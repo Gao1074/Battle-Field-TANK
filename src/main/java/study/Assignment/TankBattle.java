@@ -6,41 +6,39 @@ import java.util.ArrayList;
 
 public class TankBattle extends GameEngine{
     boolean GameOver;
-    double tankWidth = 20;
-    double tankHeight = 20;
-
+    ArrayList<Wall> walls = new ArrayList<>();
     public static void main(String[] args) {
 
         createGame(new TankBattle());
     }
     public Position Border(Position position){
 
-        if (position.X >= width() - tankWidth/2){
-            position.X = width() - tankWidth/2;
+        if (position.X >= width() - player.width/2){
+            position.X = width() - player.width/2;
         }
-        if (position.Y >= height() - tankHeight/2){
-            position.Y = height() - tankHeight/2;
+        if (position.Y >= height() - player.height/2){
+            position.Y = height() - player.height/2;
         }
-        if (position.X <= tankWidth/2){
-            position.X = tankWidth/2;
+        if (position.X <= player.width/2){
+            position.X = player.width/2;
         }
-        if (position.Y <= tankHeight/2){
-            position.Y = tankHeight/2;
+        if (position.Y <= player.height/2){
+            position.Y = player.height/2;
         }
         return position;
     }
-    //随机生成墙
+
     public Position Collides(Position position, double FX, double FY, double TX, double TY){
         if (FX == TX){
             if (position.Y < (Math.max(FY, TY)) && position.Y > (Math.min(FY, TY))){
                 if (position.X > TX){
-                    if (position.X - TX <= tankWidth){
-                        position.X = tankWidth + TX;
+                    if (position.X - TX <= player.width/2){
+                        position.X = player.width/2 + TX;
                     }
                 }
                 if (position.X < TX){
-                    if (TX - position.X <= tankWidth){
-                        position.X = TX - tankWidth;
+                    if (TX - position.X <= player.width/2){
+                        position.X = TX - player.width/2;
                     }
                 }
             }
@@ -48,17 +46,20 @@ public class TankBattle extends GameEngine{
         if (FY == TY){
             if (position.X < (Math.max(FX, TX)) && position.X > (Math.min(FX, TX))){
                 if (position.Y > TY){
-                    if (position.Y - TY <= tankHeight){
-                        position.Y = tankHeight + TY;
+                    if (position.Y - TY <= player.height/2){
+                        position.Y = player.height/2 + TY;
                     }
                 }
                 if (position.Y < TY){
-                    if (TY - position.Y <= tankHeight){
-                        position.Y = TY - tankHeight;
+                    if (TY - position.Y <= player.height/2){
+                        position.Y = TY - player.height/2;
                     }
                 }
             }
         }
+        Wall wall = new Wall();
+        wall.setWall(FX,FY,TX,TY);
+        walls.add(wall);
         return position;
     }
     public void updateTank(double dt){
@@ -82,6 +83,11 @@ public class TankBattle extends GameEngine{
         player.position.Y += player.velocity.Y * dt;
         player.position = Border(player.position);
         player.position = Collides(player.position, 200,0,200,height());
+    }
+    public void drawWall(){
+        for (Wall wall : walls) {
+            drawLine(wall.From.X, wall.From.Y, wall.To.X, wall.To.Y);
+        }
     }
     public void updateAmmo(double dt){
         for (int i = 0; i<99; i ++) {
@@ -174,6 +180,10 @@ public class TankBattle extends GameEngine{
         clearBackground(width(),height());
         drawTank();
         drawAmmo();
+        if (walls.size()!=0){
+            drawWall();
+        }
+
     }
     boolean Pressed = false;
     @Override

@@ -14,6 +14,8 @@ public class Entity {
         }
     };
     double Angle;
+    double width;
+    double height;
     public void setPosition(double x,double y) {
         this.position.X = x;
         this.position.Y = y;
