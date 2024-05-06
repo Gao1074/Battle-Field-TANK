@@ -6,9 +6,60 @@ import java.util.ArrayList;
 
 public class TankBattle extends GameEngine{
     boolean GameOver;
+    double tankWidth = 20;
+    double tankHeight = 20;
 
     public static void main(String[] args) {
+
         createGame(new TankBattle());
+    }
+    public Position Border(Position position){
+
+        if (position.X >= width() - tankWidth/2){
+            position.X = width() - tankWidth/2;
+        }
+        if (position.Y >= height() - tankHeight/2){
+            position.Y = height() - tankHeight/2;
+        }
+        if (position.X <= tankWidth/2){
+            position.X = tankWidth/2;
+        }
+        if (position.Y <= tankHeight/2){
+            position.Y = tankHeight/2;
+        }
+        return position;
+    }
+    //随机生成墙
+    public Position Collides(Position position, double FX, double FY, double TX, double TY){
+        if (FX == TX){
+            if (position.Y < (Math.max(FY, TY)) && position.Y > (Math.min(FY, TY))){
+                if (position.X > TX){
+                    if (position.X - TX <= tankWidth){
+                        position.X = tankWidth + TX;
+                    }
+                }
+                if (position.X < TX){
+                    if (TX - position.X <= tankWidth){
+                        position.X = TX - tankWidth;
+                    }
+                }
+            }
+        }
+        if (FY == TY){
+            if (position.X < (Math.max(FX, TX)) && position.X > (Math.min(FX, TX))){
+                if (position.Y > TY){
+                    if (position.Y - TY <= tankHeight){
+                        position.Y = tankHeight + TY;
+                    }
+                }
+                if (position.Y < TY){
+                    if (TY - position.Y <= tankHeight){
+                        position.Y = TY - tankHeight;
+                    }
+                }
+            }
+        }
+        return position;
     }
     public void updateTank(double dt){
         if(player.UP) {
@@ -26,9 +77,11 @@ public class TankBattle extends GameEngine{
             player.velocity.X = -sin(player.Angle) * 50;
             player.velocity.Y = cos(player.Angle) * 50;
         }
-        player.velocity.V = Math.sqrt(player.velocity.X * player.velocity.X + player.velocity.Y * player.velocity.Y);
+        player.velocity.V = sqrt(player.velocity.X * player.velocity.X + player.velocity.Y * player.velocity.Y);
         player.position.X += player.velocity.X * dt;
         player.position.Y += player.velocity.Y * dt;
+        player.position = Border(player.position);
+        player.position = Collides(player.position, 200,0,200,height());
     }
     public void updateAmmo(double dt){
         for (int i = 0; i<99; i ++) {
@@ -112,7 +165,7 @@ public class TankBattle extends GameEngine{
         rotate(player.Angle);
         changeColor(Color.BLACK);
         drawSolidRectangle(-10,-10,20,20);
-        drawSolidRectangle(-5,-30,10,20);
+        drawSolidRectangle(-2,-15,4,5);
         restoreLastTransform();
     }
     @Override
@@ -122,11 +175,17 @@ public class TankBattle extends GameEngine{
         drawTank();
         drawAmmo();
     }
-
+    boolean Pressed = false;
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
-            fire();
+            if (!Pressed){
+                fire();
+                Pressed = true;
+            }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE && !GameOver)    {
+            System.exit(1);
         }
         if(e.getKeyCode() == KeyEvent.VK_W && !GameOver)    {
             player.UP = true;
@@ -159,7 +218,6 @@ public class TankBattle extends GameEngine{
             }*/
         }
     }
-
     @Override
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_W && !GameOver)    {
@@ -179,5 +237,16 @@ public class TankBattle extends GameEngine{
             player.RIGHT = false;
 
         }
+        if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
+            Pressed = false;
+        }
     }
+    @Override
+    public void setupWindow(int width, int height) {
+        super.setupWindow(width, height);
+        mFrame.setLocation(0,0);
+        mFrame.getGraphicsConfiguration().getDevice().setFullScreenWindow(mFrame);
+    }
+
+
 }

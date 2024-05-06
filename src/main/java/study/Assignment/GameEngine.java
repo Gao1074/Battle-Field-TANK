@@ -72,18 +72,15 @@ public abstract class GameEngine implements KeyListener, MouseListener, MouseMot
 
         mWidth = width;
         mHeight = height;
-
-        mFrame.setSize(width, height);
+        mFrame.setSize(width,height);
         mFrame.setLocation(600,200);
         mFrame.setTitle("Tank");
         mFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mFrame.add(mPanel);
         mFrame.setVisible(true);
-
         mPanel.setDoubleBuffered(true);
         mPanel.addMouseListener(this);
         mPanel.addMouseMotionListener(this);
-
         // Register a key event dispatcher to get a turn in handling all
         // key events, independent of which component currently has the focus
         KeyboardFocusManager.getCurrentKeyboardFocusManager()
@@ -148,8 +145,9 @@ public abstract class GameEngine implements KeyListener, MouseListener, MouseMot
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                 // Create the window
-                setupWindow(500,500);
+                setupWindow(dim.width,dim.height);
             }
         });
     }
