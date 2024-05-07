@@ -13,9 +13,13 @@ public class Entity {
             return super.hashCode();
         }
     };
+    Size size = new Size() {
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
+    };
     double Angle;
-    double width;
-    double height;
     public void setPosition(double x,double y) {
         this.position.X = x;
         this.position.Y = y;

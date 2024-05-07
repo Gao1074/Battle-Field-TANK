@@ -7,7 +7,7 @@ public abstract class TANK extends Entity {
     boolean LEFT;
     boolean RIGHT;
     TANK(){
-        width = 20;
-        height = 20;
+        size.width = 20;
+        size.height = 20;
     }
 }

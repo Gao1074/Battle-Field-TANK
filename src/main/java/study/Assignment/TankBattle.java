@@ -11,56 +11,22 @@ public class TankBattle extends GameEngine{
     public static void main(String[] args) {
 
         createGame(new TankBattle());
+
     }
     public Position Border(Position position){
 
-        if (position.X >= width() - player.width/2){
-            position.X = width() - player.width/2;
+        if (position.X >= width() - player.size.width/2){
+            position.X = width() - player.size.width/2;
         }
-        if (position.Y >= height() - player.height/2){
-            position.Y = height() - player.height/2;
+        if (position.Y >= height() - player.size.height/2){
+            position.Y = height() - player.size.height/2;
         }
-        if (position.X <= player.width/2){
-            position.X = player.width/2;
+        if (position.X <= player.size.width/2){
+            position.X = player.size.width/2;
         }
-        if (position.Y <= player.height/2){
-            position.Y = player.height/2;
+        if (position.Y <= player.size.height/2){
+            position.Y = player.size.height/2;
         }
-        return position;
-    }
-
-    public Position Collides(Position position, double FX, double FY, double TX, double TY){
-        if (FX == TX){
-            if (position.Y < (Math.max(FY, TY)) && position.Y > (Math.min(FY, TY))){
-                if (position.X > TX){
-                    if (position.X - TX <= player.width/2){
-                        position.X = player.width/2 + TX;
-                    }
-                }
-                if (position.X < TX){
-                    if (TX - position.X <= player.width/2){
-                        position.X = TX - player.width/2;
-                    }
-                }
-            }
-        }
-        if (FY == TY){
-            if (position.X < (Math.max(FX, TX)) && position.X > (Math.min(FX, TX))){
-                if (position.Y > TY){
-                    if (position.Y - TY <= player.height/2){
-                        position.Y = player.height/2 + TY;
-                    }
-                }
-                if (position.Y < TY){
-                    if (TY - position.Y <= player.height/2){
-                        position.Y = TY - player.height/2;
-                    }
-                }
-            }
-        }
-        Wall wall = new Wall();
-        wall.setWall(FX,FY,TX,TY);
-        walls.add(wall);
         return position;
     }
     public void updateTank(double dt){
@@ -83,7 +49,9 @@ public class TankBattle extends GameEngine{
         player.position.X += player.velocity.X * dt;
         player.position.Y += player.velocity.Y * dt;
         player.position = Border(player.position);
-        player.position = Collides(player.position, 200,0,200,height());
+        for (Wall wall : walls) {
+            wall.setWallCollides(player.position,player.size);
+        }
     }
     public void drawWall(){
         for (Wall wall : walls) {
@@ -96,13 +64,18 @@ public class TankBattle extends GameEngine{
                 double Xtemp = ammo.get(i).position.X;
                 double Ytemp = ammo.get(i).position.Y;
                 ammo.get(i).setPosition(Xtemp + ammo.get(i).velocity.X * dt,Ytemp + ammo.get(i).velocity.Y * dt);
+                for (Wall wall : walls) {
+                    //ammo.get(i).velocity =
+                            wall.setWallCollides(ammo.get(i));
+                }
             }
         }
     }
     public void fire (){
+        Ammo tempAmmo;
         for (int i = 0; i <99 ;i++){
             if (!ammo.get(i).Active) {
-                Ammo tempAmmo = new Ammo();
+                tempAmmo = new Ammo();
                 tempAmmo.Active = true;
                 tempAmmo.Angle = player.Angle;
                 tempAmmo.position.X = player.position.X;
@@ -116,6 +89,7 @@ public class TankBattle extends GameEngine{
     }
     PLAYER player = new PLAYER();
     public void initTank(){
+
         player.Angle = 0;
         player.DOWN = false;
         player.UP = false;
@@ -140,6 +114,7 @@ public class TankBattle extends GameEngine{
         }
     }
     public void init(){
+
         initTank();
         InitAmmo();
     }
@@ -158,7 +133,7 @@ public class TankBattle extends GameEngine{
 
                 rotate(ammo.get(i).Angle);
                 changeColor(Color.BLACK);
-                drawSolidCircle(0, -34, 8);
+                drawSolidCircle(0, 0, ammo.get(i).size.radius);
                 restoreLastTransform();
             }
         }
@@ -172,7 +147,7 @@ public class TankBattle extends GameEngine{
         rotate(player.Angle);
         changeColor(Color.BLACK);
         drawSolidRectangle(-10,-10,20,20);
-        drawSolidRectangle(-2,-15,4,5);
+        drawSolidRectangle(-2,-20,4,10);
         restoreLastTransform();
     }
     @Override
@@ -257,7 +232,16 @@ public class TankBattle extends GameEngine{
         super.setupWindow(width, height);
         mFrame.setLocation(0,0);
         mFrame.getGraphicsConfiguration().getDevice().setFullScreenWindow(mFrame);
+        ConstructWall();
+
     }
+    public void ConstructWall(){
+        Wall wall = new Wall();
+        wall.setWall(200,0,200,400);
+        walls.add(wall);
 
-
+        wall = new Wall();
+        wall.setWall(400,0,400,600);
+        walls.add(wall);
+    }
 }
