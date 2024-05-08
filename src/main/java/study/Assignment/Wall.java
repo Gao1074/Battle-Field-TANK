@@ -19,31 +19,31 @@ public class Wall {
         To.X = TX;
         To.Y = TY;
     }
-    public void setWallCollides(Position position , Size size){
+    public void setWallCollides(TANK tank){
         if (From.X == To.X){
-            if (position.Y < (Math.max(From.Y, To.Y)) && position.Y > (Math.min(From.Y, To.Y))){
-                if (position.X > To.X){
-                    if (position.X - To.X <= size.width/2){
-                        position.X = size.width/2 + To.X;
+            if (tank.position.Y < (Math.max(From.Y, To.Y)) && tank.position.Y > (Math.min(From.Y, To.Y))){
+                if (tank.position.X > To.X){
+                    if (tank.position.X - To.X <= tank.size.width/2){
+                        tank.position.X = tank.size.width/2 + To.X;
                     }
                 }
-                if (position.X < To.X){
-                    if (To.X - position.X <= size.width/2){
-                        position.X = To.X - size.width/2;
+                if (tank.position.X < To.X){
+                    if (To.X - tank.position.X <= tank.size.width/2){
+                        tank.position.X = To.X - tank.size.width/2;
                     }
                 }
             }
         }
         if (From.Y == To.Y){
-            if (position.X < (Math.max(From.X, To.X)) && position.X > (Math.min(From.X, To.X))){
-                if (position.Y > To.Y){
-                    if (position.Y - To.Y <= size.height/2){
-                        position.Y = size.height/2 + To.Y;
+            if (tank.position.X < (Math.max(From.X, To.X)) && tank.position.X > (Math.min(From.X, To.X))){
+                if (tank.position.Y > To.Y){
+                    if (tank.position.Y - To.Y <= tank.size.height/2){
+                        tank.position.Y = tank.size.height/2 + To.Y;
                     }
                 }
-                if (position.Y < To.Y){
-                    if (To.Y - position.Y <= size.height/2){
-                        position.Y = To.Y - size.height/2;
+                if (tank.position.Y < To.Y){
+                    if (To.Y - tank.position.Y <= tank.size.height/2){
+                        tank.position.Y = To.Y - tank.size.height/2;
                     }
                 }
             }

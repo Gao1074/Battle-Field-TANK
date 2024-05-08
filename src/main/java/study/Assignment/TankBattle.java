@@ -50,7 +50,7 @@ public class TankBattle extends GameEngine{
         player.position.Y += player.velocity.Y * dt;
         player.position = Border(player.position);
         for (Wall wall : walls) {
-            wall.setWallCollides(player.position,player.size);
+            wall.setWallCollides(player);
         }
     }
     public void drawWall(){
