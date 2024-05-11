@@ -1,6 +1,43 @@
 package study.Assignment;
 import study.Assignment.GameEngine;
+
+import java.time.Year;
+import java.util.ArrayList;
+
 public class Wall {
+    protected ArrayList<Block> blocks;
+    public void newBlock(double X,double Y,double width, double height,boolean destroy){
+        Position position = new Position() {
+            @Override
+            public double getX() {
+                return super.getX();
+            }
+        };
+        position.setX(X);
+        position.setY(Y);
+        Size size = new Size() {
+            @Override
+            public double getRadius() {
+                return super.getRadius();
+            }
+        };
+        size.setWidth(width);
+        size.setHeight(height);
+        Block block = new Block(position,size,destroy);
+        this.blocks.add(block);
+    }
+    public void removeBlock(int i){
+        this.blocks.remove(i);
+    }
+    public ArrayList<Block> getBlocks(){
+        return blocks;
+    }
+    public void setCollides(Entity entity){
+        for (Block block : blocks){
+            block.collides(entity);
+        }
+    }
+    //old
     Position From = new Position() {
         @Override
         public int hashCode() {
@@ -13,6 +50,15 @@ public class Wall {
             return super.hashCode();
         }
     };
+    public Wall(){
+        blocks = new ArrayList<>();
+    }
+
+
+
+
+
+    //old
     public void setWall(double X, double Y, double TX, double TY){
         From.setX(X);
         From.setY(Y);

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class TankBattle extends GameEngine{
     //
     boolean GameOver;
-    ArrayList<Wall> walls = new ArrayList<>();
+    //ArrayList<Wall> walls = new ArrayList<>();
     public static void main(String[] args) {
 
         createGame(new TankBattle());
@@ -53,13 +53,17 @@ public class TankBattle extends GameEngine{
         player.position.setX(tempX +player.velocity.getX() * dt);
         player.position.setY(tempY +player.velocity.getY() * dt);
         player.position = Border(player.position);
-        for (Wall wall : walls) {
+        /*for (Wall wall : walls) {
             wall.setWallCollides(player);
-        }
+        }*/
+        wall.setCollides(player);
     }
     public void drawWall(){
-        for (Wall wall : walls) {
+        /*for (Wall wall : walls) {
             drawLine(wall.From.getX(), wall.From.getY(), wall.To.getX(), wall.To.getY());
+        }*/
+        for (Block block : wall.getBlocks()){
+            drawRectangle(block.position.getX() - block.size.getWidth() / 2,block.position.getY() - block.size.getHeight() / 2,block.size.getWidth(),block.size.getHeight());
         }
     }
     public void updateAmmo(double dt){
@@ -68,10 +72,10 @@ public class TankBattle extends GameEngine{
                 double Xtemp = ammo.get(i).position.getX();
                 double Ytemp = ammo.get(i).position.getY();
                 ammo.get(i).setPosition(Xtemp + ammo.get(i).velocity.getX() * dt,Ytemp + ammo.get(i).velocity.getY() * dt);
-                for (Wall wall : walls) {
+                /*for (Wall wall : walls) {
                     //ammo.get(i).velocity =
                             wall.setWallCollides(ammo.get(i));
-                }
+                }*/
             }
         }
     }
@@ -160,9 +164,12 @@ public class TankBattle extends GameEngine{
         clearBackground(width(),height());
         drawTank();
         drawAmmo();
-        if (walls.size()!=0){
+        if (wall.getBlocks().size() !=0) {
             drawWall();
         }
+        /*if (walls.size()!=0){
+            drawWall();
+        }*/
 
     }
     boolean Pressed = false;
@@ -239,13 +246,16 @@ public class TankBattle extends GameEngine{
         ConstructWall();
 
     }
+    Wall wall = new Wall();
     public void ConstructWall(){
-        Wall wall = new Wall();
+        /*Wall wall = new Wall();
         wall.setWall(200,0,200,400);
         walls.add(wall);
 
         wall = new Wall();
         wall.setWall(400,0,400,600);
-        walls.add(wall);
+        walls.add(wall);*/
+        wall.newBlock(100,100,40,40,false);
+        wall.newBlock(500,500,40,40,false);
     }
 }
