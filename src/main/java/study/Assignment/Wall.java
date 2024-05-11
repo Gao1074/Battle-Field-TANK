@@ -37,6 +37,11 @@ public class Wall {
             block.collides(entity);
         }
     }
+    public void setCollidesAmmo(Ammo entity){
+        for (Block block : blocks){
+            block.collides(entity);
+        }
+    }
     //old
     Position From = new Position() {
         @Override

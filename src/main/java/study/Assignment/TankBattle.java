@@ -76,6 +76,7 @@ public class TankBattle extends GameEngine{
                     //ammo.get(i).velocity =
                             wall.setWallCollides(ammo.get(i));
                 }*/
+                wall.setCollidesAmmo(ammo.get(i));
             }
         }
     }
