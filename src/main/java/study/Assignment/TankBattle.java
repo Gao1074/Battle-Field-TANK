@@ -15,24 +15,24 @@ public class TankBattle extends GameEngine{
     }
     public Position Border(Position position){
 
-        if (position.X >= width() - player.size.width/2){
-            position.X = width() - player.size.width/2;
+        if (position.getX() >= width() - player.size.getWidth() /2){
+            position.setX(width() - player.size.getWidth() /2);
         }
-        if (position.Y >= height() - player.size.height/2){
-            position.Y = height() - player.size.height/2;
+        if (position.getY() >= height() - player.size.getHeight() /2){
+            position.setY( height() - player.size.getHeight() /2);
         }
-        if (position.X <= player.size.width/2){
-            position.X = player.size.width/2;
+        if (position.getX() <= player.size.getWidth() /2){
+            position.setX(player.size.getWidth() /2);
         }
-        if (position.Y <= player.size.height/2){
-            position.Y = player.size.height/2;
+        if (position.getY() <= player.size.getHeight() /2){
+            position.setY(player.size.getHeight() /2);
         }
         return position;
     }
     public void updateTank(double dt){
         if(player.UP) {
-            player.velocity.X = sin(player.Angle) * 50;
-            player.velocity.Y = -cos(player.Angle) * 50;
+            player.velocity.setX(sin(player.Angle) * 50);
+            player.velocity.setY(-cos(player.Angle) * 50);
         }
         if(player.LEFT) {
             // Make the spaceship rotate anti-clockwise
@@ -42,12 +42,16 @@ public class TankBattle extends GameEngine{
             player.Angle += 250 * dt;
         }
         if (player.DOWN){
-            player.velocity.X = -sin(player.Angle) * 50;
-            player.velocity.Y = cos(player.Angle) * 50;
+            player.velocity.setX(-sin(player.Angle) * 50);
+            player.velocity.setY(cos(player.Angle) * 50);
         }
-        player.velocity.V = sqrt(player.velocity.X * player.velocity.X + player.velocity.Y * player.velocity.Y);
-        player.position.X += player.velocity.X * dt;
-        player.position.Y += player.velocity.Y * dt;
+        player.velocity.setV(sqrt(player.velocity.getX() * player.velocity.getX() + player.velocity.getY() * player.velocity.getY()));
+        double tempX;
+        double tempY;
+        tempX = player.position.getX();
+        tempY = player.position.getY();
+        player.position.setX(tempX +player.velocity.getX() * dt);
+        player.position.setY(tempY +player.velocity.getY() * dt);
         player.position = Border(player.position);
         for (Wall wall : walls) {
             wall.setWallCollides(player);
@@ -55,15 +59,15 @@ public class TankBattle extends GameEngine{
     }
     public void drawWall(){
         for (Wall wall : walls) {
-            drawLine(wall.From.X, wall.From.Y, wall.To.X, wall.To.Y);
+            drawLine(wall.From.getX(), wall.From.getY(), wall.To.getX(), wall.To.getY());
         }
     }
     public void updateAmmo(double dt){
         for (int i = 0; i<99; i ++) {
             if (ammo.get(i).Active) {
-                double Xtemp = ammo.get(i).position.X;
-                double Ytemp = ammo.get(i).position.Y;
-                ammo.get(i).setPosition(Xtemp + ammo.get(i).velocity.X * dt,Ytemp + ammo.get(i).velocity.Y * dt);
+                double Xtemp = ammo.get(i).position.getX();
+                double Ytemp = ammo.get(i).position.getY();
+                ammo.get(i).setPosition(Xtemp + ammo.get(i).velocity.getX() * dt,Ytemp + ammo.get(i).velocity.getY() * dt);
                 for (Wall wall : walls) {
                     //ammo.get(i).velocity =
                             wall.setWallCollides(ammo.get(i));
@@ -78,10 +82,10 @@ public class TankBattle extends GameEngine{
                 tempAmmo = new Ammo();
                 tempAmmo.Active = true;
                 tempAmmo.Angle = player.Angle;
-                tempAmmo.position.X = player.position.X;
-                tempAmmo.position.Y = player.position.Y;
-                tempAmmo.velocity.X = sin(tempAmmo.Angle) * 200;
-                tempAmmo.velocity.Y = -cos(tempAmmo.Angle) * 200;
+                tempAmmo.position.setX(player.position.getX());
+                tempAmmo.position.setY(player.position.getY());
+                tempAmmo.velocity.setX(sin(tempAmmo.Angle) * 200);
+                tempAmmo.velocity.setY(-cos(tempAmmo.Angle) * 200);
                 ammo.set(i, tempAmmo);
                 break;
             }
@@ -95,18 +99,18 @@ public class TankBattle extends GameEngine{
         player.UP = false;
         player.LEFT = false;
         player.RIGHT = false;
-        player.position.X = 20;
-        player.position.Y = 20;
-        player.velocity.X = 0;
-        player.velocity.Y = 0;
+        player.position.setX(20);
+        player.position.setY(20);
+        player.velocity.setX(0);
+        player.velocity.setY(0);
     }
     ArrayList<Ammo> ammo = new ArrayList<>();
     Ammo initAmmo = new Ammo();
     public void InitAmmo(){
-        initAmmo.position.X = 0;
-        initAmmo.position.Y = 0;
-        initAmmo.velocity.X = 0;
-        initAmmo.velocity.Y = 0;
+        initAmmo.position.setX(0);
+        initAmmo.position.setY(0);
+        initAmmo.velocity.setX(0);
+        initAmmo.velocity.setY(0);
         initAmmo.Active = false;
         initAmmo.Angle = 0;
         for (int i = 0 ; i < 99 ;i++){
@@ -129,11 +133,11 @@ public class TankBattle extends GameEngine{
             if (ammo.get(i).Active) {
                 saveCurrentTransform();
 
-                translate(ammo.get(i).position.X, ammo.get(i).position.Y);
+                translate(ammo.get(i).position.getX(), ammo.get(i).position.getY());
 
                 rotate(ammo.get(i).Angle);
                 changeColor(Color.BLACK);
-                drawSolidCircle(0, 0, ammo.get(i).size.radius);
+                drawSolidCircle(0, 0, ammo.get(i).size.getRadius());
                 restoreLastTransform();
             }
         }
@@ -142,7 +146,7 @@ public class TankBattle extends GameEngine{
     public void drawTank(){
         saveCurrentTransform();
 
-        translate(player.position.X,player.position.Y);
+        translate(player.position.getX(),player.position.getY());
 
         rotate(player.Angle);
         changeColor(Color.BLACK);
@@ -208,16 +212,16 @@ public class TankBattle extends GameEngine{
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_W && !GameOver)    {
             player.UP = false;
-            player.velocity.X = 0;
-            player.velocity.Y = 0;
+            player.velocity.setX(0);
+            player.velocity.setY(0);
         }
         if(e.getKeyCode() == KeyEvent.VK_A && !GameOver)  {
             player.LEFT = false;
         }
         if(e.getKeyCode() == KeyEvent.VK_S && !GameOver)  {
             player.DOWN = false;
-            player.velocity.X = 0;
-            player.velocity.Y = 0;
+            player.velocity.setX(0);
+            player.velocity.setY(0);
         }
         if(e.getKeyCode() == KeyEvent.VK_D && !GameOver) {
             player.RIGHT = false;

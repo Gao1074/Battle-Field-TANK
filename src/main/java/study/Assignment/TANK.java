@@ -2,12 +2,12 @@ package study.Assignment;
 
 public abstract class TANK extends Entity {
     //direction
-    boolean UP;
-    boolean DOWN;
-    boolean LEFT;
-    boolean RIGHT;
+    protected boolean UP;
+    protected boolean DOWN;
+    protected boolean LEFT;
+    protected boolean RIGHT;
     TANK(){
-        size.width = 20;
-        size.height = 20;
+        size.setWidth(20);
+        size.setHeight(20);
     }
 }

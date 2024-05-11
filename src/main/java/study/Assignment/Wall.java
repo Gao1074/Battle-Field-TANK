@@ -14,36 +14,36 @@ public class Wall {
         }
     };
     public void setWall(double X, double Y, double TX, double TY){
-        From.X = X;
-        From.Y = Y;
-        To.X = TX;
-        To.Y = TY;
+        From.setX(X);
+        From.setY(Y);
+        To.setX(TX);
+        To.setY(TY);
     }
     public void setWallCollides(TANK tank){
-        if (From.X == To.X){
-            if (tank.position.Y < (Math.max(From.Y, To.Y)) && tank.position.Y > (Math.min(From.Y, To.Y))){
-                if (tank.position.X > To.X){
-                    if (tank.position.X - To.X <= tank.size.width/2){
-                        tank.position.X = tank.size.width/2 + To.X;
+        if (From.getX() == To.getX()){
+            if (tank.position.getY() < (Math.max(From.getY(), To.getY())) && tank.position.getY() > (Math.min(From.getY(), To.getY()))){
+                if (tank.position.getX() > To.getX()){
+                    if (tank.position.getX() - To.getX() <= tank.size.getWidth() /2){
+                        tank.position.setX(tank.size.getWidth() /2 + To.getX());
                     }
                 }
-                if (tank.position.X < To.X){
-                    if (To.X - tank.position.X <= tank.size.width/2){
-                        tank.position.X = To.X - tank.size.width/2;
+                if (tank.position.getX() < To.getX()){
+                    if (To.getX() - tank.position.getX() <= tank.size.getWidth() /2){
+                        tank.position.setX(To.getX() - tank.size.getWidth() /2);
                     }
                 }
             }
         }
-        if (From.Y == To.Y){
-            if (tank.position.X < (Math.max(From.X, To.X)) && tank.position.X > (Math.min(From.X, To.X))){
-                if (tank.position.Y > To.Y){
-                    if (tank.position.Y - To.Y <= tank.size.height/2){
-                        tank.position.Y = tank.size.height/2 + To.Y;
+        if (From.getY() == To.getY()){
+            if (tank.position.getX() < (Math.max(From.getX(), To.getX())) && tank.position.getX() > (Math.min(From.getX(), To.getX()))){
+                if (tank.position.getY() > To.getY()){
+                    if (tank.position.getY() - To.getY() <= tank.size.getHeight() /2){
+                        tank.position.setY(tank.size.getHeight() /2 + To.getY());
                     }
                 }
-                if (tank.position.Y < To.Y){
-                    if (To.Y - tank.position.Y <= tank.size.height/2){
-                        tank.position.Y = To.Y - tank.size.height/2;
+                if (tank.position.getY() < To.getY()){
+                    if (To.getY() - tank.position.getY() <= tank.size.getHeight() /2){
+                        tank.position.setY(To.getY() - tank.size.getHeight() /2);
                     }
                 }
             }
@@ -51,25 +51,25 @@ public class Wall {
         //return void;
     }
     public void setWallCollides(Ammo ammo){
-        if (From.X == To.X){
-            if (ammo.position.Y < (Math.max(From.Y, To.Y)) && ammo.position.Y > (Math.min(From.Y, To.Y))){
-                if (ammo.position.X <= To.X) {
-                    if (To.X - ammo.position.X <= ammo.size.radius) {
-                        ammo.velocity.X = - ammo.velocity.X;
-                        ammo.position.X = To.X - ammo.size.radius-1;
+        if (From.getX() == To.getX()){
+            if (ammo.position.getY() < (Math.max(From.getY(), To.getY())) && ammo.position.getY() > (Math.min(From.getY(), To.getY()))){
+                if (ammo.position.getX() <= To.getX()) {
+                    if (To.getX() - ammo.position.getX() <= ammo.size.getRadius()) {
+                        ammo.velocity.setX(- ammo.velocity.getX());
+                        ammo.position.setX(To.getX() - ammo.size.getRadius() -1);
                     }
-                }if (ammo.position.X > To.X) {
-                    if (ammo.position.X - To.X < ammo.size.radius) {
-                        ammo.velocity.X = - ammo.velocity.X;
-                        ammo.position.X = To.X + ammo.size.radius;
+                }if (ammo.position.getX() > To.getX()) {
+                    if (ammo.position.getX() - To.getX() < ammo.size.getRadius()) {
+                        ammo.velocity.setX(- ammo.velocity.getX());
+                        ammo.position.setX(To.getX() + ammo.size.getRadius());
                     }
                 }
             }
         }
-        if (From.Y == To.Y){
-            if (ammo.position.X < (Math.max(From.X, To.X)) && ammo.position.X > (Math.min(From.X, To.X))){
-                if (To.Y - ammo.position.Y <= ammo.size.radius || ammo.position.Y - To.Y <= ammo.size.radius){
-                    ammo.velocity.Y = -ammo.velocity.Y;
+        if (From.getY() == To.getY()){
+            if (ammo.position.getX() < (Math.max(From.getX(), To.getX())) && ammo.position.getX() > (Math.min(From.getX(), To.getX()))){
+                if (To.getY() - ammo.position.getY() <= ammo.size.getRadius() || ammo.position.getY() - To.getY() <= ammo.size.getRadius()){
+                    ammo.velocity.setY(-ammo.velocity.getY());
                 }
             }
         }

@@ -1,27 +1,27 @@
 package study.Assignment;
 
 public class Entity {
-    Position position = new Position() {
+    protected Position position = new Position() {
         @Override
         public int hashCode() {
             return super.hashCode();
         }
     };
-    Velocity velocity = new Velocity() {
+    protected Velocity velocity = new Velocity() {
         @Override
         public int hashCode() {
             return super.hashCode();
         }
     };
-    Size size = new Size() {
+    protected Size size = new Size() {
         @Override
         public int hashCode() {
             return super.hashCode();
         }
     };
-    double Angle;
+    protected double Angle;
     public void setPosition(double x,double y) {
-        this.position.X = x;
-        this.position.Y = y;
+        this.position.setX(x);
+        this.position.setY(y);
     }
 }
