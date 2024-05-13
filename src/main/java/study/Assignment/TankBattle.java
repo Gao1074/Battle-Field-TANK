@@ -151,7 +151,7 @@ public class TankBattle extends GameEngine{
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
             if (!Pressed){
-                player.Fire();
+                player.Fire(this);
                 Pressed = true;
             }
         }
