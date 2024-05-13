@@ -33,13 +33,11 @@ public class Block extends Entity{
             if (entity.position.getY() > position.getY()){
                  if (entity.position.getY() < position.getY() + size.getHeight() / 2 + entity.size.getHeight()/2){
                      entity.position.setY(position.getY() + size.getHeight() / 2 + entity.size.getHeight()/2);
-                     System.out.println("下侧");
                  }
             }
             if (entity.position.getY() < position.getY()){
                 if (entity.position.getY() > position.getY() - size.getHeight() / 2 - entity.size.getHeight()/2){
                     entity.position.setY(position.getY() - size.getHeight() / 2 - entity.size.getHeight()/2);
-                    System.out.println("上侧");
                 }
             }
         }
@@ -47,13 +45,11 @@ public class Block extends Entity{
             if (entity.position.getX() > position.getX()){
                 if (entity.position.getX() < position.getX() + size.getWidth() / 2 + entity.size.getWidth()/2){
                     entity.position.setX(position.getX() + size.getWidth() / 2 + entity.size.getWidth()/2);
-                    System.out.println("右侧");
                 }
             }
             if (entity.position.getX() < position.getX()){
                 if (entity.position.getX() > position.getX() - size.getWidth() / 2 - entity.size.getWidth()/2){
                     entity.position.setX(position.getX() - size.getWidth() / 2 - entity.size.getWidth()/2);
-                    System.out.println("左侧");
                 }
             }
         }
@@ -64,14 +60,12 @@ public class Block extends Entity{
                 if (entity.position.getY() < position.getY() + size.getHeight() / 2 + entity.size.getRadius()/2){
                     entity.position.setY(position.getY() + size.getHeight() / 2 + entity.size.getRadius()/2);
                     entity.velocity.setY(-entity.velocity.getY());
-                    System.out.println("下侧");
                 }
             }
             if (entity.position.getY() < position.getY()){
                 if (entity.position.getY() > position.getY() - size.getHeight() / 2 - entity.size.getRadius()/2){
                     entity.position.setY(position.getY() - size.getHeight() / 2 - entity.size.getRadius()/2);
                     entity.velocity.setY(-entity.velocity.getY());
-                    System.out.println("上侧");
                 }
             }
         }
@@ -80,14 +74,12 @@ public class Block extends Entity{
                 if (entity.position.getX() < position.getX() + size.getWidth() / 2 + entity.size.getRadius()/2){
                     entity.position.setX(position.getX() + size.getWidth() / 2 + entity.size.getRadius()/2);
                     entity.velocity.setX(-entity.velocity.getX());
-                    System.out.println("右侧");
                 }
             }
             if (entity.position.getX() < position.getX()){
                 if (entity.position.getX() > position.getX() - size.getWidth() / 2 - entity.size.getRadius()/2){
                     entity.position.setX(position.getX() - size.getWidth() / 2 - entity.size.getRadius()/2);
                     entity.velocity.setX(-entity.velocity.getX());
-                    System.out.println("左侧");
                 }
             }
         }

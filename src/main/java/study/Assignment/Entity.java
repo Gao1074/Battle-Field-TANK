@@ -1,5 +1,5 @@
 package study.Assignment;
-
+import static java.lang.Math.*;
 public class Entity {
     protected Position position = new Position() {
         @Override

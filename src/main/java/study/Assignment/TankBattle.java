@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class TankBattle extends GameEngine{
     //
     boolean GameOver;
+    double loadingTime = 3;
     //ArrayList<Wall> walls = new ArrayList<>();
     public static void main(String[] args) {
 
@@ -68,31 +69,15 @@ public class TankBattle extends GameEngine{
     }
     public void updateAmmo(double dt){
         for (int i = 0; i<99; i ++) {
-            if (ammo.get(i).Active) {
-                double Xtemp = ammo.get(i).position.getX();
-                double Ytemp = ammo.get(i).position.getY();
-                ammo.get(i).setPosition(Xtemp + ammo.get(i).velocity.getX() * dt,Ytemp + ammo.get(i).velocity.getY() * dt);
+            if (player.ammo.get(i).Active) {
+                double Xtemp = player.ammo.get(i).position.getX();
+                double Ytemp = player.ammo.get(i).position.getY();
+                player.ammo.get(i).setPosition(Xtemp + player.ammo.get(i).velocity.getX() * dt,Ytemp + player.ammo.get(i).velocity.getY() * dt);
                 /*for (Wall wall : walls) {
-                    //ammo.get(i).velocity =
-                            wall.setWallCollides(ammo.get(i));
+                    //player.ammo.get(i).velocity =
+                            wall.setWallCollides(player.ammo.get(i));
                 }*/
-                wall.setCollidesAmmo(ammo.get(i));
-            }
-        }
-    }
-    public void fire (){
-        Ammo tempAmmo;
-        for (int i = 0; i <99 ;i++){
-            if (!ammo.get(i).Active) {
-                tempAmmo = new Ammo();
-                tempAmmo.Active = true;
-                tempAmmo.Angle = player.Angle;
-                tempAmmo.position.setX(player.position.getX());
-                tempAmmo.position.setY(player.position.getY());
-                tempAmmo.velocity.setX(sin(tempAmmo.Angle) * 200);
-                tempAmmo.velocity.setY(-cos(tempAmmo.Angle) * 200);
-                ammo.set(i, tempAmmo);
-                break;
+                wall.setCollidesAmmo(player.ammo.get(i));
             }
         }
     }
@@ -109,23 +94,11 @@ public class TankBattle extends GameEngine{
         player.velocity.setX(0);
         player.velocity.setY(0);
     }
-    ArrayList<Ammo> ammo = new ArrayList<>();
-    Ammo initAmmo = new Ammo();
-    public void InitAmmo(){
-        initAmmo.position.setX(0);
-        initAmmo.position.setY(0);
-        initAmmo.velocity.setX(0);
-        initAmmo.velocity.setY(0);
-        initAmmo.Active = false;
-        initAmmo.Angle = 0;
-        for (int i = 0 ; i < 99 ;i++){
-            ammo.add(i,initAmmo);
-        }
-    }
+
     public void init(){
 
         initTank();
-        InitAmmo();
+
     }
 
     @Override
@@ -135,14 +108,14 @@ public class TankBattle extends GameEngine{
     }
     public void drawAmmo(){
         for (int i = 0 ;i<99;i++){
-            if (ammo.get(i).Active) {
+            if (player.ammo.get(i).Active) {
                 saveCurrentTransform();
 
-                translate(ammo.get(i).position.getX(), ammo.get(i).position.getY());
+                translate(player.ammo.get(i).position.getX(), player.ammo.get(i).position.getY());
 
-                rotate(ammo.get(i).Angle);
+                rotate(player.ammo.get(i).Angle);
                 changeColor(Color.BLACK);
-                drawSolidCircle(0, 0, ammo.get(i).size.getRadius());
+                drawSolidCircle(0, 0, player.ammo.get(i).size.getRadius());
                 restoreLastTransform();
             }
         }
@@ -178,7 +151,7 @@ public class TankBattle extends GameEngine{
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
             if (!Pressed){
-                fire();
+                player.Fire();
                 Pressed = true;
             }
         }
