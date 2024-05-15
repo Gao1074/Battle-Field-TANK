@@ -2,9 +2,8 @@ package study.Assignment;
 
 import java.awt.*;
 
-public abstract class Entity {
+public abstract class Aentity {
     Image image;
-    GameEngine gameEngine;
     protected Position position = new Position() {
         @Override
         public int hashCode() {
@@ -27,8 +26,5 @@ public abstract class Entity {
     public void setPosition(double x,double y) {
         this.position.setX(x);
         this.position.setY(y);
-    }
-    public Entity(GameEngine gameEngine){
-        this.gameEngine = gameEngine;
     }
 }

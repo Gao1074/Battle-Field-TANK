@@ -68,46 +68,64 @@ public class TankBattle extends GameEngine{
         }
     }
     public void updateAmmo(double dt){
-        for (int i = 0; i<99; i ++) {
+
+        player.weapon_M.updateAmmo(dt,wall);
+        player.weapon_L.updateAmmo(dt,wall);
+        player.weapon_R.updateAmmo(dt,wall);
+        /*for (int i = 0; i<99; i ++) {
             if (player.ammo.get(i).Active) {
                 double Xtemp = player.ammo.get(i).position.getX();
                 double Ytemp = player.ammo.get(i).position.getY();
                 player.ammo.get(i).setPosition(Xtemp + player.ammo.get(i).velocity.getX() * dt,Ytemp + player.ammo.get(i).velocity.getY() * dt);
-                /*for (Wall wall : walls) {
+                for (Wall wall : walls) {
                     //player.ammo.get(i).velocity =
                             wall.setWallCollides(player.ammo.get(i));
-                }*/
-                wall.setCollidesAmmo(player.ammo.get(i));
+                }
+
             }
-        }
+        }*/
     }
-    PLAYER player = new PLAYER();
+    PLAYER player = new PLAYER(this);
     public void initTank(){
 
-        player.Angle = 0;
+        player.Angle = 90;
         player.DOWN = false;
         player.UP = false;
         player.LEFT = false;
         player.RIGHT = false;
-        player.position.setX(20);
-        player.position.setY(20);
+        player.position.setX(player.size.getHeight());
+        player.position.setY(Toolkit.getDefaultToolkit().getScreenSize().height / 2.0);
         player.velocity.setX(0);
         player.velocity.setY(0);
     }
 
     public void init(){
-
         initTank();
-
     }
 
     @Override
     public void update(double dt) {
         updateTank(dt);
         updateAmmo(dt);
+        updateWeapon(dt);
+    }
+    public void updateWeapon(double dt){
+        if (JPressed){
+            player.weapon_L.FireMode(dt);
+        }
+        if (KPressed){
+            player.weapon_R.FireMode(dt);
+        }
+
+        player.weapon_M.updateWeapon(dt);
+        player.weapon_R.updateWeapon();
+        player.weapon_L.updateWeapon();
     }
     public void drawAmmo(){
-        for (int i = 0 ;i<99;i++){
+        player.weapon_M.drawAmmo();
+        player.weapon_L.drawAmmo();
+        player.weapon_R.drawAmmo();
+        /*for (int i = 0 ;i<99;i++){
             if (player.ammo.get(i).Active) {
                 saveCurrentTransform();
 
@@ -118,26 +136,20 @@ public class TankBattle extends GameEngine{
                 drawSolidCircle(0, 0, player.ammo.get(i).size.getRadius());
                 restoreLastTransform();
             }
-        }
+        }*/
 
     }
     public void drawTank(){
-        saveCurrentTransform();
 
-        translate(player.position.getX(),player.position.getY());
-
-        rotate(player.Angle);
-        changeColor(Color.BLACK);
-        drawSolidRectangle(-10,-10,20,20);
-        drawSolidRectangle(-2,-20,4,10);
-        restoreLastTransform();
     }
     @Override
     public void paintComponent() {
         changeColor(Color.WHITE);
         clearBackground(width(),height());
-        drawTank();
+
         drawAmmo();
+        player.drawTank();
+        drawWeapon();
         if (wall.getBlocks().size() !=0) {
             drawWall();
         }
@@ -146,13 +158,31 @@ public class TankBattle extends GameEngine{
         }*/
 
     }
-    boolean Pressed = false;
+    public void drawWeapon(){
+        player.drawUI();
+        player.weapon_M.drawWeapon();
+        player.weapon_R.drawWeapon();
+        player.weapon_L.drawWeapon();
+    }
+    boolean SpacePressed = false;
+    boolean JPressed = false;
+    boolean KPressed = false;
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
-            if (!Pressed){
-                player.Fire(this);
-                Pressed = true;
+            if (!SpacePressed){
+                player.weapon_M.Fire();
+                SpacePressed = true;
+            }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_J && !GameOver)    {
+            if (!JPressed){
+                JPressed = true;
+            }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_K && !GameOver)    {
+            if (!KPressed){
+                KPressed = true;
             }
         }
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE && !GameOver)    {
@@ -209,7 +239,13 @@ public class TankBattle extends GameEngine{
 
         }
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
-            Pressed = false;
+            SpacePressed = false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_J && !GameOver)    {
+            JPressed = false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_K && !GameOver)    {
+            KPressed = false;
         }
     }
     @Override
@@ -229,7 +265,7 @@ public class TankBattle extends GameEngine{
         wall = new Wall();
         wall.setWall(400,0,400,600);
         walls.add(wall);*/
-        wall.newBlock(100,100,40,40,false);
-        wall.newBlock(500,500,40,40,false);
+        wall.newBlock(100,100,80,80,false);
+        wall.newBlock(500,500,80,80,false);
     }
 }

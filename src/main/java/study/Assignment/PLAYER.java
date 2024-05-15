@@ -1,36 +1,29 @@
 package study.Assignment;
 
 
+import java.awt.*;
 
-public class PLAYER extends TANK implements TankWeapon{
+public class PLAYER extends TANK{
+    ATWeapon weapon_M = new ATWeapon(this, gameEngine,0);
+    Spitfire weapon_L = new Spitfire(this, gameEngine,-1);
+    Spitfire weapon_R = new Spitfire(this, gameEngine,1);
 
-    @Override
-    public void Fire(GameEngine gameEngine) {
-        Ammo tempAmmo;
-        for (int i = 0; i <99 ;i++){
-            if (!ammo.get(i).Active) {
-                tempAmmo = new Ammo();
-                tempAmmo.Active = true;
-                tempAmmo.Angle = this.Angle;
-                tempAmmo.position.setX(this.position.getX());
-                tempAmmo.position.setY(this.position.getY());
-                tempAmmo.velocity.setX(gameEngine.sin(tempAmmo.Angle)* 200);
-                tempAmmo.velocity.setY(-gameEngine.cos(tempAmmo.Angle)* 200);
-                ammo.set(i, tempAmmo);
-                break;
-            }
-        }
+
+    public PLAYER(GameEngine gameEngine){
+        super(gameEngine);
+        image = gameEngine.loadImage("Player.png");
     }
-    public PLAYER(){
-        Ammo initAmmo = new Ammo();
-        initAmmo.position.setX(0);
-        initAmmo.position.setY(0);
-        initAmmo.velocity.setX(0);
-        initAmmo.velocity.setY(0);
-        initAmmo.Active = false;
-        initAmmo.Angle = 0;
-        for (int i = 0 ; i < 99 ;i++){
-            ammo.add(i,initAmmo);
-        }
+    public void drawUI(){
+        weapon_M.drawUI( 20 );
+        weapon_L.drawUI( 220 );
+        weapon_R.drawUI( 420 );
+    }
+    public void drawTank(){
+        weapon_M.drawWeapon();
+        gameEngine.saveCurrentTransform();
+        gameEngine.translate(position.getX(),position.getY());
+        gameEngine.rotate(Angle);
+        gameEngine.drawImage(image, - size.getWidth()/2,  - size.getHeight()/2,size.getWidth(),size.getHeight());
+        gameEngine.restoreLastTransform();
     }
 }

@@ -1,6 +1,6 @@
 package study.Assignment;
 
-public class Block extends Entity{
+public class Block extends Aentity{
     private boolean destroyable;
     Block(Position position, Size size , boolean destroyable){
         this.position = position;
@@ -58,31 +58,38 @@ public class Block extends Entity{
         if (entity.position.getX() >= position.getX() - size.getWidth() / 2 && entity.position.getX() <= position.getX() + size.getWidth()/2){
             if (entity.position.getY() > position.getY()){
                 if (entity.position.getY() < position.getY() + size.getHeight() / 2 + entity.size.getRadius()/2){
-                    entity.position.setY(position.getY() + size.getHeight() / 2 + entity.size.getRadius()/2);
-                    entity.velocity.setY(-entity.velocity.getY());
+                    //entity.position.setY(position.getY() + size.getHeight() / 2 + entity.size.getRadius()/2);
+                    //entity.velocity.setY(-entity.velocity.getY());
+                    inActive(entity);
                 }
             }
             if (entity.position.getY() < position.getY()){
                 if (entity.position.getY() > position.getY() - size.getHeight() / 2 - entity.size.getRadius()/2){
-                    entity.position.setY(position.getY() - size.getHeight() / 2 - entity.size.getRadius()/2);
-                    entity.velocity.setY(-entity.velocity.getY());
+                    //entity.position.setY(position.getY() - size.getHeight() / 2 - entity.size.getRadius()/2);
+                    //entity.velocity.setY(-entity.velocity.getY());
+                    inActive(entity);
                 }
             }
         }
         if (entity.position.getY() >= position.getY() - size.getHeight() / 2 && entity.position.getY() <= position.getY() + size.getHeight()/2){
             if (entity.position.getX() > position.getX()){
                 if (entity.position.getX() < position.getX() + size.getWidth() / 2 + entity.size.getRadius()/2){
-                    entity.position.setX(position.getX() + size.getWidth() / 2 + entity.size.getRadius()/2);
-                    entity.velocity.setX(-entity.velocity.getX());
+                    //entity.position.setX(position.getX() + size.getWidth() / 2 + entity.size.getRadius()/2);
+                    //entity.velocity.setX(-entity.velocity.getX());
+                    inActive(entity);
                 }
             }
             if (entity.position.getX() < position.getX()){
                 if (entity.position.getX() > position.getX() - size.getWidth() / 2 - entity.size.getRadius()/2){
-                    entity.position.setX(position.getX() - size.getWidth() / 2 - entity.size.getRadius()/2);
-                    entity.velocity.setX(-entity.velocity.getX());
+                    //entity.position.setX(position.getX() - size.getWidth() / 2 - entity.size.getRadius()/2);
+                    //entity.velocity.setX(-entity.velocity.getX());
+                    inActive(entity);
                 }
             }
         }
+    }
+    private void inActive(Ammo entity){
+        entity.Active = false;
     }
 
     public void setDestroyable(boolean destroyable){

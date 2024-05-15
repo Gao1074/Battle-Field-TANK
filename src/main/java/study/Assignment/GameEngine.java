@@ -25,6 +25,7 @@ public abstract class GameEngine implements KeyListener, MouseListener, MouseMot
     Graphics2D mGraphics;
     boolean initialised = false;
 
+    Image ImageSheet = loadImage("Tanks.png");
     //-------------------------------------------------------
     // Time-Related functions
     //-------------------------------------------------------
