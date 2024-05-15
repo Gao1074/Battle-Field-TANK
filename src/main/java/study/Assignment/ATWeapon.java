@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class ATWeapon extends Weapon {
     double loadingTime;
-    double waitTime = 0.5;
+    boolean BinaryFire = true;
     ATWeapon(TANK tank, GameEngine gameEngine, double Angle) {
         super(tank, gameEngine, Angle);
         power = 200;
@@ -14,20 +14,33 @@ public class ATWeapon extends Weapon {
     public void Fire(){
         if (loadingTime <= 0) {
             creatFire();
-            waitTime = 0.2;
             loadingTime = 1;
         }
     }
     private void creatFire(){
         for (Ammo ammo : ammos) {
             if (!ammo.Active) {
+
                 ammo.Active = true;
                 ammo.Angle = this.Angle;
                 ammo.position.setX(this.position.getX());
                 ammo.position.setY(this.position.getY());
+                if (BinaryFire){
+                    ammo.position.setX(this.position.getX()+gameEngine.sin(ammo.Angle - 90) * 6);
+                    ammo.position.setY(this.position.getY()-gameEngine.cos(ammo.Angle - 90) * 6);
+                }else {
+                    ammo.position.setX(this.position.getX()+gameEngine.sin(ammo.Angle + 90) * 6);
+                    ammo.position.setY(this.position.getY()-gameEngine.cos(ammo.Angle + 90) * 6);
+                }
+
                 ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 200);
                 ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 200);
-                break;
+                if (BinaryFire){
+                    BinaryFire = false;
+                }else {
+                    BinaryFire = true;
+                    break;
+                }
             }
         }
     }
@@ -38,13 +51,6 @@ public class ATWeapon extends Weapon {
         }
         if (loadingTime < 0){
             loadingTime = 0;
-        }
-        if (waitTime > 0 && waitTime < 1){
-            waitTime -= dt;
-        }
-        if (waitTime <= 0){
-            creatFire();
-            waitTime = 1;
         }
     }
     private void initAmmo(){

@@ -3,7 +3,7 @@ package study.Assignment;
 import java.awt.*;
 
 public class Ammo extends Entity {
-
+    Image AmmoImage = gameEngine.loadImage("Ammo.png");
     boolean Active = false;
     double power;
     Ammo(GameEngine gameEngine){
