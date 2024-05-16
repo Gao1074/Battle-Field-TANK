@@ -33,8 +33,8 @@ public class ATWeapon extends Weapon {
                     ammo.position.setY(this.position.getY()-gameEngine.cos(ammo.Angle + 90) * 6 - gameEngine.cos(ammo.Angle) * 60);
                 }
 
-                ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 200);
-                ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 200);
+                ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 1000);
+                ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 1000);
                 if (BinaryFire){
                     BinaryFire = false;
                 }else {

@@ -8,7 +8,6 @@ public class TankBattle extends GameEngine{
     public Wall wall = new Wall();
     //
     boolean GameOver;
-    double loadingTime = 3;
     public ArrayList<TANK> players = new ArrayList<>();
     public ArrayList<TANK> AI = new ArrayList<>();
 
@@ -39,6 +38,7 @@ public class TankBattle extends GameEngine{
         AI1.updateTank(dt);
         AI1.FindTarget(players,dt);
         wall.setCollides(AI1);
+
     }
     public void drawWall(){
         /*for (Wall wall : walls) {
@@ -67,6 +67,7 @@ public class TankBattle extends GameEngine{
 
     @Override
     public void update(double dt) {
+        AI1.AI(players,dt);
         updateTank(dt);
         updateAmmo(dt);
         updateWeapon(dt);

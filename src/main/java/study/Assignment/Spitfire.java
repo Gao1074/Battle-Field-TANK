@@ -3,9 +3,12 @@ package study.Assignment;
 import java.awt.*;
 import java.util.ArrayList;
 public class Spitfire extends Weapon{
-    double LimitTime = 0.05;
+    double LimitTime = 0.25;
     double FireTime = 0;
-    double fuel = 100;
+    double AmmoNums = 2;
+    boolean loading  = false;
+    final double trackingLength = 800;
+    final double FireLength = 600;
     ArrayList<FireAmmo> ammos = new ArrayList<>();
     Image image = gameEngine.loadImage("SideFire.png");
     double sideFireMode;
@@ -33,6 +36,7 @@ public class Spitfire extends Weapon{
     }
     public void updateWeapon(){
         Angle = tank.Angle + ChangAngle;
+
         if (sideFireMode == 0){
             position.setX(tank.position.getX() + gameEngine.sin(tank.Angle - 90) * 25 + gameEngine.sin(tank.Angle) * 25);
             position.setY(tank.position.getY() - gameEngine.cos(tank.Angle - 90) * 25 - gameEngine.cos(tank.Angle) * 25);
@@ -64,10 +68,12 @@ public class Spitfire extends Weapon{
         }
     }
     public void FireMode(double dt){
-        FireTime += dt;
-        if (FireTime >= LimitTime){
-            FireTime -= LimitTime;
-            Fire();
+        if (!loading) {
+            FireTime += dt;
+            if (FireTime >= LimitTime) {
+                FireTime -= LimitTime;
+                Fire();
+            }
         }
     }
     public void Fire(){
@@ -89,9 +95,13 @@ public class Spitfire extends Weapon{
 
                 fire.position.setX(position.getX() + gameEngine.sin(fire.Angle)* 30);
                 fire.position.setY(position.getY() - gameEngine.cos(fire.Angle)* 30);
-                fire.velocity.setX(gameEngine.sin(fire.Angle - 10 + gameEngine.rand(20))* 200 );
-                fire.velocity.setY(-gameEngine.cos(fire.Angle - 10 + gameEngine.rand(20))* 200 );
-                fuel -= 0.1;
+                fire.velocity.setX(gameEngine.sin(fire.Angle - 10 + gameEngine.rand(20))* 500 );
+                fire.velocity.setY(-gameEngine.cos(fire.Angle - 10 + gameEngine.rand(20))* 500 );
+
+                AmmoNums -= 0.5;
+                if (AmmoNums == 0){
+                    loading = true;
+                }
                 break;
             }
         }
@@ -105,7 +115,7 @@ public class Spitfire extends Weapon{
                 distance = gameEngine.distance(position.getX() ,position.getY() ,tank.position.getX(),tank.position.getY());
             }
         }
-        if (target != null && distance <= 400) {
+        if (target != null && distance <= trackingLength) {
             targetTracking(target,dt);
         }else if (sideFireMode == 0 || sideFireMode == 1){
             targetTracking(0,dt);
@@ -138,14 +148,20 @@ public class Spitfire extends Weapon{
             ChangAngle += maxRotationSpeed * dt;
         } else {
             ChangAngle = targetAngle - tank.Angle;
-
         }
-        if (gameEngine.distance(position.getX() ,position.getY() ,enemy.position.getX(),enemy.position.getY()) <=200){
+        if (gameEngine.distance(position.getX() ,position.getY() ,enemy.position.getX(),enemy.position.getY()) <= FireLength){
             FireMode(dt);
         }
 
     }
     public void updateAmmo(double dt ,Wall wall){
+        if (loading){
+            AmmoNums += dt;
+            if (AmmoNums >= 2){
+                AmmoNums = 2;
+                loading = false;
+            }
+        }
         for (Ammo ammo : ammos) {
             ammo.update(dt, wall);
         }
@@ -157,7 +173,7 @@ public class Spitfire extends Weapon{
     }
     public void drawUI(double X){
         gameEngine.changeColor(Color.BLACK);
-        gameEngine.drawSolidRectangle(X,20,fuel,20);
+        gameEngine.drawSolidRectangle(X,20,AmmoNums * 50,20);
         gameEngine.drawRectangle(X,20,100,20);
     }
     public void drawWeapon(){

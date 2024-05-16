@@ -11,6 +11,7 @@ public class HeavyTank extends TANK{
     Spitfire weapon_R = new Spitfire(this, gameEngine,1,1);
     Spitfire weapon_L_L = new Spitfire(this, gameEngine,-1,2);
     Spitfire weapon_R_R = new Spitfire(this, gameEngine,1,3);
+    TANK target = this;
     public void initTank(){
         Angle = 90;
         DOWN = false;
@@ -36,8 +37,8 @@ public class HeavyTank extends TANK{
 
     public void updateTank(double dt){
         if(UP) {
-            velocity.setX(gameEngine.sin(Angle) * 100);
-            velocity.setY(-gameEngine.cos(Angle) * 100);
+            velocity.setX(gameEngine.sin(Angle) * 60);
+            velocity.setY(-gameEngine.cos(Angle) * 60);
         }
         if(LEFT) {
             // Make the spaceship rotate anti-clockwise
@@ -47,8 +48,8 @@ public class HeavyTank extends TANK{
             Angle += 100 * dt;
         }
         if (DOWN){
-            velocity.setX(-gameEngine.sin(Angle) * 100);
-            velocity.setY(gameEngine.cos(Angle) * 100);
+            velocity.setX(-gameEngine.sin(Angle) * 30);
+            velocity.setY(gameEngine.cos(Angle) * 30);
         }
         position.setX(position.getX() + velocity.getX() * dt);
         position.setY(position.getY() + velocity.getY() * dt);
@@ -105,5 +106,45 @@ public class HeavyTank extends TANK{
         weapon_R.drawAmmo();
         weapon_L_L.drawAmmo();
         weapon_R_R.drawAmmo();
+    }
+    public void AI(ArrayList<TANK> tanks,double dt){
+        double distance = 9999999;
+        for (TANK tank : tanks){
+            if (gameEngine.distance(position.getX() ,position.getY() ,tank.position.getX(),tank.position.getY()) <= distance){
+                target = tank;
+            }
+        }
+        distance = gameEngine.distance(position.getX() ,position.getY() ,target.position.getX(),target.position.getY());
+        if (distance < 600){
+            if (distance > 200) {
+                targetTracking(target, dt);
+            }
+            else {
+                targetTracking(target);
+                velocity.setX(0);
+                velocity.setY(0);
+            }
+        }else {
+            UP = false;
+            velocity.setX(0);
+            velocity.setY(0);
+        }
+    }
+    public void targetTracking(Entity enemy){
+        Angle = -gameEngine.atan2(position.getX() - enemy.position.getX(),position.getY() - enemy.position.getY());
+        UP = false;
+    }
+    public void targetTracking(Entity enemy, double dt){
+        double targetAngle = -gameEngine.atan2(position.getX() - enemy.position.getX(),position.getY() - enemy.position.getY());
+        double angleDiff = (targetAngle - Angle + 180 + 360) % 360 - 180;
+        double maxRotationSpeed = 90;
+        UP = true;
+        if (angleDiff < -1) {
+            Angle -= maxRotationSpeed * dt;
+        } else if (angleDiff > 1) {
+            Angle += maxRotationSpeed * dt;
+        } else {
+            Angle = targetAngle;
+        }
     }
 }
