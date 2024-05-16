@@ -27,6 +27,8 @@ public abstract class Weapon extends Entity implements TankWeapon{
     }
     public void updateWeapon(){
         this.Angle = tank.Angle + ChangAngle;
+        position.setX(tank.position.getX());
+        position.setY(tank.position.getY());
     }
     //public void updateW() {
       //  this.Angle =
@@ -34,7 +36,8 @@ public abstract class Weapon extends Entity implements TankWeapon{
     Weapon(TANK tank, GameEngine gameEngine , double Angle){
         super(gameEngine);
         this.tank = tank;
-        this.position = tank.position;
+        position.setX(tank.position.getX());
+        position.setY(tank.position.getY());
         ChangAngle = Angle * ChangAngle;
         this.Angle = tank.Angle + ChangAngle;
     }

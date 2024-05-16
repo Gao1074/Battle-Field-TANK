@@ -5,7 +5,7 @@ import java.time.Year;
 import java.util.ArrayList;
 
 public class Wall {
-    protected ArrayList<Block> blocks;
+    ArrayList<Block> blocks;
     public void newBlock(double X,double Y,double width, double height,boolean destroy){
         Position position = new Position() {
             @Override

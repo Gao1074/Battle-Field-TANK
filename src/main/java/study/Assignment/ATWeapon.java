@@ -26,11 +26,11 @@ public class ATWeapon extends Weapon {
                 ammo.position.setX(this.position.getX());
                 ammo.position.setY(this.position.getY());
                 if (BinaryFire){
-                    ammo.position.setX(this.position.getX()+gameEngine.sin(ammo.Angle - 90) * 6);
-                    ammo.position.setY(this.position.getY()-gameEngine.cos(ammo.Angle - 90) * 6);
+                    ammo.position.setX(this.position.getX()+gameEngine.sin(ammo.Angle - 90) * 6 + gameEngine.sin(ammo.Angle) * 60);
+                    ammo.position.setY(this.position.getY()-gameEngine.cos(ammo.Angle - 90) * 6 - gameEngine.cos(ammo.Angle) * 60);
                 }else {
-                    ammo.position.setX(this.position.getX()+gameEngine.sin(ammo.Angle + 90) * 6);
-                    ammo.position.setY(this.position.getY()-gameEngine.cos(ammo.Angle + 90) * 6);
+                    ammo.position.setX(this.position.getX()+gameEngine.sin(ammo.Angle + 90) * 6 + gameEngine.sin(ammo.Angle) * 60);
+                    ammo.position.setY(this.position.getY()-gameEngine.cos(ammo.Angle + 90) * 6 - gameEngine.cos(ammo.Angle) * 60);
                 }
 
                 ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 200);
@@ -52,6 +52,8 @@ public class ATWeapon extends Weapon {
         if (loadingTime < 0){
             loadingTime = 0;
         }
+        position.setX(tank.position.getX());
+        position.setY(tank.position.getY());
     }
     private void initAmmo(){
         for (int i = 0 ; i<99;i++){

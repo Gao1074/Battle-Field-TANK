@@ -5,59 +5,40 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class TankBattle extends GameEngine{
+    public Wall wall = new Wall();
     //
     boolean GameOver;
     double loadingTime = 3;
-    //ArrayList<Wall> walls = new ArrayList<>();
+    public ArrayList<TANK> players = new ArrayList<>();
+    public ArrayList<TANK> AI = new ArrayList<>();
+
     public static void main(String[] args) {
 
         createGame(new TankBattle());
 
     }
-    public Position Border(Position position){
+    HeavyTank heavyTank = new HeavyTank(this);
+    HeavyTank AI1 = new HeavyTank(this);
+    public void initTank(){
+        heavyTank.initTank();
+        players.add(heavyTank);
 
-        if (position.getX() >= width() - player.size.getWidth() /2){
-            position.setX(width() - player.size.getWidth() /2);
-        }
-        if (position.getY() >= height() - player.size.getHeight() /2){
-            position.setY( height() - player.size.getHeight() /2);
-        }
-        if (position.getX() <= player.size.getWidth() /2){
-            position.setX(player.size.getWidth() /2);
-        }
-        if (position.getY() <= player.size.getHeight() /2){
-            position.setY(player.size.getHeight() /2);
-        }
-        return position;
+        AI1.initTank(900,900);
+        AI.add(AI1);
+    }
+
+    public void init(){
+        initTank();
     }
     public void updateTank(double dt){
-        if(player.UP) {
-            player.velocity.setX(sin(player.Angle) * 50);
-            player.velocity.setY(-cos(player.Angle) * 50);
-        }
-        if(player.LEFT) {
-            // Make the spaceship rotate anti-clockwise
-            player.Angle -= 250 * dt;
-        }
-        if (player.RIGHT){
-            player.Angle += 250 * dt;
-        }
-        if (player.DOWN){
-            player.velocity.setX(-sin(player.Angle) * 50);
-            player.velocity.setY(cos(player.Angle) * 50);
-        }
-        player.velocity.setV(sqrt(player.velocity.getX() * player.velocity.getX() + player.velocity.getY() * player.velocity.getY()));
-        double tempX;
-        double tempY;
-        tempX = player.position.getX();
-        tempY = player.position.getY();
-        player.position.setX(tempX +player.velocity.getX() * dt);
-        player.position.setY(tempY +player.velocity.getY() * dt);
-        player.position = Border(player.position);
-        /*for (Wall wall : walls) {
-            wall.setWallCollides(player);
-        }*/
-        wall.setCollides(player);
+        heavyTank.updateTank(dt);
+        heavyTank.FindTarget(AI,dt);
+        wall.setCollides(heavyTank);
+
+
+        AI1.updateTank(dt);
+        AI1.FindTarget(players,dt);
+        wall.setCollides(AI1);
     }
     public void drawWall(){
         /*for (Wall wall : walls) {
@@ -69,39 +50,20 @@ public class TankBattle extends GameEngine{
     }
     public void updateAmmo(double dt){
 
-        player.weapon_M.updateAmmo(dt,wall);
-        player.weapon_L.updateAmmo(dt,wall);
-        player.weapon_R.updateAmmo(dt,wall);
-        /*for (int i = 0; i<99; i ++) {
-            if (player.ammo.get(i).Active) {
-                double Xtemp = player.ammo.get(i).position.getX();
-                double Ytemp = player.ammo.get(i).position.getY();
-                player.ammo.get(i).setPosition(Xtemp + player.ammo.get(i).velocity.getX() * dt,Ytemp + player.ammo.get(i).velocity.getY() * dt);
-                for (Wall wall : walls) {
-                    //player.ammo.get(i).velocity =
-                            wall.setWallCollides(player.ammo.get(i));
-                }
+        heavyTank.weapon_M.updateAmmo(dt,wall);
+        heavyTank.weapon_L.updateAmmo(dt,wall);
+        heavyTank.weapon_R.updateAmmo(dt,wall);
+        heavyTank.weapon_L_L.updateAmmo(dt,wall);
+        heavyTank.weapon_R_R.updateAmmo(dt,wall);
 
-            }
-        }*/
-    }
-    PLAYER player = new PLAYER(this);
-    public void initTank(){
-
-        player.Angle = 90;
-        player.DOWN = false;
-        player.UP = false;
-        player.LEFT = false;
-        player.RIGHT = false;
-        player.position.setX(player.size.getHeight());
-        player.position.setY(Toolkit.getDefaultToolkit().getScreenSize().height / 2.0);
-        player.velocity.setX(0);
-        player.velocity.setY(0);
+        AI1.weapon_M.updateAmmo(dt,wall);
+        AI1.weapon_L.updateAmmo(dt,wall);
+        AI1.weapon_R.updateAmmo(dt,wall);
+        AI1.weapon_L_L.updateAmmo(dt,wall);
+        AI1.weapon_R_R.updateAmmo(dt,wall);
     }
 
-    public void init(){
-        initTank();
-    }
+
 
     @Override
     public void update(double dt) {
@@ -111,36 +73,20 @@ public class TankBattle extends GameEngine{
     }
     public void updateWeapon(double dt){
         if (JPressed){
-            player.weapon_L.FireMode(dt);
+            heavyTank.weapon_L.FireMode(dt);
         }
         if (KPressed){
-            player.weapon_R.FireMode(dt);
+            heavyTank.weapon_R.FireMode(dt);
         }
-
-        player.weapon_M.updateWeapon(dt);
-        player.weapon_R.updateWeapon();
-        player.weapon_L.updateWeapon();
+        heavyTank.updateTank(dt);
+        AI1.updateTank(dt);
     }
     public void drawAmmo(){
-        player.weapon_M.drawAmmo();
-        player.weapon_L.drawAmmo();
-        player.weapon_R.drawAmmo();
-        /*for (int i = 0 ;i<99;i++){
-            if (player.ammo.get(i).Active) {
-                saveCurrentTransform();
-
-                translate(player.ammo.get(i).position.getX(), player.ammo.get(i).position.getY());
-
-                rotate(player.ammo.get(i).Angle);
-                changeColor(Color.BLACK);
-                drawSolidCircle(0, 0, player.ammo.get(i).size.getRadius());
-                restoreLastTransform();
-            }
-        }*/
 
     }
     public void drawTank(){
-
+        heavyTank.drawTank();
+        AI1.drawTank();
     }
     @Override
     public void paintComponent() {
@@ -148,7 +94,7 @@ public class TankBattle extends GameEngine{
         clearBackground(width(),height());
 
         drawAmmo();
-        player.drawTank();
+        drawTank();
         drawWeapon();
         if (wall.getBlocks().size() !=0) {
             drawWall();
@@ -159,10 +105,8 @@ public class TankBattle extends GameEngine{
 
     }
     public void drawWeapon(){
-        player.drawUI();
-        player.weapon_M.drawWeapon();
-        player.weapon_R.drawWeapon();
-        player.weapon_L.drawWeapon();
+        heavyTank.drawUI();
+
     }
     boolean SpacePressed = false;
     boolean JPressed = false;
@@ -171,7 +115,7 @@ public class TankBattle extends GameEngine{
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
             if (!SpacePressed){
-                player.weapon_M.Fire();
+                heavyTank.weapon_M.Fire();
                 SpacePressed = true;
             }
         }
@@ -189,53 +133,53 @@ public class TankBattle extends GameEngine{
             System.exit(1);
         }
         if(e.getKeyCode() == KeyEvent.VK_W && !GameOver)    {
-            player.UP = true;
+            heavyTank.UP = true;
         }
         if(e.getKeyCode() == KeyEvent.VK_A && !GameOver)  {
-            player.LEFT = true;
-            /*if (player.UP){
-                player.velocity.X = sin(player.Angle) * 25;
-                player.velocity.Y = -cos(player.Angle) * 25;
+            heavyTank.LEFT = true;
+            /*if (heavyTank.UP){
+                heavyTank.velocity.X = sin(heavyTank.Angle) * 25;
+                heavyTank.velocity.Y = -cos(heavyTank.Angle) * 25;
             }
-            if (player.DOWN){
-                player.velocity.X = -sin(player.Angle) * 25;
-                player.velocity.Y = cos(player.Angle) * 25;
+            if (heavyTank.DOWN){
+                heavyTank.velocity.X = -sin(heavyTank.Angle) * 25;
+                heavyTank.velocity.Y = cos(heavyTank.Angle) * 25;
             }*/
         }
         if(e.getKeyCode() == KeyEvent.VK_S && !GameOver)  {
-            player.DOWN = true;
-            /*player.velocity.X = -sin(player.Angle) * 25;
-            player.velocity.Y = cos(player.Angle) * 25;*/
+            heavyTank.DOWN = true;
+            /*heavyTank.velocity.X = -sin(heavyTank.Angle) * 25;
+            heavyTank.velocity.Y = cos(heavyTank.Angle) * 25;*/
         }
         if(e.getKeyCode() == KeyEvent.VK_D && !GameOver) {
-            player.RIGHT = true;
-            /*if (player.UP){
-                player.velocity.X = sin(player.Angle) * 25;
-                player.velocity.Y = -cos(player.Angle) * 25;
+            heavyTank.RIGHT = true;
+            /*if (heavyTank.UP){
+                heavyTank.velocity.X = sin(heavyTank.Angle) * 25;
+                heavyTank.velocity.Y = -cos(heavyTank.Angle) * 25;
             }
-            if (player.DOWN){
-                player.velocity.X = -sin(player.Angle) * 25;
-                player.velocity.Y = cos(player.Angle) * 25;
+            if (heavyTank.DOWN){
+                heavyTank.velocity.X = -sin(heavyTank.Angle) * 25;
+                heavyTank.velocity.Y = cos(heavyTank.Angle) * 25;
             }*/
         }
     }
     @Override
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_W && !GameOver)    {
-            player.UP = false;
-            player.velocity.setX(0);
-            player.velocity.setY(0);
+            heavyTank.UP = false;
+            heavyTank.velocity.setX(0);
+            heavyTank.velocity.setY(0);
         }
         if(e.getKeyCode() == KeyEvent.VK_A && !GameOver)  {
-            player.LEFT = false;
+            heavyTank.LEFT = false;
         }
         if(e.getKeyCode() == KeyEvent.VK_S && !GameOver)  {
-            player.DOWN = false;
-            player.velocity.setX(0);
-            player.velocity.setY(0);
+            heavyTank.DOWN = false;
+            heavyTank.velocity.setX(0);
+            heavyTank.velocity.setY(0);
         }
         if(e.getKeyCode() == KeyEvent.VK_D && !GameOver) {
-            player.RIGHT = false;
+            heavyTank.RIGHT = false;
 
         }
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
@@ -254,17 +198,9 @@ public class TankBattle extends GameEngine{
         mFrame.setLocation(0,0);
         mFrame.getGraphicsConfiguration().getDevice().setFullScreenWindow(mFrame);
         ConstructWall();
-
     }
-    Wall wall = new Wall();
-    public void ConstructWall(){
-        /*Wall wall = new Wall();
-        wall.setWall(200,0,200,400);
-        walls.add(wall);
 
-        wall = new Wall();
-        wall.setWall(400,0,400,600);
-        walls.add(wall);*/
+    public void ConstructWall(){
         wall.newBlock(100,100,80,80,false);
         wall.newBlock(500,500,80,80,false);
     }
