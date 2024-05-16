@@ -3,7 +3,7 @@ package study.Assignment;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Weapon extends Entity implements TankWeapon{
+public abstract class Weapon extends Entity{
     double power;
     double Angle;
     TANK tank;
