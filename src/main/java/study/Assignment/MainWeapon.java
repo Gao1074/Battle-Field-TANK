@@ -1,6 +1,7 @@
 package study.Assignment;
 
 public class MainWeapon extends Weapon{
+    double loadingTime;
     MainWeapon(TANK tank, GameEngine gameEngine, double Angle) {
         super(tank, gameEngine, Angle);
     }
@@ -17,4 +18,5 @@ public class MainWeapon extends Weapon{
             ammos.add(i,ammo);
         }
     }
+
 }

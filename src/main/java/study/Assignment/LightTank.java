@@ -3,7 +3,7 @@ package study.Assignment;
 import java.awt.*;
 
 public class LightTank extends TANK{
-    LightWeapon M_Weapon = new LightWeapon(this,gameEngine,0);
+    LightWeapon weapon_M = new LightWeapon(this,gameEngine,0);
     LightTank(GameEngine gameEngine) {
         super(gameEngine);
         size.setWidth(40);
@@ -30,7 +30,7 @@ public class LightTank extends TANK{
         position.setY(position.getY() + velocity.getY() * dt);
         Border border = new Border(this);
 
-        M_Weapon.updateWeapon();
+        weapon_M.updateWeapon(dt);
     }
     public void drawTank(){
         gameEngine.saveCurrentTransform();
@@ -38,6 +38,6 @@ public class LightTank extends TANK{
         gameEngine.rotate(Angle);
         gameEngine.drawImage(image, - size.getWidth()/2,  - size.getHeight()/2,size.getWidth(),size.getHeight());
         gameEngine.restoreLastTransform();
-        M_Weapon.drawWeapon();
+        weapon_M.drawWeapon();
     }
 }

@@ -15,16 +15,24 @@ public class TankBattle extends GameEngine{
     public static void main(String[] args) {
         createGame(new TankBattle());
     }
-    LightTank P1;
-    MediumTank P1M;
-    HeavyTank P1H;
-
+    LightTank P1 = new LightTank(this);
+    MediumTank P1M = new MediumTank(this);
+    HeavyTank P1H = new HeavyTank(this);
     HeavyTank AI1 = new HeavyTank(this);
     public void initTank(){
         P1Choose = 1;
-        P1 = new LightTank(this);
-        P1.initTank();
-        players.add(P1);
+        if (P1Choose == 0) {
+            P1.initTank();
+            players.add(P1);
+        }
+        if (P1Choose == 1) {
+            P1M.initTank();
+            players.add(P1M);
+        }
+        if (P1Choose == 2) {
+            P1H.initTank();
+            players.add(P1H);
+        }
 
         AI1.initTank(900,900);
         AI.add(AI1);
@@ -34,9 +42,14 @@ public class TankBattle extends GameEngine{
         initTank();
     }
     public void updateTank(double dt){
-        P1.updateTank(dt);
+        if (P1Choose == 0){
+            P1.updateTank(dt);
+        }
+        if (P1Choose == 1){
+            P1M.updateTank(dt);
+        }
         if (P1Choose == 2) {
-            //P1.FindTarget(AI, dt);
+            P1H.FindTarget(AI, dt);
         }
         wall.setCollides(P1);
 
@@ -55,13 +68,19 @@ public class TankBattle extends GameEngine{
         }
     }
     public void updateAmmo(double dt){
-        if (P1Choose==2) {
-            /*P1.weapon_M.updateAmmo(dt, wall);
-            P1.weapon_L.updateAmmo(dt, wall);
-            P1.weapon_R.updateAmmo(dt, wall);
-            P1.weapon_L_L.updateAmmo(dt, wall);
-            P1.weapon_R_R.updateAmmo(dt, wall);*/
+        if (P1Choose == 0){
+            P1.weapon_M.updateAmmo(dt,wall);
+        }else if (P1Choose == 1){
+            P1M.weapon_M.updateAmmo(dt,wall);
         }
+        if (P1Choose==2) {
+            P1H.weapon_M.updateAmmo(dt, wall);
+            P1H.weapon_L.updateAmmo(dt, wall);
+            P1H.weapon_R.updateAmmo(dt, wall);
+            P1H.weapon_L_L.updateAmmo(dt, wall);
+            P1H.weapon_R_R.updateAmmo(dt, wall);
+        }
+
         AI1.weapon_M.updateAmmo(dt,wall);
         AI1.weapon_L.updateAmmo(dt,wall);
         AI1.weapon_R.updateAmmo(dt,wall);
@@ -79,20 +98,29 @@ public class TankBattle extends GameEngine{
         updateWeapon(dt);
     }
     public void updateWeapon(double dt){
-        /*if (JPressed){
-            P1.weapon_L.FireMode(dt);
+        if (P1Choose==0){
+            P1.updateTank(dt);
         }
-        if (KPressed){
-            P1.weapon_R.FireMode(dt);
-        }*/
-        P1.updateTank(dt);
+        if (P1Choose==1){
+            P1M.updateTank(dt);
+        }
+        if (P1Choose==2){
+            P1H.updateTank(dt);
+        }
         AI1.updateTank(dt);
     }
     public void drawAmmo(){
 
     }
     public void drawTank(){
-        P1.drawTank();
+        if (P1Choose == 0) {
+            P1.drawTank();
+        }
+        if (P1Choose == 1) {
+            P1M.drawTank();
+        }if (P1Choose == 2) {
+            P1H.drawTank();
+        }
         AI1.drawTank();
     }
     @Override
@@ -108,90 +136,133 @@ public class TankBattle extends GameEngine{
         }
     }
     public void drawWeapon(){
-        /*P1.drawUI();*/
     }
     boolean SpacePressed = false;
-    boolean JPressed = false;
-    boolean KPressed = false;
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
             if (!SpacePressed){
-                //P1.weapon_M.Fire();
-                SpacePressed = true;
-            }
-        }
-        if(e.getKeyCode() == KeyEvent.VK_J && !GameOver)    {
-            if (!JPressed){
-                JPressed = true;
-            }
-        }
-        if(e.getKeyCode() == KeyEvent.VK_K && !GameOver)    {
-            if (!KPressed){
-                KPressed = true;
+                if (P1Choose==0) {
+                    P1.weapon_M.Fire();
+                    SpacePressed = true;
+                }
+                if (P1Choose==1) {
+                    P1M.weapon_M.Fire();
+                    SpacePressed = true;
+                }
+                if (P1Choose==2) {
+                    P1H.weapon_M.Fire();
+                    SpacePressed = true;
+                }
             }
         }
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE && !GameOver)    {
             System.exit(1);
         }
         if(e.getKeyCode() == KeyEvent.VK_W && !GameOver)    {
-            P1.UP = true;
+            if (P1Choose==0) {
+                P1.UP = true;
+            }
+            if (P1Choose==1) {
+                P1M.UP = true;
+            }
+            if (P1Choose==2) {
+                P1H.UP = true;
+            }
+
         }
         if(e.getKeyCode() == KeyEvent.VK_A && !GameOver)  {
-            P1.LEFT = true;
-            /*if (heavyTank.UP){
-                heavyTank.velocity.X = sin(heavyTank.Angle) * 25;
-                heavyTank.velocity.Y = -cos(heavyTank.Angle) * 25;
+            if (P1Choose==0) {
+                P1.LEFT = true;
             }
-            if (heavyTank.DOWN){
-                heavyTank.velocity.X = -sin(heavyTank.Angle) * 25;
-                heavyTank.velocity.Y = cos(heavyTank.Angle) * 25;
-            }*/
+            if (P1Choose==1) {
+                P1M.LEFT = true;
+            }
+            if (P1Choose==2) {
+                P1H.LEFT = true;
+            }
         }
         if(e.getKeyCode() == KeyEvent.VK_S && !GameOver)  {
-            P1.DOWN = true;
-            /*heavyTank.velocity.X = -sin(heavyTank.Angle) * 25;
-            heavyTank.velocity.Y = cos(heavyTank.Angle) * 25;*/
+            if (P1Choose==0) {
+                P1.DOWN = true;
+            }
+            if (P1Choose==1) {
+                P1M.DOWN = true;
+            }
+            if (P1Choose==2) {
+                P1H.DOWN = true;
+            }
+
         }
         if(e.getKeyCode() == KeyEvent.VK_D && !GameOver) {
-            P1.RIGHT = true;
-            /*if (heavyTank.UP){
-                heavyTank.velocity.X = sin(heavyTank.Angle) * 25;
-                heavyTank.velocity.Y = -cos(heavyTank.Angle) * 25;
+            if (P1Choose==0) {
+                P1.RIGHT = true;
             }
-            if (heavyTank.DOWN){
-                heavyTank.velocity.X = -sin(heavyTank.Angle) * 25;
-                heavyTank.velocity.Y = cos(heavyTank.Angle) * 25;
-            }*/
+            if (P1Choose==1) {
+                P1M.RIGHT = true;
+            }
+            if (P1Choose==2) {
+                P1H.RIGHT = true;
+            }
+
         }
     }
     @Override
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_W && !GameOver)    {
-            P1.UP = false;
-            P1.velocity.setX(0);
-            P1.velocity.setY(0);
+            if (P1Choose==0) {
+                P1.UP = false;
+                P1.velocity.setX(0);
+                P1.velocity.setY(0);
+            }
+            if (P1Choose==1) {
+                P1M.UP = false;
+                P1M.velocity.setX(0);
+                P1M.velocity.setY(0);
+            }
+            if (P1Choose==2) {
+                P1H.UP = false;
+                P1H.velocity.setX(0);
+                P1H.velocity.setY(0);
+            }
         }
         if(e.getKeyCode() == KeyEvent.VK_A && !GameOver)  {
-            P1.LEFT = false;
+            if (P1Choose==0) {
+                P1.LEFT = false;
+            }if (P1Choose==1) {
+                P1M.LEFT = false;
+            }if (P1Choose==2) {
+                P1H.LEFT = false;
+            }
         }
         if(e.getKeyCode() == KeyEvent.VK_S && !GameOver)  {
-            P1.DOWN = false;
-            P1.velocity.setX(0);
-            P1.velocity.setY(0);
+            if (P1Choose==0) {
+                P1.DOWN = false;
+                P1.velocity.setX(0);
+                P1.velocity.setY(0);
+            }if (P1Choose==1) {
+                P1M.DOWN = false;
+                P1M.velocity.setX(0);
+                P1M.velocity.setY(0);
+            }if (P1Choose==2) {
+                P1H.DOWN = false;
+                P1H.velocity.setX(0);
+                P1H.velocity.setY(0);
+            }
         }
         if(e.getKeyCode() == KeyEvent.VK_D && !GameOver) {
-            P1.RIGHT = false;
+            if (P1Choose==0) {
+                P1.RIGHT = false;
+            }if (P1Choose==1) {
+                P1M.RIGHT = false;
+            }if (P1Choose==2) {
+                P1H.RIGHT = false;
+            }
+
 
         }
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
             SpacePressed = false;
-        }
-        if(e.getKeyCode() == KeyEvent.VK_J && !GameOver)    {
-            JPressed = false;
-        }
-        if(e.getKeyCode() == KeyEvent.VK_K && !GameOver)    {
-            KPressed = false;
         }
     }
     @Override

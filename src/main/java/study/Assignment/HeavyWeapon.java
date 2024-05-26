@@ -3,7 +3,6 @@ package study.Assignment;
 import java.awt.*;
 
 public class HeavyWeapon extends MainWeapon {
-    double loadingTime;
     boolean BinaryFire = true;
     HeavyWeapon(TANK tank, GameEngine gameEngine, double Angle) {
         super(tank, gameEngine, Angle);
@@ -12,10 +11,12 @@ public class HeavyWeapon extends MainWeapon {
         image = gameEngine.loadImage("HeavyWeapon.png");
     }
     public void Fire(){
+
         if (loadingTime <= 0) {
             creatFire();
             loadingTime = 5;
         }
+
     }
     private void creatFire(){
         for (Ammo ammo : ammos) {
@@ -41,17 +42,7 @@ public class HeavyWeapon extends MainWeapon {
             }
         }
     }
-    public void updateWeapon(double dt){
-        this.Angle = tank.Angle + ChangAngle;
-        if (loadingTime > 0){
-            loadingTime -=dt;
-        }
-        if (loadingTime < 0){
-            loadingTime = 0;
-        }
-        position.setX(tank.position.getX());
-        position.setY(tank.position.getY());
-    }
+
     public void drawUI(double X){
         gameEngine.changeColor(Color.BLACK);
         gameEngine.drawSolidRectangle(X,20,(5 - loadingTime)* 20,20);
@@ -64,5 +55,17 @@ public class HeavyWeapon extends MainWeapon {
         gameEngine.changeColor(Color.BLACK);
         gameEngine.drawImage(image,-tank.size.getWidth() / 4,-tank.size.getHeight() / 2 - 20,tank.size.getWidth() / 2 ,tank.size.getHeight());
         gameEngine.restoreLastTransform();
+        drawAmmo();
+    }
+    public void updateWeapon(double dt){
+        Angle = tank.Angle + ChangAngle;
+        if (loadingTime > 0){
+            loadingTime -=dt;
+        }
+        if (loadingTime < 0){
+            loadingTime = 0;
+        }
+        position.setX(tank.position.getX());
+        position.setY(tank.position.getY());
     }
 }

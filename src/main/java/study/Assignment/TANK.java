@@ -10,8 +10,6 @@ public abstract class TANK extends Entity{
     protected boolean LEFT;
     protected boolean RIGHT;
     TANK target = this;
-    Image Moving = gameEngine.loadImage("Moving.png");
-
     TANK(GameEngine gameEngine){
         super(gameEngine);
 

@@ -11,7 +11,6 @@ public class HeavyTank extends TANK{
     Spitfire weapon_R = new Spitfire(this, gameEngine,1,1);
     Spitfire weapon_L_L = new Spitfire(this, gameEngine,-1,2);
     Spitfire weapon_R_R = new Spitfire(this, gameEngine,1,3);
-    Image Moving = gameEngine.loadImage("Moving.png");
     TANK target = this;
     public HeavyTank(GameEngine gameEngine){
         super(gameEngine);
@@ -40,7 +39,7 @@ public class HeavyTank extends TANK{
         position.setY(position.getY() + velocity.getY() * dt);
 
 
-        weapon_M.updateWeapon(dt);
+        weapon_M. updateWeapon(dt);
         weapon_R.updateWeapon();
         weapon_L.updateWeapon();
         weapon_R_R.updateWeapon();
@@ -67,19 +66,11 @@ public class HeavyTank extends TANK{
 
         gameEngine.restoreLastTransform();
 
-
         weapon_M.drawWeapon();
         weapon_R.drawWeapon();
         weapon_L.drawWeapon();
         weapon_R_R.drawWeapon();
         weapon_L_L.drawWeapon();
-
-
-        weapon_M.drawAmmo();
-        weapon_L.drawAmmo();
-        weapon_R.drawAmmo();
-        weapon_L_L.drawAmmo();
-        weapon_R_R.drawAmmo();
     }
     public void AI(ArrayList<TANK> tanks,double dt){
         double distance = 9999999;

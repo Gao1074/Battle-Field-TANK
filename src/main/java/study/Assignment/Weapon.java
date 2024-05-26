@@ -7,7 +7,7 @@ public abstract class Weapon extends Entity{
     double power;
     double Angle;
     TANK tank;
-    double ChangAngle = 90;
+    double ChangAngle;
     protected ArrayList<Ammo> ammos = new ArrayList<>(99);
     public void FireMode(double dt){
 
@@ -30,9 +30,6 @@ public abstract class Weapon extends Entity{
         position.setX(tank.position.getX());
         position.setY(tank.position.getY());
     }
-    //public void updateW() {
-      //  this.Angle =
-    //}
     Weapon(TANK tank, GameEngine gameEngine , double Angle){
         super(gameEngine);
         this.tank = tank;

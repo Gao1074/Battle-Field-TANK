@@ -184,5 +184,6 @@ public class Spitfire extends Weapon{
         gameEngine.rotate(Angle);
         gameEngine.drawImage(image,-20,-20,40,40);
         gameEngine.restoreLastTransform();
+        drawAmmo();
     }
 }

@@ -2,13 +2,12 @@ package study.Assignment;
 
 import java.awt.*;
 
-public class LightWeapon extends MainWeapon{
-    double loadingTime = 0;
-    LightWeapon(TANK tank, GameEngine gameEngine, double Angle) {
+public class MediumWeapon extends MainWeapon{
+    MediumWeapon(TANK tank, GameEngine gameEngine, double Angle) {
         super(tank, gameEngine, Angle);
         power = 100;
         initAmmo();
-        image = gameEngine.loadImage("LightWeapon.png");
+        image = gameEngine.loadImage("MediumWeapon.png");
     }
     public void Fire(){
         if (loadingTime <= 0) {
