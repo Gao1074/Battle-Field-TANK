@@ -34,24 +34,26 @@ public class Spitfire extends Weapon{
         initAmmo();
         sideFireMode = D;
     }
+    double turretPositionX = 20;
+    double turretPositionY = 25;
     public void updateWeapon(){
         Angle = tank.Angle + ChangAngle;
 
         if (sideFireMode == 0){
-            position.setX(tank.position.getX() + gameEngine.sin(tank.Angle - 90) * 25 + gameEngine.sin(tank.Angle) * 25);
-            position.setY(tank.position.getY() - gameEngine.cos(tank.Angle - 90) * 25 - gameEngine.cos(tank.Angle) * 25);
+            position.setX(tank.position.getX() + gameEngine.sin(tank.Angle - 90) * turretPositionX + gameEngine.sin(tank.Angle) * turretPositionY);
+            position.setY(tank.position.getY() - gameEngine.cos(tank.Angle - 90) * turretPositionX - gameEngine.cos(tank.Angle) * turretPositionY);
         }
         if (sideFireMode == 1){
-            position.setX(tank.position.getX() + gameEngine.sin(tank.Angle + 90) * 25 + gameEngine.sin(tank.Angle) * 25);
-            position.setY(tank.position.getY() - gameEngine.cos(tank.Angle + 90) * 25 - gameEngine.cos(tank.Angle) * 25);
+            position.setX(tank.position.getX() + gameEngine.sin(tank.Angle + 90) * turretPositionX + gameEngine.sin(tank.Angle) * turretPositionY);
+            position.setY(tank.position.getY() - gameEngine.cos(tank.Angle + 90) * turretPositionX - gameEngine.cos(tank.Angle) * turretPositionY);
         }
         if (sideFireMode == 2){
-            position.setX(tank.position.getX() + gameEngine.sin(tank.Angle - 90) * 25 + gameEngine.sin(tank.Angle + 180) * 25);
-            position.setY(tank.position.getY() - gameEngine.cos(tank.Angle - 90) * 25 - gameEngine.cos(tank.Angle + 180) * 25);
+            position.setX(tank.position.getX() + gameEngine.sin(tank.Angle - 90) * turretPositionX + gameEngine.sin(tank.Angle + 180) * turretPositionY);
+            position.setY(tank.position.getY() - gameEngine.cos(tank.Angle - 90) * turretPositionX - gameEngine.cos(tank.Angle + 180) * turretPositionY);
         }
         if (sideFireMode == 3){
-            position.setX(tank.position.getX() + gameEngine.sin(tank.Angle + 90) * 25 + gameEngine.sin(tank.Angle + 180) * 25);
-            position.setY(tank.position.getY() - gameEngine.cos(tank.Angle + 90) * 25 - gameEngine.cos(tank.Angle + 180) * 25);
+            position.setX(tank.position.getX() + gameEngine.sin(tank.Angle + 90) * turretPositionX + gameEngine.sin(tank.Angle + 180) * turretPositionY);
+            position.setY(tank.position.getY() - gameEngine.cos(tank.Angle + 90) * turretPositionX - gameEngine.cos(tank.Angle + 180) * turretPositionY);
         }
     }
     private void initAmmo(){

@@ -6,36 +6,21 @@ import java.util.ArrayList;
 
 public class HeavyTank extends TANK{
 
-    ATWeapon weapon_M = new ATWeapon(this, gameEngine,0);
+    HeavyWeapon weapon_M = new HeavyWeapon(this, gameEngine,0);
     Spitfire weapon_L = new Spitfire(this, gameEngine,-1,0);
     Spitfire weapon_R = new Spitfire(this, gameEngine,1,1);
     Spitfire weapon_L_L = new Spitfire(this, gameEngine,-1,2);
     Spitfire weapon_R_R = new Spitfire(this, gameEngine,1,3);
+    Image Moving = gameEngine.loadImage("Moving.png");
     TANK target = this;
-    public void initTank(){
-        Angle = 90;
-        DOWN = false;
-        UP = false;
-        LEFT = false;
-        RIGHT = false;
-        position.setX(size.getHeight());
-        position.setY(Toolkit.getDefaultToolkit().getScreenSize().height / 2.0);
-        velocity.setX(0);
-        velocity.setY(0);
+    public HeavyTank(GameEngine gameEngine){
+        super(gameEngine);
+        size.setWidth(80);
+        size.setHeight(80);
+        image = gameEngine.loadImage("HeavyTank0.png");
     }
-    public void initTank(double x,double y){
-        Angle = 90;
-        DOWN = false;
-        UP = false;
-        LEFT = false;
-        RIGHT = false;
-        position.setX(x);
-        position.setY(y);
-        velocity.setX(0);
-        velocity.setY(0);
-    }
-
     public void updateTank(double dt){
+        Border border = new Border(this);
         if(UP) {
             velocity.setX(gameEngine.sin(Angle) * 60);
             velocity.setY(-gameEngine.cos(Angle) * 60);
@@ -55,17 +40,13 @@ public class HeavyTank extends TANK{
         position.setY(position.getY() + velocity.getY() * dt);
 
 
-        Border border = new Border(this);
-
-
-
-
         weapon_M.updateWeapon(dt);
         weapon_R.updateWeapon();
         weapon_L.updateWeapon();
         weapon_R_R.updateWeapon();
         weapon_L_L.updateWeapon();
     }
+    //Small turret
     public void FindTarget(ArrayList<TANK> tanks,double dt){
         weapon_L.targetChoosing(tanks,dt);
         weapon_L_L.targetChoosing(tanks,dt);
@@ -73,11 +54,6 @@ public class HeavyTank extends TANK{
         weapon_R_R.targetChoosing(tanks,dt);
     }
 
-
-    public HeavyTank(GameEngine gameEngine){
-        super(gameEngine);
-        image = gameEngine.loadImage("Player.png");
-    }
     public void drawUI(){
         weapon_M.drawUI( 20 );
         weapon_L.drawUI( 220 );
@@ -87,8 +63,6 @@ public class HeavyTank extends TANK{
         gameEngine.saveCurrentTransform();
         gameEngine.translate(position.getX(),position.getY());
         gameEngine.rotate(Angle);
-        gameEngine.drawImage(Moving,- size.getWidth()/2,- size.getHeight()/2,size.getWidth(),size.getHeight()/2);
-        gameEngine.drawImage(Moving,- size.getWidth()/2,0,size.getWidth(),size.getHeight()/2);
         gameEngine.drawImage(image, - size.getWidth()/2,  - size.getHeight()/2,size.getWidth(),size.getHeight());
 
         gameEngine.restoreLastTransform();
@@ -116,7 +90,7 @@ public class HeavyTank extends TANK{
         }
         distance = gameEngine.distance(position.getX() ,position.getY() ,target.position.getX(),target.position.getY());
         if (distance < 600){
-            if (distance > 200) {
+            if (distance > 400) {
                 targetTracking(target, dt);
             }
             else {
@@ -133,6 +107,7 @@ public class HeavyTank extends TANK{
     public void targetTracking(Entity enemy){
         Angle = -gameEngine.atan2(position.getX() - enemy.position.getX(),position.getY() - enemy.position.getY());
         UP = false;
+        weapon_M.Fire();
     }
     public void targetTracking(Entity enemy, double dt){
         double targetAngle = -gameEngine.atan2(position.getX() - enemy.position.getX(),position.getY() - enemy.position.getY());
@@ -145,6 +120,7 @@ public class HeavyTank extends TANK{
             Angle += maxRotationSpeed * dt;
         } else {
             Angle = targetAngle;
+            weapon_M.Fire();
         }
     }
 }

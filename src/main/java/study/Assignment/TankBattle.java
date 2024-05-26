@@ -10,17 +10,21 @@ public class TankBattle extends GameEngine{
     boolean GameOver;
     public ArrayList<TANK> players = new ArrayList<>();
     public ArrayList<TANK> AI = new ArrayList<>();
+    int P1Choose = 0;
 
     public static void main(String[] args) {
-
         createGame(new TankBattle());
-
     }
-    HeavyTank heavyTank = new HeavyTank(this);
+    LightTank P1;
+    MediumTank P1M;
+    HeavyTank P1H;
+
     HeavyTank AI1 = new HeavyTank(this);
     public void initTank(){
-        heavyTank.initTank();
-        players.add(heavyTank);
+        P1Choose = 1;
+        P1 = new LightTank(this);
+        P1.initTank();
+        players.add(P1);
 
         AI1.initTank(900,900);
         AI.add(AI1);
@@ -30,9 +34,11 @@ public class TankBattle extends GameEngine{
         initTank();
     }
     public void updateTank(double dt){
-        heavyTank.updateTank(dt);
-        heavyTank.FindTarget(AI,dt);
-        wall.setCollides(heavyTank);
+        P1.updateTank(dt);
+        if (P1Choose == 2) {
+            //P1.FindTarget(AI, dt);
+        }
+        wall.setCollides(P1);
 
 
         AI1.updateTank(dt);
@@ -49,13 +55,13 @@ public class TankBattle extends GameEngine{
         }
     }
     public void updateAmmo(double dt){
-
-        heavyTank.weapon_M.updateAmmo(dt,wall);
-        heavyTank.weapon_L.updateAmmo(dt,wall);
-        heavyTank.weapon_R.updateAmmo(dt,wall);
-        heavyTank.weapon_L_L.updateAmmo(dt,wall);
-        heavyTank.weapon_R_R.updateAmmo(dt,wall);
-
+        if (P1Choose==2) {
+            /*P1.weapon_M.updateAmmo(dt, wall);
+            P1.weapon_L.updateAmmo(dt, wall);
+            P1.weapon_R.updateAmmo(dt, wall);
+            P1.weapon_L_L.updateAmmo(dt, wall);
+            P1.weapon_R_R.updateAmmo(dt, wall);*/
+        }
         AI1.weapon_M.updateAmmo(dt,wall);
         AI1.weapon_L.updateAmmo(dt,wall);
         AI1.weapon_R.updateAmmo(dt,wall);
@@ -73,20 +79,20 @@ public class TankBattle extends GameEngine{
         updateWeapon(dt);
     }
     public void updateWeapon(double dt){
-        if (JPressed){
-            heavyTank.weapon_L.FireMode(dt);
+        /*if (JPressed){
+            P1.weapon_L.FireMode(dt);
         }
         if (KPressed){
-            heavyTank.weapon_R.FireMode(dt);
-        }
-        heavyTank.updateTank(dt);
+            P1.weapon_R.FireMode(dt);
+        }*/
+        P1.updateTank(dt);
         AI1.updateTank(dt);
     }
     public void drawAmmo(){
 
     }
     public void drawTank(){
-        heavyTank.drawTank();
+        P1.drawTank();
         AI1.drawTank();
     }
     @Override
@@ -100,14 +106,9 @@ public class TankBattle extends GameEngine{
         if (wall.getBlocks().size() !=0) {
             drawWall();
         }
-        /*if (walls.size()!=0){
-            drawWall();
-        }*/
-
     }
     public void drawWeapon(){
-        heavyTank.drawUI();
-
+        /*P1.drawUI();*/
     }
     boolean SpacePressed = false;
     boolean JPressed = false;
@@ -116,7 +117,7 @@ public class TankBattle extends GameEngine{
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
             if (!SpacePressed){
-                heavyTank.weapon_M.Fire();
+                //P1.weapon_M.Fire();
                 SpacePressed = true;
             }
         }
@@ -134,10 +135,10 @@ public class TankBattle extends GameEngine{
             System.exit(1);
         }
         if(e.getKeyCode() == KeyEvent.VK_W && !GameOver)    {
-            heavyTank.UP = true;
+            P1.UP = true;
         }
         if(e.getKeyCode() == KeyEvent.VK_A && !GameOver)  {
-            heavyTank.LEFT = true;
+            P1.LEFT = true;
             /*if (heavyTank.UP){
                 heavyTank.velocity.X = sin(heavyTank.Angle) * 25;
                 heavyTank.velocity.Y = -cos(heavyTank.Angle) * 25;
@@ -148,12 +149,12 @@ public class TankBattle extends GameEngine{
             }*/
         }
         if(e.getKeyCode() == KeyEvent.VK_S && !GameOver)  {
-            heavyTank.DOWN = true;
+            P1.DOWN = true;
             /*heavyTank.velocity.X = -sin(heavyTank.Angle) * 25;
             heavyTank.velocity.Y = cos(heavyTank.Angle) * 25;*/
         }
         if(e.getKeyCode() == KeyEvent.VK_D && !GameOver) {
-            heavyTank.RIGHT = true;
+            P1.RIGHT = true;
             /*if (heavyTank.UP){
                 heavyTank.velocity.X = sin(heavyTank.Angle) * 25;
                 heavyTank.velocity.Y = -cos(heavyTank.Angle) * 25;
@@ -167,20 +168,20 @@ public class TankBattle extends GameEngine{
     @Override
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_W && !GameOver)    {
-            heavyTank.UP = false;
-            heavyTank.velocity.setX(0);
-            heavyTank.velocity.setY(0);
+            P1.UP = false;
+            P1.velocity.setX(0);
+            P1.velocity.setY(0);
         }
         if(e.getKeyCode() == KeyEvent.VK_A && !GameOver)  {
-            heavyTank.LEFT = false;
+            P1.LEFT = false;
         }
         if(e.getKeyCode() == KeyEvent.VK_S && !GameOver)  {
-            heavyTank.DOWN = false;
-            heavyTank.velocity.setX(0);
-            heavyTank.velocity.setY(0);
+            P1.DOWN = false;
+            P1.velocity.setX(0);
+            P1.velocity.setY(0);
         }
         if(e.getKeyCode() == KeyEvent.VK_D && !GameOver) {
-            heavyTank.RIGHT = false;
+            P1.RIGHT = false;
 
         }
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
