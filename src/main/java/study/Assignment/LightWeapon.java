@@ -1,8 +1,10 @@
 package study.Assignment;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class LightWeapon extends MainWeapon{
+    double fullLoadingTime = 1;
     double loadingTime = 0;
     LightWeapon(TANK tank, GameEngine gameEngine, double Angle) {
         super(tank, gameEngine, Angle);
@@ -13,7 +15,7 @@ public class LightWeapon extends MainWeapon{
     public void Fire(){
         if (loadingTime <= 0) {
             creatFire();
-            loadingTime = 2;
+            loadingTime = 1;
         }
     }
     private void creatFire(){
@@ -30,12 +32,19 @@ public class LightWeapon extends MainWeapon{
         }
     }
     public void drawWeapon(){
-        gameEngine.saveCurrentTransform();
-        gameEngine.translate(position.getX(),position.getY());
-        gameEngine.rotate(Angle);
-        gameEngine.changeColor(Color.BLACK);
-        gameEngine.drawImage(image,-tank.size.getWidth() / 4,-tank.size.getHeight() + 10,tank.size.getWidth() / 2 ,tank.size.getHeight());
-        gameEngine.restoreLastTransform();
+        if (!tank.defeat) {
+            gameEngine.saveCurrentTransform();
+            gameEngine.translate(position.getX(), position.getY());
+            gameEngine.rotate(Angle);
+            gameEngine.changeColor(Color.BLACK);
+            gameEngine.drawImage(image, -tank.size.getWidth() / 4, -tank.size.getHeight() + 10, tank.size.getWidth() / 2, tank.size.getHeight());
+            gameEngine.restoreLastTransform();
+
+            gameEngine.changeColor(Color.BLUE);
+            gameEngine.drawSolidRectangle(tank.position.getX() - tank.size.getWidth() / 2, tank.position.getY() - tank.size.getHeight() / 2 - 10, tank.size.getWidth() * (fullLoadingTime - loadingTime) / fullLoadingTime, 5);
+            gameEngine.changeColor(Color.BLACK);
+            gameEngine.drawRectangle(tank.position.getX() - tank.size.getWidth() / 2, tank.position.getY() - tank.size.getHeight() / 2 - 10, tank.size.getWidth(), 5);
+        }
         drawAmmo();
     }
     public void updateWeapon(double dt){

@@ -5,11 +5,18 @@ import java.util.ArrayList;
 
 public abstract class TANK extends Entity{
     //direction
+    protected double Health;
+    protected boolean defeat = false;
+    protected double FullHealth;
     protected boolean UP;
     protected boolean DOWN;
     protected boolean LEFT;
     protected boolean RIGHT;
+    public boolean explode;
+
+    protected GameEngine.AudioClip MovingAudio;
     TANK target = this;
+
     TANK(GameEngine gameEngine){
         super(gameEngine);
 

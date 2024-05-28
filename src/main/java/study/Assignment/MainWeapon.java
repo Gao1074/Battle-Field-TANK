@@ -1,7 +1,10 @@
 package study.Assignment;
 
+import java.util.ArrayList;
+
 public class MainWeapon extends Weapon{
     double loadingTime;
+    ArrayList<ATAmmo> ammos = new ArrayList<>(99);
     MainWeapon(TANK tank, GameEngine gameEngine, double Angle) {
         super(tank, gameEngine, Angle);
     }
@@ -16,6 +19,21 @@ public class MainWeapon extends Weapon{
             ammo.power = this.power;
             ammo.Active = false;
             ammos.add(i,ammo);
+        }
+    }
+    public void updateAmmo(double dt ,Wall wall){
+        for (ATAmmo ammo : ammos) {
+            ammo.update(dt,wall);
+        }
+    }
+    public void drawAmmo(){
+        for (ATAmmo ammo : ammos) {
+            ammo.draw();
+        }
+    }
+    public void updateDamage(ArrayList<TANK> tank){
+        for (ATAmmo ammo : ammos){
+            ammo.Damage(tank);
         }
     }
 

@@ -179,11 +179,18 @@ public class Spitfire extends Weapon{
         gameEngine.drawRectangle(X,20,100,20);
     }
     public void drawWeapon(){
-        gameEngine.saveCurrentTransform();
-        gameEngine.translate(position.getX(),position.getY());
-        gameEngine.rotate(Angle);
-        gameEngine.drawImage(image,-20,-20,40,40);
-        gameEngine.restoreLastTransform();
+        if (!tank.defeat) {
+            gameEngine.saveCurrentTransform();
+            gameEngine.translate(position.getX(), position.getY());
+            gameEngine.rotate(Angle);
+            gameEngine.drawImage(image, -20, -20, 40, 40);
+            gameEngine.restoreLastTransform();
+        }
         drawAmmo();
+    }
+    public void updateDamage(ArrayList<TANK> tank){
+        for (FireAmmo ammo : ammos){
+            ammo.Damage(tank);
+        }
     }
 }

@@ -1,6 +1,8 @@
 package study.Assignment;
 
 
+import java.util.ArrayList;
+
 public class FireAmmo extends Ammo{
     final double trackingLength = 400;
 
@@ -12,6 +14,7 @@ public class FireAmmo extends Ammo{
     };
     public FireAmmo(GameEngine gameEngine){
         super(gameEngine);
+        power = 5;
         image = gameEngine.subImage(AmmoImage,0,0,20,103);
     }
     public Position getInitialPosition() {
@@ -38,6 +41,19 @@ public class FireAmmo extends Ammo{
             gameEngine.rotate(Angle);
             gameEngine.drawImage(image,-2.5,-12.5,5,25);
             gameEngine.restoreLastTransform();
+        }
+    }
+    public void Damage(ArrayList<TANK> Enemies){
+        for (TANK Tank : Enemies){
+            if (Active) {
+                if (gameEngine.distance(position.getX(), position.getY(), Tank.position.getX(), Tank.position.getY()) <= Tank.size.getWidth()) {
+                    Tank.Health -= 5;
+                    Active = false;
+                    if (Tank.Health <=0){
+                        Tank.Health = 0;
+                    }
+                }
+            }
         }
     }
 }
