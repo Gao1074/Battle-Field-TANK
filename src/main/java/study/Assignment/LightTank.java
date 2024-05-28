@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class LightTank extends TANK{
-    boolean Playing;
+//    boolean Playing;
     LightWeapon weapon_M = new LightWeapon(this,gameEngine,0);
     LightTank(GameEngine gameEngine) {
         super(gameEngine);
@@ -38,14 +38,14 @@ public class LightTank extends TANK{
                 velocity.setY(gameEngine.cos(Angle) * 150);
 
             }
-            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
-                gameEngine.startAudioLoop(MovingAudio);
-                Playing = true;
-            }
-            if (Playing && !(UP || LEFT || RIGHT || DOWN)) {
-                gameEngine.stopAudioLoop(MovingAudio);
-                Playing = false;
-            }
+//            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
+//                gameEngine.startAudioLoop(MovingAudio);
+//                Playing = true;
+//            }
+//            if (Playing && !(UP || LEFT || RIGHT || DOWN)) {
+//                gameEngine.stopAudioLoop(MovingAudio);
+//                Playing = false;
+//            }
             position.setX(position.getX() + velocity.getX() * dt);
             position.setY(position.getY() + velocity.getY() * dt);
             Border border = new Border(this);

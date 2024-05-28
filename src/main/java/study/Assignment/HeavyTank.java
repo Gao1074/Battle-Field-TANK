@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class HeavyTank extends TANK{
-    boolean Playing;
+//    boolean Playing;
     HeavyWeapon weapon_M = new HeavyWeapon(this, gameEngine,0);
     Spitfire weapon_L = new Spitfire(this, gameEngine,-1,0);
     Spitfire weapon_R = new Spitfire(this, gameEngine,1,1);
@@ -41,14 +41,14 @@ public class HeavyTank extends TANK{
                 velocity.setX(-gameEngine.sin(Angle) * 30);
                 velocity.setY(gameEngine.cos(Angle) * 30);
             }
-            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
-                gameEngine.startAudioLoop(MovingAudio);
-                Playing = true;
-            }
-            if (Playing && !(UP || LEFT || RIGHT || DOWN)) {
-                gameEngine.stopAudioLoop(MovingAudio);
-                Playing = false;
-            }
+//            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
+//                gameEngine.startAudioLoop(MovingAudio);
+//                Playing = true;
+//            }
+//            if (Playing && !(UP || LEFT || RIGHT || DOWN)) {
+//                gameEngine.stopAudioLoop(MovingAudio);
+//                Playing = false;
+//            }
             position.setX(position.getX() + velocity.getX() * dt);
             position.setY(position.getY() + velocity.getY() * dt);
 

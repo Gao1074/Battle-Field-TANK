@@ -152,7 +152,7 @@ public abstract class GameEngine implements KeyListener, MouseListener, MouseMot
             public void run() {
                 Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                 // Create the window
-                setupWindow(dim.width,dim.height);
+                setupWindow(1500,1000);
             }
         });
     }

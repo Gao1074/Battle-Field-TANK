@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class MediumTank extends TANK{
 
     MediumWeapon weapon_M = new MediumWeapon(this, gameEngine,0);
-    boolean Playing;
+//    boolean Playing;
     MediumTank(GameEngine gameEngine) {
         super(gameEngine);
         size.setWidth(60);
@@ -36,14 +36,14 @@ public class MediumTank extends TANK{
                 velocity.setY(gameEngine.cos(Angle) * 100);
             }
 
-            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
-                gameEngine.startAudioLoop(MovingAudio);
-                Playing = true;
-            }
-            if (Playing && !(UP || LEFT || RIGHT || DOWN)) {
-                gameEngine.stopAudioLoop(MovingAudio);
-                Playing = false;
-            }
+//            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
+//                gameEngine.startAudioLoop(MovingAudio);
+//                Playing = true;
+//            }
+//            if (Playing && !(UP || LEFT || RIGHT || DOWN)) {
+//                gameEngine.stopAudioLoop(MovingAudio);
+//                Playing = false;
+//            }
 
             position.setX(position.getX() + velocity.getX() * dt);
             position.setY(position.getY() + velocity.getY() * dt);

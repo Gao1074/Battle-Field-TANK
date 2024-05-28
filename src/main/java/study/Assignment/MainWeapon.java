@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class MainWeapon extends Weapon{
     double loadingTime;
     ArrayList<ATAmmo> ammos = new ArrayList<>(99);
+   final GameEngine.AudioClip fireSoundEffect = gameEngine.loadAudio("src/main/resources/Fire.WAV");
     MainWeapon(TANK tank, GameEngine gameEngine, double Angle) {
         super(tank, gameEngine, Angle);
     }
