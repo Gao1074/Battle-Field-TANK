@@ -114,7 +114,7 @@ public class MediumTank extends TANK{
             gameEngine.changeColor(Color.BLACK);
             gameEngine.drawRectangle(position.getX() - size.getWidth() / 2, position.getY() - size.getHeight() / 2 - 20, size.getWidth(), 10);
             if (isrepair){
-                gameEngine.drawImage(gameEngine.loadImage("repair.png"), position.getX()-size.getWidth() / 2 -20, position.getY()-size.getHeight() / 2 -25, 20, 20);
+                gameEngine.drawImage(gameEngine.loadImage("main/resources/Repairstation/repair.png"), position.getX()-size.getWidth() / 2 -20, position.getY()-size.getHeight() / 2 -25, 20, 20);
             }
         }
         weapon_M.drawWeapon();

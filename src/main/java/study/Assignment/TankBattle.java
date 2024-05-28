@@ -147,7 +147,7 @@ public class TankBattle extends GameEngine{
         }
 
     }
-    Image Block = loadImage(Resource + "Block/Block.png");
+    Image Block = loadImage(Resource + "block/wall.png");
     public void drawWall(){
         changeColor(Color.BLACK);
         for (Block block : wall.getBlocks()){
