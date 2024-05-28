@@ -11,6 +11,7 @@ public class TankBattle extends GameEngine{
     public ArrayList<TANK> factionA = new ArrayList<>();
     public ArrayList<TANK> factionB = new ArrayList<>();
     public ArrayList<TANK> tanks = new ArrayList<>();
+    RepairStation repairStation;
     int P1Choose = 0;
     AudioClip Test = loadAudio("Fast.wav");
 
@@ -29,6 +30,7 @@ public class TankBattle extends GameEngine{
         P1M = new MediumTank(this);
         P1H = new HeavyTank(this);
         AI1 = new HeavyTank(this);
+        repairStation = new RepairStation(this);
         P1Choose = 1;
         if (P1Choose == 0) {
             P1.initTank();
@@ -127,6 +129,7 @@ public class TankBattle extends GameEngine{
     @Override
     public void update(double dt) {
         updateSectionA(dt);
+        repairStation.repair(P1M);
     }
     public void updateSectionA(double dt){
         AI1.AI(factionA,dt);
@@ -210,6 +213,7 @@ public class TankBattle extends GameEngine{
             P1H.updateTank(dt);
         }
         AI1.updateTank(dt);
+
     }
     public void drawAmmo(){
 
@@ -226,10 +230,12 @@ public class TankBattle extends GameEngine{
         }
         changeColor(Color.RED);
         AI1.drawTank();
+
     }
     @Override
     public void paintComponent() {
         drawSectionA();
+        repairStation.draw();
     }
     public void drawSectionA(){
         changeColor(Color.WHITE);
