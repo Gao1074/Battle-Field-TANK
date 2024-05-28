@@ -111,6 +111,7 @@ public class TankBattle extends GameEngine{
         initSmoke();
         initExplosion();
         ConstructWall();
+        initFloor();
     }
     public void updateTank(double dt){
         if (P1Choose == 0){
@@ -147,6 +148,55 @@ public class TankBattle extends GameEngine{
         }
 
     }
+
+    Floor floorTopleft;
+    Floor floorDownleft;
+    Floor floorTopright;
+    Floor floorDownright;
+    Floor floorTop;
+    Floor floorDown;
+    Floor floorLeft ;
+    Floor floorRight;
+    Floor floorMiddle;
+    public void initFloor(){
+
+        floorTopleft = new Floor(loadImage("src/main/resources/Floor/Topleft.png"), 0, 0,this);
+        floorDownleft = new Floor(loadImage("src/main/resources/Floor/Downleft.png"), 0, 900,this);
+        floorTopright = new Floor(loadImage("src/main/resources/Floor/Topright.png"), 1400, 0,this);
+        floorDownright = new Floor(loadImage("src/main/resources/Floor/Downright.png"), 1400, 900,this);
+        floorTop = new Floor(loadImage("src/main/resources/Floor/Top.png"), 0, 0,this);
+        floorDown = new Floor(loadImage("src/main/resources/Floor/Down.png"), 0, 900,this);
+        floorLeft = new Floor(loadImage("src/main/resources/Floor/Left.png"), 0, 0,this);
+        floorRight = new Floor(loadImage("src/main/resources/Floor/Right.png"), 1400, 0,this);
+        floorMiddle = new Floor(loadImage("src/main/resources/Floor/Middle.png"), 100, 100,this);
+    }
+    public void drawFloor(){
+        floorTopleft.draw();
+        floorDownleft.draw();
+        floorTopright.draw();
+        floorDownright.draw();
+        for (int i = 1; i <= 13; i++) {
+            floorTop.setPositionX(100*i);
+            floorTop.draw();
+            floorDown.setPositionX(100*i);
+            floorDown.draw();
+        }
+        for (int i = 1; i <= 10; i++) {
+            floorLeft.setPositionY(100*i);
+            floorLeft.draw();
+            floorRight.setPositionY(100*i);
+            floorRight.draw();
+        }
+        for (int i = 1; i <= 13; i++) {
+            floorMiddle.setPositionX(i*100);
+            for (int j = 1; j <= 10; j++) {
+                floorMiddle.setPositionY(j*100);
+                floorMiddle.draw();
+            }
+            //floorMiddle.draw();
+        }
+    }
+
     Image Block = loadImage(Resource + "block/wall.png");
     public void drawWall(){
         changeColor(Color.BLACK);
@@ -305,6 +355,7 @@ public class TankBattle extends GameEngine{
     public void drawSectionA(){
         changeColor(Color.WHITE);
         clearBackground(width(),height());
+        drawFloor();
         drawTank();
         drawWeapon();
         drawSmoke();
@@ -312,6 +363,7 @@ public class TankBattle extends GameEngine{
             drawWall();
         }
         drawExplosion();
+
     }
     public void drawWeapon(){
     }

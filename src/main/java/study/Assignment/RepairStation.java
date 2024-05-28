@@ -3,7 +3,7 @@ package study.Assignment;
 import java.awt.*;
 
 public class RepairStation extends Entity{
-    Image repairStation = gameEngine.loadImage("main/resources/Repairstation/RepairStation.png");
+    Image repairStation = gameEngine.loadImage("src/main/resources/Repairstation/RepairStation.png");
     public RepairStation(GameEngine gameEngine) {
         super(gameEngine);
         size.setHeight(50);
