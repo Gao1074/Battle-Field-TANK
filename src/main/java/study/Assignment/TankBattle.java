@@ -37,7 +37,6 @@ public class TankBattle extends GameEngine{
         P1 = new LightTank(this);
         P1M = new MediumTank(this);
         P1H = new HeavyTank(this);
-        AI1 = new HeavyTank(this);
         repairStation = new RepairStation(this);
         P1Choose = 1;
         if (P1Choose == 0) {

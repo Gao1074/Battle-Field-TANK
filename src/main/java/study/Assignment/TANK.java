@@ -13,6 +13,7 @@ public abstract class TANK extends Entity{
     protected boolean LEFT;
     protected boolean RIGHT;
     public boolean explode;
+    public boolean isrepair;
 
     protected GameEngine.AudioClip MovingAudio;
     TANK target = this;

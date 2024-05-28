@@ -15,6 +15,7 @@ public class MediumTank extends TANK{
         Health = 100;
         MovingAudio = gameEngine.loadAudio("Medium.wav");
         image = gameEngine.loadImage("MediumTank0.png");
+        isrepair = false;
     }
     public void updateTank(double dt){
         if (Health <= 0){
@@ -112,6 +113,9 @@ public class MediumTank extends TANK{
             gameEngine.drawSolidRectangle(position.getX() - size.getWidth() / 2, position.getY() - size.getHeight() / 2 - 20, size.getWidth() * (Health / FullHealth), 10);
             gameEngine.changeColor(Color.BLACK);
             gameEngine.drawRectangle(position.getX() - size.getWidth() / 2, position.getY() - size.getHeight() / 2 - 20, size.getWidth(), 10);
+            if (isrepair){
+                gameEngine.drawImage(gameEngine.loadImage("repair.png"), position.getX()-size.getWidth() / 2 -20, position.getY()-size.getHeight() / 2 -25, 20, 20);
+            }
         }
         weapon_M.drawWeapon();
     }
