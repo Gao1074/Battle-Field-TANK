@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class LightWeapon extends MainWeapon{
-    double fullLoadingTime = 1;
+    double fullLoadingTime = 2;
     double loadingTime = 0;
     LightWeapon(TANK tank, GameEngine gameEngine, double Angle) {
         super(tank, gameEngine, Angle);
@@ -15,7 +15,7 @@ public class LightWeapon extends MainWeapon{
     public void Fire(){
         if (loadingTime <= 0) {
             creatFire();
-            loadingTime = 1;
+            loadingTime = fullLoadingTime;
         }
     }
     private void creatFire(){
@@ -25,8 +25,8 @@ public class LightWeapon extends MainWeapon{
                 ammo.Angle = this.Angle;
                 ammo.position.setX(this.position.getX()+ gameEngine.sin(ammo.Angle) * 60);
                 ammo.position.setY(this.position.getY()- gameEngine.cos(ammo.Angle) * 60);
-                ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 200);
-                ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 200);
+                ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 1000);
+                ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 1000);
                 break;
             }
         }

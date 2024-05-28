@@ -20,7 +20,12 @@ public class TankBattle extends GameEngine{
     LightTank P1;
     MediumTank P1M;
     HeavyTank P1H;
-    HeavyTank AI1;
+    HeavyTank Ai_H_0;
+    MediumTank Ai_M_0;
+    LightTank Ai_L_0;
+    ArrayList<HeavyTank> heavyTanks = new ArrayList<>();
+    ArrayList<LightTank> lightTanks = new ArrayList<>();
+    ArrayList<MediumTank> mediumTanks = new ArrayList<>();
     public void initTank(){
 
         startAudioLoop(Test);
@@ -28,8 +33,8 @@ public class TankBattle extends GameEngine{
         P1 = new LightTank(this);
         P1M = new MediumTank(this);
         P1H = new HeavyTank(this);
-        AI1 = new HeavyTank(this);
-        P1Choose = 1;
+
+        P1Choose = 0;
         if (P1Choose == 0) {
             P1.initTank();
             factionA.add(P1);
@@ -45,15 +50,37 @@ public class TankBattle extends GameEngine{
             factionA.add(P1H);
             tanks.add(P1H);
         }
-
-        AI1.initTank(900,900);
-        factionB.add(AI1);
-        tanks.add(AI1);
+        Ai_H_0 = new HeavyTank(this);
+        Ai_L_0 = new LightTank(this);
+        Ai_M_0 = new MediumTank(this);
+        initAi(Ai_H_0,900,900);
+        initAi(Ai_M_0,300,300);
+        initAi(Ai_L_0,300,300);
     }
-
+    public void initAi(HeavyTank tank,double x, double y){
+        tank.initTank(x,y);
+        heavyTanks.add(tank);
+        factionB.add(tank);
+        tanks.add(tank);
+    }
+    public void initAi(LightTank tank,double x, double y){
+        tank.initTank(x,y);
+        lightTanks.add(tank);
+        factionB.add(tank);
+        tanks.add(tank);
+    }
+    public void initAi(MediumTank tank,double x, double y){
+        tank.initTank(x,y);
+        mediumTanks.add(tank);
+        factionB.add(tank);
+        tanks.add(tank);
+    }
     public void init(){
         factionB.clear();
         factionA.clear();
+        lightTanks.clear();
+        heavyTanks.clear();
+        mediumTanks.clear();
         tanks.clear();
         smokes.clear();
         explosions.clear();
@@ -82,10 +109,24 @@ public class TankBattle extends GameEngine{
             P1H.FindTarget(factionB, dt);
             wall.setCollides(P1H);
         }
-        if (!AI1.defeat) {
-            AI1.updateTank(dt);
-            AI1.FindTarget(factionA, dt);
-            wall.setCollides(AI1);
+        for (HeavyTank tank : heavyTanks){
+            if (tank.defeat){
+                tank.updateTank(dt);
+                tank.FindTarget(factionA, dt);
+                wall.setCollides(tank);
+            }
+        }
+        for (MediumTank tank : mediumTanks){
+            if (tank.defeat){
+                tank.updateTank(dt);
+                wall.setCollides(tank);
+            }
+        }
+        for (LightTank tank : lightTanks){
+            if (tank.defeat){
+                tank.updateTank(dt);
+                wall.setCollides(tank);
+            }
         }
 
     }
@@ -112,15 +153,22 @@ public class TankBattle extends GameEngine{
             P1H.UpdateDamage(factionB);
 
         }
-
-        AI1.weapon_M.updateAmmo(dt,wall);
-        AI1.weapon_L.updateAmmo(dt,wall);
-        AI1.weapon_R.updateAmmo(dt,wall);
-        AI1.weapon_L_L.updateAmmo(dt,wall);
-        AI1.weapon_R_R.updateAmmo(dt,wall);
-
-
-        AI1.UpdateDamage(factionA);
+        for (HeavyTank tank : heavyTanks){
+            tank.weapon_M.updateAmmo(dt,wall);
+            tank.weapon_L.updateAmmo(dt,wall);
+            tank.weapon_R.updateAmmo(dt,wall);
+            tank.weapon_L_L.updateAmmo(dt,wall);
+            tank.weapon_R_R.updateAmmo(dt,wall);
+            tank.UpdateDamage(factionA);
+        }
+        for (MediumTank tank : mediumTanks){
+            tank.weapon_M.updateAmmo(dt,wall);
+            tank.UpdateDamage(factionA);
+        }
+        for (LightTank tank : lightTanks){
+            tank.weapon_M.updateAmmo(dt,wall);
+            tank.UpdateDamage(factionA);
+        }
     }
     ArrayList<Smoke> smokes = new ArrayList<>();
 
@@ -129,7 +177,15 @@ public class TankBattle extends GameEngine{
         updateSectionA(dt);
     }
     public void updateSectionA(double dt){
-        AI1.AI(factionA,dt);
+        for (HeavyTank tank : heavyTanks){
+            tank.AI(factionA,dt);
+        }
+        for (MediumTank tank : mediumTanks){
+            tank.AI(factionA,dt);
+        }
+        for (LightTank tank : lightTanks){
+            tank.AI(factionA,dt);
+        }
         updateTank(dt);
         updateAmmo(dt);
         updateWeapon(dt);
@@ -209,7 +265,17 @@ public class TankBattle extends GameEngine{
         if (P1Choose==2){
             P1H.updateTank(dt);
         }
-        AI1.updateTank(dt);
+        for (HeavyTank tank : heavyTanks){
+            tank.updateTank(dt);
+        }
+        for (MediumTank tank : mediumTanks){
+            tank.updateTank(dt);
+        }
+        for (LightTank tank : lightTanks){
+            tank.updateTank(dt);
+        }
+
+
     }
     public void drawAmmo(){
 
@@ -224,8 +290,18 @@ public class TankBattle extends GameEngine{
         }if (P1Choose == 2) {
             P1H.drawTank();
         }
-        changeColor(Color.RED);
-        AI1.drawTank();
+        for (HeavyTank tank : heavyTanks){
+            changeColor(Color.RED);
+            tank.drawTank();
+        }
+        for (MediumTank tank : mediumTanks){
+            changeColor(Color.RED);
+            tank.drawTank();
+        }
+        for (LightTank tank : lightTanks){
+            changeColor(Color.RED);
+            tank.drawTank();
+        }
     }
     @Override
     public void paintComponent() {

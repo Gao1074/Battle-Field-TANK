@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class ATAmmo extends Ammo{
     ATAmmo(GameEngine gameEngine) {
         super(gameEngine);
+        power = 20;
         image = gameEngine.subImage(AmmoImage,70,0,38,103);
     }
     public void draw(){
@@ -20,7 +21,7 @@ public class ATAmmo extends Ammo{
         for (TANK Tank : Enemies){
             if (Active) {
                 if (gameEngine.distance(position.getX(), position.getY(), Tank.position.getX(), Tank.position.getY()) <= Tank.size.getWidth()) {
-                    Tank.Health -= 20;
+                    Tank.Health -= power;
                     Active = false;
                     if (Tank.Health <=0){
                         Tank.Health = 0;

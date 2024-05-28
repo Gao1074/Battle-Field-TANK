@@ -16,7 +16,6 @@ public class MainWeapon extends Weapon{
             ammo.velocity.setX(this.velocity.getX());
             ammo.velocity.setY(this.velocity.getY());
             ammo.Angle = this.Angle;
-            ammo.power = this.power;
             ammo.Active = false;
             ammos.add(i,ammo);
         }

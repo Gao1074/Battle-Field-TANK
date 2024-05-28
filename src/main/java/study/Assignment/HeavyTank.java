@@ -91,14 +91,16 @@ public class HeavyTank extends TANK{
     public void AI(ArrayList<TANK> tanks,double dt){
         if (!defeat) {
             double distance = 9999999;
-            boolean Active = false;
             for (TANK tank : tanks) {
                 if (gameEngine.distance(position.getX(), position.getY(), tank.position.getX(), tank.position.getY()) <= distance) {
                     target = tank;
-                    Active = true;
                 }
             }
-            if (Active) {
+            if (target.defeat){
+                UP = false;
+                velocity.setX(0);
+                velocity.setY(0);
+            }else {
                 distance = gameEngine.distance(position.getX(), position.getY(), target.position.getX(), target.position.getY());
                 if (distance < 600) {
                     if (distance > 400) {
@@ -114,6 +116,7 @@ public class HeavyTank extends TANK{
                     velocity.setY(0);
                 }
             }
+
         }
     }
     public void targetTracking(Entity enemy){
