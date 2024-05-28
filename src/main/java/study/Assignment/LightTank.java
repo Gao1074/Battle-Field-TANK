@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class LightTank extends TANK{
-    boolean Playing;
+//    boolean Playing;
     LightWeapon weapon_M = new LightWeapon(this,gameEngine,0);
     LightTank(GameEngine gameEngine) {
         super(gameEngine);
@@ -21,8 +21,8 @@ public class LightTank extends TANK{
         }
         if (!defeat) {
             if (UP) {
-                velocity.setX(gameEngine.sin(Angle) * 200);
-                velocity.setY(-gameEngine.cos(Angle) * 200);
+                velocity.setX(gameEngine.sin(Angle) * 300);
+                velocity.setY(-gameEngine.cos(Angle) * 300);
 
             }
             if (LEFT) {
@@ -34,23 +34,73 @@ public class LightTank extends TANK{
 
             }
             if (DOWN) {
-                velocity.setX(-gameEngine.sin(Angle) * 100);
-                velocity.setY(gameEngine.cos(Angle) * 100);
+                velocity.setX(-gameEngine.sin(Angle) * 150);
+                velocity.setY(gameEngine.cos(Angle) * 150);
 
             }
-            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
-                gameEngine.startAudioLoop(MovingAudio);
-                Playing = true;
-            }
-            if (Playing && !(UP || LEFT || RIGHT || DOWN)) {
-                gameEngine.stopAudioLoop(MovingAudio);
-                Playing = false;
-            }
+//            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
+//                gameEngine.startAudioLoop(MovingAudio);
+//                Playing = true;
+//            }
+//            if (Playing && !(UP || LEFT || RIGHT || DOWN)) {
+//                gameEngine.stopAudioLoop(MovingAudio);
+//                Playing = false;
+//            }
             position.setX(position.getX() + velocity.getX() * dt);
             position.setY(position.getY() + velocity.getY() * dt);
             Border border = new Border(this);
 
             weapon_M.updateWeapon(dt);
+        }
+    }
+    public void AI(ArrayList<TANK> tanks,double dt){
+        if (!defeat) {
+            double distance = 9999999;
+            for (TANK tank : tanks) {
+                if (gameEngine.distance(position.getX(), position.getY(), tank.position.getX(), tank.position.getY()) <= distance) {
+                    target = tank;
+                }
+            }
+            if (target.defeat){
+                UP = false;
+                velocity.setX(0);
+                velocity.setY(0);
+            }else {
+                distance = gameEngine.distance(position.getX(), position.getY(), target.position.getX(), target.position.getY());
+                if (distance < 600) {
+                    if (distance > 400) {
+                        targetTracking(target, dt);
+                    } else {
+                        targetTracking(target);
+                        velocity.setX(0);
+                        velocity.setY(0);
+                    }
+                } else {
+                    UP = false;
+                    velocity.setX(0);
+                    velocity.setY(0);
+                }
+            }
+
+        }
+    }
+    public void targetTracking(Entity enemy){
+        Angle = -gameEngine.atan2(position.getX() - enemy.position.getX(),position.getY() - enemy.position.getY());
+        UP = false;
+        weapon_M.Fire();
+    }
+    public void targetTracking(Entity enemy, double dt){
+        double targetAngle = -gameEngine.atan2(position.getX() - enemy.position.getX(),position.getY() - enemy.position.getY());
+        double angleDiff = (targetAngle - Angle + 180 + 360) % 360 - 180;
+        double maxRotationSpeed = 90;
+        UP = true;
+        if (angleDiff < -1) {
+            Angle -= maxRotationSpeed * dt;
+        } else if (angleDiff > 1) {
+            Angle += maxRotationSpeed * dt;
+        } else {
+            Angle = targetAngle;
+            weapon_M.Fire();
         }
     }
     public void drawTank(){

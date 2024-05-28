@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class HeavyTank extends TANK{
-    boolean Playing;
+//    boolean Playing;
     HeavyWeapon weapon_M = new HeavyWeapon(this, gameEngine,0);
     Spitfire weapon_L = new Spitfire(this, gameEngine,-1,0);
     Spitfire weapon_R = new Spitfire(this, gameEngine,1,1);
@@ -41,14 +41,14 @@ public class HeavyTank extends TANK{
                 velocity.setX(-gameEngine.sin(Angle) * 30);
                 velocity.setY(gameEngine.cos(Angle) * 30);
             }
-            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
-                gameEngine.startAudioLoop(MovingAudio);
-                Playing = true;
-            }
-            if (Playing && !(UP || LEFT || RIGHT || DOWN)) {
-                gameEngine.stopAudioLoop(MovingAudio);
-                Playing = false;
-            }
+//            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
+//                gameEngine.startAudioLoop(MovingAudio);
+//                Playing = true;
+//            }
+//            if (Playing && !(UP || LEFT || RIGHT || DOWN)) {
+//                gameEngine.stopAudioLoop(MovingAudio);
+//                Playing = false;
+//            }
             position.setX(position.getX() + velocity.getX() * dt);
             position.setY(position.getY() + velocity.getY() * dt);
 
@@ -91,14 +91,16 @@ public class HeavyTank extends TANK{
     public void AI(ArrayList<TANK> tanks,double dt){
         if (!defeat) {
             double distance = 9999999;
-            boolean Active = false;
             for (TANK tank : tanks) {
                 if (gameEngine.distance(position.getX(), position.getY(), tank.position.getX(), tank.position.getY()) <= distance) {
                     target = tank;
-                    Active = true;
                 }
             }
-            if (Active) {
+            if (target.defeat){
+                UP = false;
+                velocity.setX(0);
+                velocity.setY(0);
+            }else {
                 distance = gameEngine.distance(position.getX(), position.getY(), target.position.getX(), target.position.getY());
                 if (distance < 600) {
                     if (distance > 400) {
@@ -114,6 +116,7 @@ public class HeavyTank extends TANK{
                     velocity.setY(0);
                 }
             }
+
         }
     }
     public void targetTracking(Entity enemy){

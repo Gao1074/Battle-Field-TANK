@@ -47,7 +47,7 @@ public class FireAmmo extends Ammo{
         for (TANK Tank : Enemies){
             if (Active) {
                 if (gameEngine.distance(position.getX(), position.getY(), Tank.position.getX(), Tank.position.getY()) <= Tank.size.getWidth()) {
-                    Tank.Health -= 5;
+                    Tank.Health -= power;
                     Active = false;
                     if (Tank.Health <=0){
                         Tank.Health = 0;

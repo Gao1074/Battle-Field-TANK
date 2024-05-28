@@ -15,6 +15,7 @@ public class MediumWeapon extends MainWeapon{
     public void Fire(){
         if (loadingTime <= 0) {
             creatFire();
+            gameEngine.playAudio(fireSoundEffect);
             loadingTime = 2;
         }
     }
