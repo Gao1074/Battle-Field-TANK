@@ -3,15 +3,15 @@ package study.Assignment;
 import java.awt.*;
 
 public final class Border {
-    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
 
     public Border(Entity entity){
 
-        double width = dim.width;
+        double width = 1500;
         if (entity.position.getX() >= width - entity.size.getWidth() /2){
             entity.position.setX(width - entity.size.getWidth() /2);
         }
-        double height = dim.height;
+        double height = 1000;
         if (entity.position.getY() >= height - entity.size.getHeight() /2){
             entity.position.setY( height - entity.size.getHeight() /2);
         }
