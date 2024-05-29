@@ -49,9 +49,10 @@ public class TankBattle extends GameEngine{
         P1 = new LightTank(this,difficult);
         P1M = new MediumTank(this,difficult);
         P1H = new HeavyTank(this,difficult);
-        repairStation = new RepairStation(this);
+
         if (P1Choose == 0) {
             initPlayerA(P1,250,250);
+
         }
         if (P1Choose == 1) {
             initPlayerA(P1M,250,250);
@@ -63,6 +64,7 @@ public class TankBattle extends GameEngine{
             initLightAi(300,300);
             initLightAi(600,300);
             initLightAi(900,300);
+            repairStation = new RepairStation(this, 500,500);
 
         }
 
@@ -71,6 +73,7 @@ public class TankBattle extends GameEngine{
             initMediumAi(300,300);
             initMediumAi(600,300);
             initMediumAi(900,300);
+            repairStation = new RepairStation(this, 500,500);
 
         }
         if (level == 3){
@@ -78,6 +81,7 @@ public class TankBattle extends GameEngine{
             initMediumAi(600,300);
             initLightAi(300,300);
             initLightAi(900,300);
+            repairStation = new RepairStation(this, 500,500);
         }
 
     }
@@ -334,6 +338,8 @@ public class TankBattle extends GameEngine{
         if (gameStart) {
             updateLevel(dt);
             repairStation.repair(P1M);
+            repairStation.repair(P1);
+            repairStation.repair(P1H);
         }
     }
 
@@ -884,11 +890,29 @@ public class TankBattle extends GameEngine{
     public void ConstructWall(){
         if(level == 1){
             Block = loadImage(Resource + "block/wall"+level+".png");
-            wall.newBlock(50,50,100,100,false);
-            wall.newBlock(500,500,100,100,false);
+            for (int i = 0; i <= 16 ; i++) {
+                if (i % 2 == 0){
+                    wall.newBlock(50+50*i,150,100,100,false);
+                    wall.newBlock(750+50*i,450,100,100,false);
+                    wall.newBlock(50+50*i,750,100,100,false);
+                }
+            }
+
         }
         if(level == 2){
             Block = loadImage(Resource + "block/wall"+level+".png");
+            for (int i = 0; i <= 8 ; i++) {
+                if (i % 2 == 0){
+                    wall.newBlock(50+50*i,100,100,100,false);
+                    wall.newBlock(50+50*i,500,100,100,false);
+                    wall.newBlock(50+50*i,900,100,100,false);
+                    wall.newBlock(1450-50*i,100,100,100,false);
+                    wall.newBlock(1450-50*i,500,100,100,false);
+                    wall.newBlock(1450-50*i,900,100,100,false);
+                }
+
+            }
+
         }
         if(level == 3){
             Block = loadImage(Resource + "block/wall"+level+".png");
