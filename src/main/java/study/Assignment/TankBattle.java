@@ -12,6 +12,8 @@ public class TankBattle extends GameEngine{
     boolean tankSelection = false;
     boolean about = false;
     boolean help = false;
+
+    int level = 1;
     public Wall wall = new Wall();
     ArrayList<Image> Images = new ArrayList<>();
     String Resource = "src/main/resources/";
@@ -58,11 +60,27 @@ public class TankBattle extends GameEngine{
         if (P1Choose == 2) {
             initPlayerA(P1H,250,250);
         }
+        if (level == 1){
+            initLightAi(300,300);
+            initLightAi(600,300);
+            initLightAi(900,300);
 
+        }
 
-        initHeavyAi(900,900);
-        initMediumAi(300,300);
-        initLightAi(300,300);
+        if (level == 2){
+
+            initMediumAi(300,300);
+            initMediumAi(600,300);
+            initMediumAi(900,300);
+
+        }
+        if (level == 3){
+            initHeavyAi(900,900);
+            initMediumAi(600,300);
+            initLightAi(300,300);
+            initLightAi(900,300);
+        }
+
     }
 
     public void initPlayerA(HeavyTank tank, double x, double y){
@@ -111,6 +129,7 @@ public class TankBattle extends GameEngine{
         tanks.clear();
         smokes.clear();
         explosions.clear();
+        initLevel();
         buttons.clear();
         if (gameMenu) {
             initStartMenu();
@@ -138,12 +157,37 @@ public class TankBattle extends GameEngine{
     }
     public void initHelp(){
         initButton(50,50,200,40,"Back");
+        
     }
     public void initStartMenu(){
         initButton(200,500,200,40,"GameStart");
         initButton(200,550,200,40,"Help");
         initButton(200,600,200,40,"About");
         initButton(200,650,200,40,"Exit");
+    }
+    public void initLevel(){
+        if (level == 1){
+            initTank();
+            initSmoke();
+            initExplosion();
+            ConstructWall();
+            initFloor();
+        }
+        if (level == 2){
+            initTank();
+            initSmoke();
+            initExplosion();
+            ConstructWall();
+            initFloor();
+        }
+        if (level == 3){
+            initTank();
+            initSmoke();
+            initExplosion();
+            ConstructWall();
+            initFloor();
+        }
+        
     }
     public void initSectionA(){
         initTank();
@@ -198,16 +242,15 @@ public class TankBattle extends GameEngine{
     Floor floorRight;
     Floor floorMiddle;
     public void initFloor(){
-
-        floorTopleft = new Floor(loadImage("src/main/resources/Floor/Topleft.png"), 0, 0,this);
-        floorDownleft = new Floor(loadImage("src/main/resources/Floor/Downleft.png"), 0, 900,this);
-        floorTopright = new Floor(loadImage("src/main/resources/Floor/Topright.png"), 1400, 0,this);
-        floorDownright = new Floor(loadImage("src/main/resources/Floor/Downright.png"), 1400, 900,this);
-        floorTop = new Floor(loadImage("src/main/resources/Floor/Top.png"), 0, 0,this);
-        floorDown = new Floor(loadImage("src/main/resources/Floor/Down.png"), 0, 900,this);
-        floorLeft = new Floor(loadImage("src/main/resources/Floor/Left.png"), 0, 0,this);
-        floorRight = new Floor(loadImage("src/main/resources/Floor/Right.png"), 1400, 0,this);
-        floorMiddle = new Floor(loadImage("src/main/resources/Floor/Middle.png"), 100, 100,this);
+        floorTopleft = new Floor(loadImage("src/main/resources/Floor/Topleft"+ level +".png"), 0, 0,this);
+        floorDownleft = new Floor(loadImage("src/main/resources/Floor/Downleft"+ level +".png"), 0, 900,this);
+        floorTopright = new Floor(loadImage("src/main/resources/Floor/Topright"+ level +".png"), 1400, 0,this);
+        floorDownright = new Floor(loadImage("src/main/resources/Floor/Downright"+ level +".png"), 1400, 900,this);
+        floorTop = new Floor(loadImage("src/main/resources/Floor/Top"+ level +".png"), 0, 0,this);
+        floorDown = new Floor(loadImage("src/main/resources/Floor/Down"+ level +".png"), 0, 900,this);
+        floorLeft = new Floor(loadImage("src/main/resources/Floor/Left"+ level +".png"), 0, 0,this);
+        floorRight = new Floor(loadImage("src/main/resources/Floor/Right"+ level +".png"), 1400, 0,this);
+        floorMiddle = new Floor(loadImage("src/main/resources/Floor/Middle"+ level +".png"), 100, 100,this);
     }
     public void drawFloor(){
         floorTopleft.draw();
@@ -232,12 +275,12 @@ public class TankBattle extends GameEngine{
                 floorMiddle.setPositionY(j*100);
                 floorMiddle.draw();
             }
-            //floorMiddle.draw();
         }
     }
 
-    Image Block = loadImage(Resource + "block/wall.png");
+    Image Block;
     public void drawWall(){
+
         changeColor(Color.BLACK);
         for (Block block : wall.getBlocks()){
             drawImage(Block,block.position.getX() - block.size.getWidth() / 2,block.position.getY() - block.size.getHeight() / 2,block.size.getWidth(),block.size.getHeight());
@@ -282,12 +325,24 @@ public class TankBattle extends GameEngine{
 
     @Override
     public void update(double dt) {
+        updateSectionA(dt);
+        updateLevel(dt);
+        repairStation.repair(P1M);
+    }
+    public void updateLevel(double dt){
+        if (factionB.size() == 0 && level == 1){
+            level = 2;
+        }
+        if (false){
+            
+            repairStation.repair(P1M);
+        }
         if (false){
             updateGame(dt);
             repairStation.repair(P1M);
         }
     }
-    public void updateGame(double dt){
+    public void updateSectionA(double dt){
         for (HeavyTank tank : heavyTanks){
             tank.AI(factionA,dt);
         }
@@ -405,6 +460,10 @@ public class TankBattle extends GameEngine{
             drawSectionA();
             repairStation.draw();
         }
+        drawLevel();
+        //drawSectionA();
+        repairStation.draw();
+    
     }
     public void drawTankSelection(){
         changeBackgroundColor(Color.WHITE);
@@ -639,6 +698,19 @@ public class TankBattle extends GameEngine{
     }
 
 
+        
+    public void drawLevel(){
+        changeColor(Color.WHITE);
+        clearBackground(width(),height());
+        drawFloor();
+        drawTank();
+        drawWeapon();
+        drawSmoke();
+        if (wall.getBlocks().size() !=0) {
+            drawWall();
+        }
+        drawExplosion();
+    }
     public void drawSectionA(){
         changeColor(Color.WHITE);
         clearBackground(width(),height());
@@ -793,8 +865,18 @@ public class TankBattle extends GameEngine{
     }
 
     public void ConstructWall(){
-        wall.newBlock(100,100,80,80,false);
-        wall.newBlock(500,500,80,80,false);
+        if(level == 1){
+            Block = loadImage(Resource + "block/wall"+level+".png");
+            wall.newBlock(50,50,100,100,false);
+            wall.newBlock(500,500,100,100,false);
+        }
+        if(level == 2){
+            Block = loadImage(Resource + "block/wall"+level+".png");
+        }
+        if(level == 3){
+            Block = loadImage(Resource + "block/wall"+level+".png");
+        }
+
     }
 
     static class Smoke{

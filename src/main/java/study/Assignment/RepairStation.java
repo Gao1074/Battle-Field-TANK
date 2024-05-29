@@ -13,7 +13,7 @@ public class RepairStation extends Entity{
     public void draw(){
         gameEngine.saveCurrentTransform();
         gameEngine.translate(500, 500);
-        gameEngine.drawImage(repairStation,0,0,size.getWidth(),size.getHeight());
+        gameEngine.drawImage(repairStation,-size.getWidth()/2,-size.getHeight()/2,size.getWidth(),size.getHeight());
         gameEngine.restoreLastTransform();
     }
 
