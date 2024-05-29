@@ -29,6 +29,9 @@ public class Wall {
     public void removeBlock(int i){
         this.blocks.remove(i);
     }
+    public void removeAllBlock(){
+        blocks.clear();
+    }
     public ArrayList<Block> getBlocks(){
         return blocks;
     }

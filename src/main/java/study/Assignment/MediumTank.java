@@ -11,8 +11,20 @@ public class MediumTank extends TANK{
         super(gameEngine);
         size.setWidth(60);
         size.setHeight(60);
-        FullHealth = 100;
-        Health = 100;
+        FullHealth = 80;
+        Health = 80;
+        speed = 200;
+        MovingAudio = gameEngine.loadAudio("Medium.wav");
+        image = gameEngine.loadImage("MediumTank0.png");
+        isrepair = false;
+    }
+    MediumTank(GameEngine gameEngine,double difficult) {
+        super(gameEngine);
+        size.setWidth(60);
+        size.setHeight(60);
+        FullHealth = 80 * difficult;
+        Health = 80 * difficult;
+        speed = 200 * difficult * 0.2;
         MovingAudio = gameEngine.loadAudio("Medium.wav");
         image = gameEngine.loadImage("MediumTank0.png");
         isrepair = false;
@@ -23,8 +35,8 @@ public class MediumTank extends TANK{
         }
         if (!defeat) {
             if (UP) {
-                velocity.setX(gameEngine.sin(Angle) * 200);
-                velocity.setY(-gameEngine.cos(Angle) * 200);
+                velocity.setX(gameEngine.sin(Angle) * speed);
+                velocity.setY(-gameEngine.cos(Angle) * speed);
             }
             if (LEFT) {
                 Angle -= 100 * dt;
@@ -33,8 +45,8 @@ public class MediumTank extends TANK{
                 Angle += 100 * dt;
             }
             if (DOWN) {
-                velocity.setX(-gameEngine.sin(Angle) * 100);
-                velocity.setY(gameEngine.cos(Angle) * 100);
+                velocity.setX(-gameEngine.sin(Angle) * speed/2);
+                velocity.setY(gameEngine.cos(Angle) * speed/2);
             }
 
 //            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
@@ -68,13 +80,7 @@ public class MediumTank extends TANK{
             }else {
                 distance = gameEngine.distance(position.getX(), position.getY(), target.position.getX(), target.position.getY());
                 if (distance < 600) {
-                    if (distance > 400) {
-                        targetTracking(target, dt);
-                    } else {
-                        targetTracking(target);
-                        velocity.setX(0);
-                        velocity.setY(0);
-                    }
+                    targetTracking(target,dt);
                 } else {
                     UP = false;
                     velocity.setX(0);
@@ -93,7 +99,13 @@ public class MediumTank extends TANK{
         double targetAngle = -gameEngine.atan2(position.getX() - enemy.position.getX(),position.getY() - enemy.position.getY());
         double angleDiff = (targetAngle - Angle + 180 + 360) % 360 - 180;
         double maxRotationSpeed = 90;
-        UP = true;
+        if (gameEngine.distance(enemy.position.getX(),enemy.position.getY(),position.getX(),position.getY())<400){
+            UP = false;
+            velocity.setX(0);
+            velocity.setY(0);
+        }else {
+            UP = true;
+        }
         if (angleDiff < -1) {
             Angle -= maxRotationSpeed * dt;
         } else if (angleDiff > 1) {

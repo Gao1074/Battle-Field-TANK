@@ -41,15 +41,15 @@ public class TankBattle extends GameEngine{
     ArrayList<HeavyTank> heavyTanks = new ArrayList<>();
     ArrayList<LightTank> lightTanks = new ArrayList<>();
     ArrayList<MediumTank> mediumTanks = new ArrayList<>();
+    double difficult = 9;
     public void initTank(){
 
         startAudioLoop(Test);
         stopAudioLoop(Test);
-        P1 = new LightTank(this);
-        P1M = new MediumTank(this);
-        P1H = new HeavyTank(this);
+        P1 = new LightTank(this,difficult);
+        P1M = new MediumTank(this,difficult);
+        P1H = new HeavyTank(this,difficult);
         repairStation = new RepairStation(this);
-        P1Choose = 1;
         if (P1Choose == 0) {
             initPlayerA(P1,250,250);
         }
@@ -128,6 +128,7 @@ public class TankBattle extends GameEngine{
         tanks.clear();
         smokes.clear();
         explosions.clear();
+        wall.removeAllBlock();
 
         buttons.clear();
         if (gameMenu) {

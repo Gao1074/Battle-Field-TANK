@@ -10,8 +10,19 @@ public class LightTank extends TANK{
         super(gameEngine);
         size.setWidth(40);
         size.setHeight(40);
-        FullHealth = 50;
-        Health = 50;
+        FullHealth = 40;
+        Health = 40;
+        speed = 300;
+        MovingAudio = gameEngine.loadAudio("Fast.wav");
+        image = gameEngine.loadImage("LightTank0.png");
+    }
+    LightTank(GameEngine gameEngine,double difficult) {
+        super(gameEngine);
+        size.setWidth(40);
+        size.setHeight(40);
+        FullHealth = 40 * difficult;
+        Health = 40 * difficult;
+        speed = 300 * difficult * 0.2;
         MovingAudio = gameEngine.loadAudio("Fast.wav");
         image = gameEngine.loadImage("LightTank0.png");
     }
@@ -21,8 +32,8 @@ public class LightTank extends TANK{
         }
         if (!defeat) {
             if (UP) {
-                velocity.setX(gameEngine.sin(Angle) * 300);
-                velocity.setY(-gameEngine.cos(Angle) * 300);
+                velocity.setX(gameEngine.sin(Angle) * speed);
+                velocity.setY(-gameEngine.cos(Angle) * speed);
 
             }
             if (LEFT) {
@@ -34,8 +45,8 @@ public class LightTank extends TANK{
 
             }
             if (DOWN) {
-                velocity.setX(-gameEngine.sin(Angle) * 150);
-                velocity.setY(gameEngine.cos(Angle) * 150);
+                velocity.setX(-gameEngine.sin(Angle) * speed/2);
+                velocity.setY(gameEngine.cos(Angle) * speed/2);
 
             }
 //            if (!Playing && (UP || LEFT || RIGHT || DOWN)) {
@@ -68,13 +79,7 @@ public class LightTank extends TANK{
             }else {
                 distance = gameEngine.distance(position.getX(), position.getY(), target.position.getX(), target.position.getY());
                 if (distance < 600) {
-                    if (distance > 400) {
-                        targetTracking(target, dt);
-                    } else {
-                        targetTracking(target);
-                        velocity.setX(0);
-                        velocity.setY(0);
-                    }
+                    targetTracking(target, dt);
                 } else {
                     UP = false;
                     velocity.setX(0);
@@ -93,7 +98,13 @@ public class LightTank extends TANK{
         double targetAngle = -gameEngine.atan2(position.getX() - enemy.position.getX(),position.getY() - enemy.position.getY());
         double angleDiff = (targetAngle - Angle + 180 + 360) % 360 - 180;
         double maxRotationSpeed = 90;
-        UP = true;
+        if (gameEngine.distance(enemy.position.getX(),enemy.position.getY(),position.getX(),position.getY())<400){
+            UP = false;
+            velocity.setX(0);
+            velocity.setY(0);
+        }else {
+            UP = true;
+        }
         if (angleDiff < -1) {
             Angle -= maxRotationSpeed * dt;
         } else if (angleDiff > 1) {
