@@ -15,6 +15,7 @@ public class LightTank extends TANK{
         speed = 300;
         MovingAudio = gameEngine.loadAudio("Fast.wav");
         image = gameEngine.loadImage("LightTank0.png");
+        isrepair = false;
     }
     LightTank(GameEngine gameEngine,double difficult) {
         super(gameEngine);
@@ -25,6 +26,7 @@ public class LightTank extends TANK{
         speed = 300 + difficult * 0.01 * 300;
         MovingAudio = gameEngine.loadAudio("Fast.wav");
         image = gameEngine.loadImage("LightTank0.png");
+        isrepair = false;
     }
     public void updateTank(double dt){
         if (Health <= 0){
@@ -125,6 +127,9 @@ public class LightTank extends TANK{
             gameEngine.drawSolidRectangle(position.getX() - size.getWidth() / 2, position.getY() - size.getHeight() / 2 - 20, size.getWidth() * (Health / FullHealth), 10);
             gameEngine.changeColor(Color.BLACK);
             gameEngine.drawRectangle(position.getX() - size.getWidth() / 2, position.getY() - size.getHeight() / 2 - 20, size.getWidth(), 10);
+            if (isrepair){
+                gameEngine.drawImage(gameEngine.loadImage("src/main/resources/Repairstation/repair.png"), position.getX()-size.getWidth() / 2 -20, position.getY()-size.getHeight() / 2 -25, 20, 20);
+            }
         }
         weapon_M.drawWeapon();
     }
