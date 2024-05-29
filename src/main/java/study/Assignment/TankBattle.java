@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class TankBattle extends GameEngine{
 
-    int level = 3;
+    int level = 1;
     ArrayList<FireEffect> fireEffects = new ArrayList<>();
     public Wall wall = new Wall();
     ArrayList<Image> Images = new ArrayList<>();
@@ -55,6 +55,7 @@ public class TankBattle extends GameEngine{
             initLightAi(300,300);
             initLightAi(600,300);
             initLightAi(900,300);
+
         }
 
         if (level == 2){
@@ -62,6 +63,7 @@ public class TankBattle extends GameEngine{
             initMediumAi(300,300);
             initMediumAi(600,300);
             initMediumAi(900,300);
+
         }
         if (level == 3){
             initHeavyAi(900,900);
@@ -133,6 +135,13 @@ public class TankBattle extends GameEngine{
             initFloor();
         }
         if (level == 2){
+            initTank();
+            initSmoke();
+            initExplosion();
+            ConstructWall();
+            initFloor();
+        }
+        if (level == 3){
             initTank();
             initSmoke();
             initExplosion();
@@ -229,8 +238,9 @@ public class TankBattle extends GameEngine{
         }
     }
 
-    Image Block = loadImage(Resource + "block/wall.png");
+    Image Block;
     public void drawWall(){
+
         changeColor(Color.BLACK);
         for (Block block : wall.getBlocks()){
             drawImage(Block,block.position.getX() - block.size.getWidth() / 2,block.position.getY() - block.size.getHeight() / 2,block.size.getWidth(),block.size.getHeight());
@@ -276,7 +286,14 @@ public class TankBattle extends GameEngine{
     @Override
     public void update(double dt) {
         updateSectionA(dt);
+        updateLevel(dt);
         repairStation.repair(P1M);
+    }
+    public void updateLevel(double dt){
+        if (factionB.size() == 0 && level == 1){
+            level = 2;
+        }
+
     }
     public void updateSectionA(double dt){
         for (HeavyTank tank : heavyTanks){
@@ -381,8 +398,21 @@ public class TankBattle extends GameEngine{
     }
     @Override
     public void paintComponent() {
-        drawSectionA();
+        drawLevel();
+        //drawSectionA();
         repairStation.draw();
+    }
+    public void drawLevel(){
+        changeColor(Color.WHITE);
+        clearBackground(width(),height());
+        drawFloor();
+        drawTank();
+        drawWeapon();
+        drawSmoke();
+        if (wall.getBlocks().size() !=0) {
+            drawWall();
+        }
+        drawExplosion();
     }
     public void drawSectionA(){
         changeColor(Color.WHITE);
@@ -538,8 +568,18 @@ public class TankBattle extends GameEngine{
     }
 
     public void ConstructWall(){
-        wall.newBlock(100,100,80,80,false);
-        wall.newBlock(500,500,80,80,false);
+        if(level == 1){
+            Block = loadImage(Resource + "block/wall"+level+".png");
+            wall.newBlock(50,50,100,100,false);
+            wall.newBlock(500,500,100,100,false);
+        }
+        if(level == 2){
+            Block = loadImage(Resource + "block/wall"+level+".png");
+        }
+        if(level == 3){
+            Block = loadImage(Resource + "block/wall"+level+".png");
+        }
+
     }
 
     static class Smoke{
