@@ -96,8 +96,8 @@ public class Spitfire extends Weapon{
 
                 fire.position.setX(position.getX() + gameEngine.sin(fire.Angle)* 30);
                 fire.position.setY(position.getY() - gameEngine.cos(fire.Angle)* 30);
-                fire.velocity.setX(gameEngine.sin(fire.Angle - 10 + gameEngine.rand(20))* 500 );
-                fire.velocity.setY(-gameEngine.cos(fire.Angle - 10 + gameEngine.rand(20))* 500 );
+                fire.velocity.setX(gameEngine.sin(fire.Angle - 10 + gameEngine.rand(20))* 800 );
+                fire.velocity.setY(-gameEngine.cos(fire.Angle - 10 + gameEngine.rand(20))* 800 );
 
                 AmmoNums -= 0.5;
                 if (AmmoNums == 0){

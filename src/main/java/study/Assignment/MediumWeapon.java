@@ -36,8 +36,8 @@ public class MediumWeapon extends MainWeapon{
                     creatFireEffect(gameEngine.sin(ammo.Angle + 90) * 6,-gameEngine.cos(ammo.Angle + 90) * 6);
                 }
 
-                ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 1000);
-                ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 1000);
+                ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 500);
+                ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 500);
                 if (BinaryFire){
                     BinaryFire = false;
                 }else {

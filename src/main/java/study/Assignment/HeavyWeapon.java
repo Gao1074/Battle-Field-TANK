@@ -36,8 +36,8 @@ public class HeavyWeapon extends MainWeapon {
                     creatFireEffect(gameEngine.sin(ammo.Angle + 90) * 6+ gameEngine.sin(ammo.Angle) * 10,-gameEngine.cos(ammo.Angle + 90) * 6- gameEngine.cos(ammo.Angle) * 10);
                 }
 
-                ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 1000);
-                ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 1000);
+                ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 700);
+                ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 700);
                 if (BinaryFire){
                     BinaryFire = false;
                 }else {

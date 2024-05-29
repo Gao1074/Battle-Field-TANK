@@ -1,7 +1,5 @@
 package study.Assignment;
 
-import org.w3c.dom.ls.LSOutput;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -51,6 +49,7 @@ public class TankBattle extends GameEngine{
         P1M = new MediumTank(this);
         P1H = new HeavyTank(this);
         repairStation = new RepairStation(this);
+        P1Choose = 1;
         if (P1Choose == 0) {
             initPlayerA(P1,250,250);
         }
@@ -129,7 +128,7 @@ public class TankBattle extends GameEngine{
         tanks.clear();
         smokes.clear();
         explosions.clear();
-        initLevel();
+
         buttons.clear();
         if (gameMenu) {
             initStartMenu();
@@ -141,8 +140,11 @@ public class TankBattle extends GameEngine{
             initTankSelection();
         }else if (levelSelection){
             initLevelSelection();
+        }else if (gameStart){
+            initLevel();
         }
     }
+    boolean gameStart;
     public void initTankSelection(){
         initButton(50,50,200,40,"Back");
         initButton(250,730,200,40,"LightTank");
@@ -151,6 +153,9 @@ public class TankBattle extends GameEngine{
     }
     public void initLevelSelection(){
         initButton(50,50,200,40,"Back");
+        initButton(250,500,200,40,"Level 1");
+        initButton(650,500,200,40,"Level 2");
+        initButton(1050,500,200,40,"Level 3");
     }
     public void initAbout(){
         initButton(50,50,200,40,"Back");
@@ -325,24 +330,13 @@ public class TankBattle extends GameEngine{
 
     @Override
     public void update(double dt) {
-        updateSectionA(dt);
-        updateLevel(dt);
-        repairStation.repair(P1M);
+        if (gameStart) {
+            updateLevel(dt);
+            repairStation.repair(P1M);
+        }
     }
+
     public void updateLevel(double dt){
-        if (factionB.size() == 0 && level == 1){
-            level = 2;
-        }
-        if (false){
-            
-            repairStation.repair(P1M);
-        }
-        if (false){
-            updateGame(dt);
-            repairStation.repair(P1M);
-        }
-    }
-    public void updateSectionA(double dt){
         for (HeavyTank tank : heavyTanks){
             tank.AI(factionA,dt);
         }
@@ -356,6 +350,9 @@ public class TankBattle extends GameEngine{
         updateAmmo(dt);
         updateSmoke(dt);
         updateExplosion(dt);
+        if (factionB.size() == 0 && level == 1){
+            level = 2;
+        }
     }
     public void updateSmoke(double dt){
         for (Smoke smoke : smokes){
@@ -456,13 +453,11 @@ public class TankBattle extends GameEngine{
         }else if (levelSelection){
             drawLevelSelection();
         }
-        if (false){
-            drawSectionA();
+        if (gameStart){
+            drawLevel();
             repairStation.draw();
         }
-        drawLevel();
-        //drawSectionA();
-        repairStation.draw();
+
     
     }
     public void drawTankSelection(){
@@ -645,7 +640,7 @@ public class TankBattle extends GameEngine{
                         }
                         if (i == 1) {
                             P1Choose = 0;
-                            levelSelection = false;
+                            levelSelection = true;
                             tankSelection = false;
                             help = false;
                             about = false;
@@ -655,21 +650,21 @@ public class TankBattle extends GameEngine{
                         }
                         if (i == 2) {
                             P1Choose = 1;
-                            levelSelection = false;
+                            levelSelection = true;
                             tankSelection = false;
                             help = false;
                             about = false;
-                            gameMenu = true;
+                            gameMenu = false;
                             init();
                             break;
                         }
                         if (i == 3) {
                             P1Choose = 2;
-                            levelSelection = false;
+                            levelSelection = true;
                             tankSelection = false;
                             help = false;
                             about = false;
-                            gameMenu = true;
+                            gameMenu = false;
                             init();
                             break;
                         }
@@ -691,7 +686,41 @@ public class TankBattle extends GameEngine{
                             init();
                             break;
                         }
+                        if (i == 1) {
+                            levelSelection = false;
+                            tankSelection = false;
+                            help = false;
+                            about = false;
+                            gameMenu = false;
+                            gameStart = true;
+                            level = 1;
+                            init();
+                            break;
+                        }
+                        if (i == 2) {
+                            levelSelection = false;
+                            tankSelection = false;
+                            help = false;
+                            about = false;
+                            gameMenu = false;
+                            gameStart = true;
+                            level = 2;
+                            init();
+                            break;
+                        }
+                        if (i == 3) {
+                            levelSelection = false;
+                            tankSelection = false;
+                            help = false;
+                            about = false;
+                            gameMenu = false;
+                            gameStart = true;
+                            level = 3;
+                            init();
+                            break;
+                        }
                     }
+
                 }
             }
         }
@@ -710,19 +739,6 @@ public class TankBattle extends GameEngine{
             drawWall();
         }
         drawExplosion();
-    }
-    public void drawSectionA(){
-        changeColor(Color.WHITE);
-        clearBackground(width(),height());
-        drawFloor();
-        drawTank();
-        drawWeapon();
-        drawSmoke();
-        if (wall.getBlocks().size() !=0) {
-            drawWall();
-        }
-        drawExplosion();
-
     }
     public void drawWeapon(){
     }

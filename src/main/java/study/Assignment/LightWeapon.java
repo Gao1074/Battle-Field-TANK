@@ -27,8 +27,8 @@ public class LightWeapon extends MainWeapon{
                 ammo.Angle = Angle;
                 ammo.position.setX(position.getX()+ gameEngine.sin(ammo.Angle) * 60);
                 ammo.position.setY(position.getY()- gameEngine.cos(ammo.Angle) * 60);
-                ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 1000);
-                ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 1000);
+                ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 300);
+                ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 300);
                 break;
             }
         }
