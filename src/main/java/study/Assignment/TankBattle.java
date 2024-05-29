@@ -51,7 +51,6 @@ public class TankBattle extends GameEngine{
         P1M = new MediumTank(this,difficult);
         P1H = new HeavyTank(this,difficult);
 
-        repairStation = new RepairStation(this);
 
         if (P1Choose == 0) {
             initPlayerA(P1,250,250);
