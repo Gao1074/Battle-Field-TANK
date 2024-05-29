@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class TankBattle extends GameEngine{
+    ArrayList<FireEffect> fireEffects = new ArrayList<>();
     public Wall wall = new Wall();
     ArrayList<Image> Images = new ArrayList<>();
     String Resource = "src/main/resources/";
@@ -552,6 +553,7 @@ public class TankBattle extends GameEngine{
                 explosion.duration = 0.5;
                 explosion.Active = true;
                 playAudio(explosionSoundEffect);
+                explosionActive = true;
                 break;
             }
         }
@@ -610,6 +612,8 @@ public class TankBattle extends GameEngine{
             }
         }
     }
+
+
     static class Explosion{
         double x;
         double y;

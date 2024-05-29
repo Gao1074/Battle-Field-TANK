@@ -22,16 +22,18 @@ public class LightWeapon extends MainWeapon{
     private void creatFire(){
         for (Ammo ammo : ammos) {
             if (!ammo.Active) {
+                creatFireEffect(0,0);
                 ammo.Active = true;
-                ammo.Angle = this.Angle;
-                ammo.position.setX(this.position.getX()+ gameEngine.sin(ammo.Angle) * 60);
-                ammo.position.setY(this.position.getY()- gameEngine.cos(ammo.Angle) * 60);
+                ammo.Angle = Angle;
+                ammo.position.setX(position.getX()+ gameEngine.sin(ammo.Angle) * 60);
+                ammo.position.setY(position.getY()- gameEngine.cos(ammo.Angle) * 60);
                 ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 1000);
                 ammo.velocity.setY(-gameEngine.cos(ammo.Angle) * 1000);
                 break;
             }
         }
     }
+
     public void drawWeapon(){
         if (!tank.defeat) {
             gameEngine.saveCurrentTransform();
@@ -45,8 +47,10 @@ public class LightWeapon extends MainWeapon{
             gameEngine.drawSolidRectangle(tank.position.getX() - tank.size.getWidth() / 2, tank.position.getY() - tank.size.getHeight() / 2 - 10, tank.size.getWidth() * (fullLoadingTime - loadingTime) / fullLoadingTime, 5);
             gameEngine.changeColor(Color.BLACK);
             gameEngine.drawRectangle(tank.position.getX() - tank.size.getWidth() / 2, tank.position.getY() - tank.size.getHeight() / 2 - 10, tank.size.getWidth(), 5);
+            drawFireEffect();
         }
         drawAmmo();
+
     }
     public void updateWeapon(double dt){
         Angle = tank.Angle + ChangAngle;
@@ -58,5 +62,8 @@ public class LightWeapon extends MainWeapon{
         }
         position.setX(tank.position.getX());
         position.setY(tank.position.getY());
+        updateFireEffect(dt);
     }
+
+
 }

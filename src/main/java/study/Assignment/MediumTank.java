@@ -119,6 +119,7 @@ public class MediumTank extends TANK{
         }
         weapon_M.drawWeapon();
     }
+
     public void UpdateDamage(ArrayList<TANK> Enemy){
         weapon_M.updateDamage(Enemy);
     }

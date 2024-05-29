@@ -20,16 +20,20 @@ public class HeavyWeapon extends MainWeapon {
         }
     }
     private void creatFire(){
+
         for (ATAmmo ammo : ammos) {
             if (!ammo.Active) {
+
                 ammo.Active = true;
                 ammo.Angle = this.Angle;
                 if (BinaryFire){
-                    ammo.position.setX(this.position.getX()+gameEngine.sin(ammo.Angle - 90) * 6 + gameEngine.sin(ammo.Angle) * 60);
-                    ammo.position.setY(this.position.getY()-gameEngine.cos(ammo.Angle - 90) * 6 - gameEngine.cos(ammo.Angle) * 60);
+                    ammo.position.setX(this.position.getX() + gameEngine.sin(ammo.Angle - 90) * 6 + gameEngine.sin(ammo.Angle) * 60);
+                    ammo.position.setY(this.position.getY() - gameEngine.cos(ammo.Angle - 90) * 6 - gameEngine.cos(ammo.Angle) * 60);
+                    creatFireEffect(gameEngine.sin(ammo.Angle - 90) * 6 + gameEngine.sin(ammo.Angle) * 10, - gameEngine.cos(ammo.Angle - 90) * 6 - gameEngine.cos(ammo.Angle) * 10);
                 }else {
                     ammo.position.setX(this.position.getX()+gameEngine.sin(ammo.Angle + 90) * 6 + gameEngine.sin(ammo.Angle) * 60);
                     ammo.position.setY(this.position.getY()-gameEngine.cos(ammo.Angle + 90) * 6 - gameEngine.cos(ammo.Angle) * 60);
+                    creatFireEffect(gameEngine.sin(ammo.Angle + 90) * 6+ gameEngine.sin(ammo.Angle) * 10,-gameEngine.cos(ammo.Angle + 90) * 6- gameEngine.cos(ammo.Angle) * 10);
                 }
 
                 ammo.velocity.setX(gameEngine.sin(ammo.Angle) * 1000);
@@ -61,8 +65,10 @@ public class HeavyWeapon extends MainWeapon {
             gameEngine.drawSolidRectangle(tank.position.getX() - tank.size.getWidth() / 2, tank.position.getY() - tank.size.getHeight() / 2 - 10, tank.size.getWidth() * (fullLoadingTime - loadingTime) / fullLoadingTime, 5);
             gameEngine.changeColor(Color.BLACK);
             gameEngine.drawRectangle(tank.position.getX() - tank.size.getWidth() / 2, tank.position.getY() - tank.size.getHeight() / 2 - 10, tank.size.getWidth(), 5);
+            drawFireEffect();
         }
         drawAmmo();
+
     }
     public void updateWeapon(double dt){
         Angle = tank.Angle + ChangAngle;
@@ -74,5 +80,6 @@ public class HeavyWeapon extends MainWeapon {
         }
         position.setX(tank.position.getX());
         position.setY(tank.position.getY());
+        updateFireEffect(dt);
     }
 }
