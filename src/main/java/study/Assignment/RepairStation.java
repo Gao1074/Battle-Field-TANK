@@ -6,8 +6,8 @@ public class RepairStation extends Entity{
     Image repairStation = gameEngine.loadImage("src/main/resources/Repairstation/RepairStation.png");
     public RepairStation(GameEngine gameEngine) {
         super(gameEngine);
-        size.setHeight(50);
-        size.setWidth(50);
+        size.setHeight(75);
+        size.setWidth(75);
     }
 
     public void draw(){
