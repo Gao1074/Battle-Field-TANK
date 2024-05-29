@@ -10,6 +10,7 @@ public class TankBattle extends GameEngine{
     boolean tankSelection = false;
     boolean about = false;
     boolean help = false;
+    boolean sectionClear = false;
 
     int level = 1;
     public Wall wall = new Wall();
@@ -20,7 +21,7 @@ public class TankBattle extends GameEngine{
     Image MediumTank = loadImage(Resource+"TanksPreview/MediumTankPreview.png");
     Image HeavyTank = loadImage(Resource+"TanksPreview/HeavyTankPreview.png");
     //
-    boolean GameOver;
+    boolean isGameOver;
     public ArrayList<TANK> factionA = new ArrayList<>();
     public ArrayList<TANK> factionB = new ArrayList<>();
     public ArrayList<TANK> tanks = new ArrayList<>();
@@ -41,14 +42,15 @@ public class TankBattle extends GameEngine{
     ArrayList<HeavyTank> heavyTanks = new ArrayList<>();
     ArrayList<LightTank> lightTanks = new ArrayList<>();
     ArrayList<MediumTank> mediumTanks = new ArrayList<>();
-    double difficult = 9;
+    double difficult = 1;
     public void initTank(){
-
         startAudioLoop(Test);
         stopAudioLoop(Test);
+
         P1 = new LightTank(this,difficult);
         P1M = new MediumTank(this,difficult);
         P1H = new HeavyTank(this,difficult);
+
         repairStation = new RepairStation(this);
         if (P1Choose == 0) {
             initPlayerA(P1,250,250);
@@ -195,13 +197,6 @@ public class TankBattle extends GameEngine{
         }
         
     }
-    public void initSectionA(){
-        initTank();
-        initSmoke();
-        initExplosion();
-        ConstructWall();
-        initFloor();
-    }
     public void updateTank(double dt){
         if (P1Choose == 0){
             P1.updateTank(dt);
@@ -332,8 +327,10 @@ public class TankBattle extends GameEngine{
     @Override
     public void update(double dt) {
         if (gameStart) {
-            updateLevel(dt);
-            repairStation.repair(P1M);
+            if (!isGameOver&&!sectionClear) {
+                updateLevel(dt);
+                repairStation.repair(P1M);
+            }
         }
     }
 
@@ -351,10 +348,22 @@ public class TankBattle extends GameEngine{
         updateAmmo(dt);
         updateSmoke(dt);
         updateExplosion(dt);
-        if (factionB.size() == 0 && level == 1){
-            level = 2;
+        if (factionA.size() == 0){
+            isGameOver = true;
+        }
+        if (factionB.size() == 0){
+            if (level == 2){
+                level = 3;
+                sectionClear = true;
+            }
+            else if (level == 1){
+                level = 2;
+                sectionClear = true;
+            }
+
         }
     }
+
     public void updateSmoke(double dt){
         for (Smoke smoke : smokes){
             if (smoke.Active) {
@@ -455,8 +464,14 @@ public class TankBattle extends GameEngine{
             drawLevelSelection();
         }
         if (gameStart){
-            drawLevel();
-            repairStation.draw();
+            if (isGameOver){
+                drawGameOver();
+            }else if (sectionClear){
+                drawSectionClear();
+            } else {
+                drawLevel();
+                repairStation.draw();
+            }
         }
 
     
@@ -469,6 +484,9 @@ public class TankBattle extends GameEngine{
         drawImage(LightTank,250,500,200,200);
         drawImage(MediumTank,650,500,200,200);
         drawImage(HeavyTank,1050,500,200,200);
+        drawText(650,290,"Difficulty:","Arial",20);
+        drawRectangle(650,300,200,20);
+        drawSolidRectangle(650,300,200 * ((10.0-difficult)/10.0),20);
         drawButton();
 
     }
@@ -502,6 +520,18 @@ public class TankBattle extends GameEngine{
         drawButton();
     }
 
+    public void drawGameOver(){
+        changeColor(Color.BLACK);
+        clearBackground(width(),height());
+        drawText(200,200,"Game Over!","Arial",100);
+        drawText(200,300,"Press 'R' to try again!","Arial",20);
+    }
+    public void drawSectionClear(){
+        clearBackground(width(),height());
+        changeColor(Color.BLACK);
+        drawText(200,200,"Section Clear!","Arial",100);
+        drawText(200,300,"Press 'R' to enter next level!","Arial",20);
+    }
     public void drawHelp(){
         changeBackgroundColor(Color.WHITE);
         clearBackground(width(),height());
@@ -627,6 +657,15 @@ public class TankBattle extends GameEngine{
             }
         }
         if (tankSelection) {
+            if (e.getX()>650&&e.getX()<650+200&&e.getY()>300&&e.getY()<300+20){
+                difficult = 10 - ((e.getX() - 650)/200.0)*10;
+                if (difficult > 9){
+                    difficult = 9;
+                }
+                if (difficult < 1){
+                    difficult = 1;
+                }
+            }
             if (!buttons.isEmpty()) {
                 for (int i = 0; i < buttons.size(); i++) {
                     if (e.getX() < buttons.get(i).x + buttons.get(i).w && e.getY() < buttons.get(i).y - 30 + buttons.get(i).h && e.getX() > buttons.get(i).x && e.getY() > buttons.get(i).y - 30) {
@@ -746,7 +785,7 @@ public class TankBattle extends GameEngine{
     boolean SpacePressed = false;
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
+        if(e.getKeyCode() == KeyEvent.VK_SPACE && !isGameOver)    {
             if (!SpacePressed){
                 if (P1Choose==0) {
                     P1.weapon_M.Fire();
@@ -762,13 +801,19 @@ public class TankBattle extends GameEngine{
                 }
             }
         }
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE && !GameOver)    {
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE && !isGameOver)    {
             System.exit(1);
         }
-        if(e.getKeyCode() == KeyEvent.VK_R && !GameOver)    {
-            init();
+        if(e.getKeyCode() == KeyEvent.VK_R)    {
+            if (isGameOver) {
+                isGameOver = false;
+                init();
+            }else if (sectionClear){
+                sectionClear = false;
+                init();
+            }
         }
-        if(e.getKeyCode() == KeyEvent.VK_W && !GameOver)    {
+        if(e.getKeyCode() == KeyEvent.VK_W && !isGameOver)    {
             if (P1Choose==0) {
                 P1.UP = true;
             }
@@ -780,7 +825,7 @@ public class TankBattle extends GameEngine{
             }
 
         }
-        if(e.getKeyCode() == KeyEvent.VK_A && !GameOver)  {
+        if(e.getKeyCode() == KeyEvent.VK_A && !isGameOver)  {
             if (P1Choose==0) {
                 P1.LEFT = true;
             }
@@ -791,7 +836,7 @@ public class TankBattle extends GameEngine{
                 P1H.LEFT = true;
             }
         }
-        if(e.getKeyCode() == KeyEvent.VK_S && !GameOver)  {
+        if(e.getKeyCode() == KeyEvent.VK_S && !isGameOver)  {
             if (P1Choose==0) {
                 P1.DOWN = true;
             }
@@ -803,7 +848,7 @@ public class TankBattle extends GameEngine{
             }
 
         }
-        if(e.getKeyCode() == KeyEvent.VK_D && !GameOver) {
+        if(e.getKeyCode() == KeyEvent.VK_D && !isGameOver) {
             if (P1Choose==0) {
                 P1.RIGHT = true;
             }
@@ -818,7 +863,7 @@ public class TankBattle extends GameEngine{
     }
     @Override
     public void keyReleased(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_W && !GameOver)    {
+        if(e.getKeyCode() == KeyEvent.VK_W && !isGameOver)    {
             if (P1Choose==0) {
                 P1.UP = false;
                 P1.velocity.setX(0);
@@ -835,7 +880,7 @@ public class TankBattle extends GameEngine{
                 P1H.velocity.setY(0);
             }
         }
-        if(e.getKeyCode() == KeyEvent.VK_A && !GameOver)  {
+        if(e.getKeyCode() == KeyEvent.VK_A && !isGameOver)  {
             if (P1Choose==0) {
                 P1.LEFT = false;
             }if (P1Choose==1) {
@@ -844,7 +889,7 @@ public class TankBattle extends GameEngine{
                 P1H.LEFT = false;
             }
         }
-        if(e.getKeyCode() == KeyEvent.VK_S && !GameOver)  {
+        if(e.getKeyCode() == KeyEvent.VK_S && !isGameOver)  {
             if (P1Choose==0) {
                 P1.DOWN = false;
                 P1.velocity.setX(0);
@@ -859,7 +904,7 @@ public class TankBattle extends GameEngine{
                 P1H.velocity.setY(0);
             }
         }
-        if(e.getKeyCode() == KeyEvent.VK_D && !GameOver) {
+        if(e.getKeyCode() == KeyEvent.VK_D && !isGameOver) {
             if (P1Choose==0) {
                 P1.RIGHT = false;
             }if (P1Choose==1) {
@@ -870,7 +915,7 @@ public class TankBattle extends GameEngine{
 
 
         }
-        if(e.getKeyCode() == KeyEvent.VK_SPACE && !GameOver)    {
+        if(e.getKeyCode() == KeyEvent.VK_SPACE && !isGameOver)    {
             SpacePressed = false;
         }
     }

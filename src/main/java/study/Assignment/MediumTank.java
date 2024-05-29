@@ -24,7 +24,7 @@ public class MediumTank extends TANK{
         size.setHeight(60);
         FullHealth = 80 * difficult;
         Health = 80 * difficult;
-        speed = 200 * difficult * 0.2;
+        speed = 200 + difficult * 0.01 * 200;
         MovingAudio = gameEngine.loadAudio("Medium.wav");
         image = gameEngine.loadImage("MediumTank0.png");
         isrepair = false;

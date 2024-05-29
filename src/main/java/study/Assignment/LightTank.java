@@ -22,7 +22,7 @@ public class LightTank extends TANK{
         size.setHeight(40);
         FullHealth = 40 * difficult;
         Health = 40 * difficult;
-        speed = 300 * difficult * 0.2;
+        speed = 300 + difficult * 0.01 * 300;
         MovingAudio = gameEngine.loadAudio("Fast.wav");
         image = gameEngine.loadImage("LightTank0.png");
     }

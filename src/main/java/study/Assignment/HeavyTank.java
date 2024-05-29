@@ -27,7 +27,7 @@ public class HeavyTank extends TANK{
         size.setHeight(80);
         FullHealth = 160 * difficult;
         Health = 160 * difficult;
-        speed = 60 * difficult * 0.2;
+        speed = 60 + difficult * 0.01 * 60;
         MovingAudio = gameEngine.loadAudio("Slow.wav");
         image = gameEngine.loadImage("HeavyTank0.png");
     }
