@@ -39,10 +39,10 @@ public class MediumTank extends TANK{
                 velocity.setY(-gameEngine.cos(Angle) * speed);
             }
             if (LEFT) {
-                Angle -= 100 * dt;
+                Angle -= 200 * dt;
             }
             if (RIGHT) {
-                Angle += 100 * dt;
+                Angle += 200 * dt;
             }
             if (DOWN) {
                 velocity.setX(-gameEngine.sin(Angle) * speed/2);

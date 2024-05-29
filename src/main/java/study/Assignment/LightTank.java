@@ -37,11 +37,11 @@ public class LightTank extends TANK{
 
             }
             if (LEFT) {
-                Angle -= 100 * dt;
+                Angle -= 300 * dt;
 
             }
             if (RIGHT) {
-                Angle += 100 * dt;
+                Angle += 300 * dt;
 
             }
             if (DOWN) {
