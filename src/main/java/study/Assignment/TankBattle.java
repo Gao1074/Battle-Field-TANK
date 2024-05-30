@@ -188,6 +188,7 @@ public class TankBattle extends GameEngine{
         if (!Win) {
             score = 0;
         }
+        Win = false;
         factionB.clear();
         factionA.clear();
         lightTanks.clear();
@@ -213,7 +214,17 @@ public class TankBattle extends GameEngine{
         }else if (gameStart){
             if (Win) {
                 initPlayerWin();
-            }else {
+                winning = true;
+            }
+            if (playerAWin){
+                initPlayerWin();
+                winning = true;
+            }
+            if (playerBWin){
+                initPlayerWin();
+                winning = true;
+            }
+            if (!Win&&!playerBWin&&!playerAWin){
                 initLevel();
             }
         }
@@ -484,6 +495,7 @@ public class TankBattle extends GameEngine{
             }
         }
     }
+    boolean winning = false;
 
     public void updateLevel(double dt){
         for (HeavyTank tank : heavyTanks){
@@ -499,37 +511,37 @@ public class TankBattle extends GameEngine{
         updateAmmo(dt);
         updateSmoke(dt);
         updateExplosion(dt);
-        if (doubleBattle){
-            if (factionA.size() == 0){
-                Win = true;
-                playerAWin = false;
-                playerBWin = true;
-            }
-            if (factionB.size() == 0){
-                Win = true;
-                playerAWin = true;
-                playerBWin = false;
-            }
-        }else {
-            if (factionA.size() == 0) {
-                isGameOver = true;
+        if (!winning) {
+            if (doubleBattle) {
+                if (factionA.size() == 0) {
+                    playerAWin = false;
+                    playerBWin = true;
+                    init();
+                }
+                if (factionB.size() == 0) {
+                    playerAWin = true;
+                    playerBWin = false;
+                    init();
+                }
+            } else {
+                if (factionA.size() == 0) {
+                    isGameOver = true;
+                }
+                if (factionB.size() == 0) {
+                    if (level == 3) {
+                        Win = true;
+                        init();
+                    } else if (level == 2) {
+                        level = 3;
+                        sectionClear = true;
+                    } else if (level == 1) {
+                        level = 2;
+                        sectionClear = true;
+                    }
+                }
             }
         }
-        if (factionB.size() == 0){
-            if (level == 3){
-                Win = true;
-            }else if (level == 2){
-                level = 3;
-                sectionClear = true;
-            }
-            else if (level == 1){
-                level = 2;
-                sectionClear = true;
-            }
-        }
-        if (Win){
-            init();
-        }
+
     }
 
     public void updateSmoke(double dt){
@@ -657,7 +669,7 @@ public class TankBattle extends GameEngine{
                     repairStation.draw();
                 }
             }
-            if (Win){
+            if (winning){
                 drawPlayerWin();
             }
         }
@@ -778,12 +790,15 @@ public class TankBattle extends GameEngine{
         if (doubleBattle){
             drawImage(BGG,0,0);
             if (playerAWin){
+                changeColor(Color.BLACK);
                 drawText(400, 200, "Player 1 Win", "Arial", 100);
             }else if (playerBWin){
+                changeColor(Color.BLACK);
                 drawText(400, 200, "Player 2 Win", "Arial", 100);
             }
         }else {
             drawImage(BGH,500,0,1000,1000);
+            changeColor(Color.BLACK);
             drawText(50, 400, "Player Win", "Arial", 50);
             drawText(50, 500, "Score: "+String.format("%.2f",score), "Arial", 50);
         }
@@ -1085,12 +1100,12 @@ public class TankBattle extends GameEngine{
 
                 }
             }
-        }if (Win){
+        }if (winning){
             for (int i = 0; i < buttons.size(); i++) {
                 if (e.getX() < buttons.get(i).x + buttons.get(i).w && e.getY() < buttons.get(i).y - 30 + buttons.get(i).h && e.getX() > buttons.get(i).x && e.getY() > buttons.get(i).y - 30) {
                     if (i == 0){
                         Win = false;
-                        startAudioLoop(End_Bgm);
+                        winning = false;
                         playerBWin = false;
                         playerAWin = false;
                         levelSelection = false;
