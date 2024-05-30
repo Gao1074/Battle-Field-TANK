@@ -19,9 +19,12 @@ public class RepairStation extends Entity{
         gameEngine.restoreLastTransform();
     }
 
-    public void repair(TANK tank){
+    public double repair(TANK tank ,double score){
         if (gameEngine.distance(position.getX(), position.getY(), tank.position.getX(),tank.position.getY()) < 100 && tank.Health <= tank.FullHealth){
-            tank.Health += 10;
+            if(tank.Health < tank.FullHealth){
+                tank.Health += 10;
+                score -= 10;
+            }
             if(tank.Health >= tank.FullHealth){
                 tank.Health = tank.FullHealth;
             }
@@ -29,6 +32,6 @@ public class RepairStation extends Entity{
         }else {
             tank.isrepair = false;
         }
-
+        return score;
     }
 }

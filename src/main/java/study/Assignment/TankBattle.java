@@ -1,3 +1,8 @@
+//Name:Xuanyu Gao ID:22009349
+//Name:Junkai Wang ID:22009330
+//Name:Xiaohan Liu ID:22009327
+//Name:Yu Yang ID:22009383
+
 package study.Assignment;
 
 import java.awt.*;
@@ -12,6 +17,10 @@ public class TankBattle extends GameEngine{
     boolean help = false;
     boolean sectionClear = false;
     boolean doubleBattle = false;
+    boolean Win = false;
+    boolean playerAWin = false;
+    boolean playerBWin = false;
+    double score = 0;
 
     int level = 1;
     public Wall wall = new Wall();
@@ -23,6 +32,12 @@ public class TankBattle extends GameEngine{
     Image HeavyTank = loadImage(Resource+"TanksPreview/HeavyTankPreview.png");
     //
     boolean isGameOver;
+    AudioClip MenuBgm = loadAudio(Resource+ "Music/BGM.wav");
+    AudioClip Level_1_Bgm = loadAudio(Resource+ "Music/Level 1.wav");
+    AudioClip Level_2_Bgm = loadAudio(Resource+ "Music/Level 2.wav");
+    AudioClip Level_3_Bgm = loadAudio(Resource+ "Music/Level 3.wav");
+    AudioClip End_Bgm = loadAudio(Resource+ "Music/Ending.wav");
+
     public ArrayList<TANK> factionA = new ArrayList<>();
     public ArrayList<TANK> factionB = new ArrayList<>();
     public ArrayList<TANK> tanks = new ArrayList<>();
@@ -39,10 +54,8 @@ public class TankBattle extends GameEngine{
     LightTank P2;
     MediumTank P2M;
     HeavyTank P2H;
+    boolean pauseMenu = false;
     boolean gameMenu = true;
-    ArrayList<HeavyTank> playerH = new ArrayList<>();
-    ArrayList<MediumTank> playerM = new ArrayList<>();
-    ArrayList<LightTank> playerL = new ArrayList<>();
     ArrayList<HeavyTank> heavyTanks = new ArrayList<>();
     ArrayList<LightTank> lightTanks = new ArrayList<>();
     ArrayList<MediumTank> mediumTanks = new ArrayList<>();
@@ -57,51 +70,54 @@ public class TankBattle extends GameEngine{
         P2H = new HeavyTank(this,difficult);
 
         if (P1Choose == 0) {
-            initPlayerA(P1,1000,1000);
+            initPlayerA(P1,10,20);
         }
         if (P1Choose == 1) {
-            initPlayerA(P1M,1000,1000);
+            if (level == 2) {
+                initPlayerA(P1M, 10, 200);
+            }else {
+                initPlayerA(P1M, 10, 20);
+            }
         }
         if (P1Choose == 2) {
-            initPlayerA(P1H,1000,1000);
+            initPlayerA(P1H,10,20);
         }
         if (doubleBattle){
             if (P2Choose == 0) {
-                initPlayerB(P2,250,300);
-
+                initPlayerB(P2,1400,800);
             }
             if (P2Choose == 1) {
-                initPlayerB(P2M,250,300);
+                initPlayerB(P2M,1400,800);
             }
             if (P2Choose == 2) {
-                initPlayerB(P2H,1000,1000);
+                initPlayerB(P2H,1400,800);
             }
         }
 
 
         if (!doubleBattle) {
             if (level == 1) {
-                initLightAi(300, 300);
-                initLightAi(600, 300);
-                initLightAi(900, 300);
-                repairStation = new RepairStation(this, 500, 500);
+                initLightAi(1400, 100);
+                initLightAi(1400, 600);
+                initLightAi(100, 900);
+                repairStation = new RepairStation(this, 30, 75);
 
             }
 
             if (level == 2) {
 
-                initMediumAi(300, 300);
-                initMediumAi(600, 300);
-                initMediumAi(900, 300);
-                repairStation = new RepairStation(this, 500, 500);
+                initMediumAi(1400, 300);
+                initMediumAi(1400, 600);
+                initMediumAi(100, 600);
+                repairStation = new RepairStation(this, 50, 300);
 
             }
             if (level == 3) {
-                initHeavyAi(900, 900);
-                initMediumAi(600, 300);
-                initLightAi(300, 300);
-                initLightAi(900, 300);
-                repairStation = new RepairStation(this, 500, 500);
+                initHeavyAi(1400, 500);
+                initMediumAi(1000, 300);
+                initLightAi(300, 250);
+                initLightAi(300, 750);
+                repairStation = new RepairStation(this, 30, 100);
             }
         }
     }
@@ -159,6 +175,7 @@ public class TankBattle extends GameEngine{
     }
 
     public void init(){
+        score = 0;
         factionB.clear();
         factionA.clear();
         lightTanks.clear();
@@ -182,20 +199,32 @@ public class TankBattle extends GameEngine{
         }else if (levelSelection){
             initLevelSelection();
         }else if (gameStart){
-            initLevel();
+            if (Win) {
+                initPlayerWin();
+            }else {
+                initLevel();
+            }
         }
     }
     boolean gameStart;
+    public void initPlayerWin(){
+        initButton(50, 50, 200, 40, "Back to Menu");
+        stopAudioLoop(Level_1_Bgm);
+        stopAudioLoop(Level_2_Bgm);
+        stopAudioLoop(Level_3_Bgm);
+        stopAudioLoop(MenuBgm);
+        startAudioLoop(End_Bgm);
+    }
     public void initTankSelection(){
         if (doubleBattle){
             initButton(50, 50, 200, 40, "Back");
-            initButton(250, 730, 100, 40, "LightTank");
-            initButton(650, 730, 100, 40, "MediumTank");
-            initButton(1050, 730, 100, 40, "HeavyTank");
+            initButton(250, 730, 100, 40, "LightTank",15);
+            initButton(650, 730, 100, 40, "MediumTank",15);
+            initButton(1050, 730, 100, 40, "HeavyTank",15);
             initButton(1250, 910, 200, 40, "Confirm");
-            initButton(350, 730, 100, 40, "LightTank");
-            initButton(750, 730, 100, 40, "MediumTank");
-            initButton(1150, 730, 100, 40, "HeavyTank");
+            initButton(350, 730, 100, 40, "LightTank",15);
+            initButton(750, 730, 100, 40, "MediumTank",15);
+            initButton(1150, 730, 100, 40, "HeavyTank",15);
         }else {
             initButton(50, 50, 200, 40, "Back");
             initButton(250, 730, 200, 40, "LightTank");
@@ -218,6 +247,12 @@ public class TankBattle extends GameEngine{
         
     }
     public void initStartMenu(){
+        stopAudioLoop(MenuBgm);
+        stopAudioLoop(Level_1_Bgm);
+        stopAudioLoop(Level_2_Bgm);
+        stopAudioLoop(Level_3_Bgm);
+        stopAudioLoop(End_Bgm);
+        startAudioLoop(MenuBgm);
         initButton(200,500,200,40,"Single Player");
         initButton(200,550,200,40,"Double Battles");
         initButton(200,600,200,40,"Help");
@@ -231,6 +266,12 @@ public class TankBattle extends GameEngine{
             initExplosion();
             ConstructWall();
             initFloor();
+            stopAudioLoop(Level_1_Bgm);
+            stopAudioLoop(Level_2_Bgm);
+            stopAudioLoop(Level_3_Bgm);
+            stopAudioLoop(MenuBgm);
+            stopAudioLoop(End_Bgm);
+            startAudioLoop(Level_1_Bgm);
         }
         if (level == 2){
             initTank();
@@ -238,6 +279,12 @@ public class TankBattle extends GameEngine{
             initExplosion();
             ConstructWall();
             initFloor();
+            stopAudioLoop(Level_2_Bgm);
+            stopAudioLoop(Level_1_Bgm);
+            stopAudioLoop(Level_3_Bgm);
+            stopAudioLoop(MenuBgm);
+            stopAudioLoop(End_Bgm);
+            startAudioLoop(Level_2_Bgm);
         }
         if (level == 3){
             initTank();
@@ -245,6 +292,12 @@ public class TankBattle extends GameEngine{
             initExplosion();
             ConstructWall();
             initFloor();
+            stopAudioLoop(Level_3_Bgm);
+            stopAudioLoop(Level_1_Bgm);
+            stopAudioLoop(Level_2_Bgm);
+            stopAudioLoop(MenuBgm);
+            stopAudioLoop(End_Bgm);
+            startAudioLoop(Level_3_Bgm);
         }
         
     }
@@ -330,7 +383,7 @@ public class TankBattle extends GameEngine{
             floorDown.setPositionX(100*i);
             floorDown.draw();
         }
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 8; i++) {
             floorLeft.setPositionY(100*i);
             floorLeft.draw();
             floorRight.setPositionY(100*i);
@@ -338,7 +391,7 @@ public class TankBattle extends GameEngine{
         }
         for (int i = 1; i <= 13; i++) {
             floorMiddle.setPositionX(i*100);
-            for (int j = 1; j <= 10; j++) {
+            for (int j = 1; j <= 8; j++) {
                 floorMiddle.setPositionY(j*100);
                 floorMiddle.draw();
             }
@@ -378,7 +431,6 @@ public class TankBattle extends GameEngine{
                 P2M.weapon_M.updateAmmo(dt,wall);
                 P2M.UpdateDamage(factionA);
             }else if (P2Choose == 2) {
-                System.out.println(1);
                 P2H.weapon_M.updateAmmo(dt, wall);
                 P2H.weapon_L.updateAmmo(dt, wall);
                 P2H.weapon_R.updateAmmo(dt, wall);
@@ -409,13 +461,13 @@ public class TankBattle extends GameEngine{
 
     @Override
     public void update(double dt) {
-        if (gameStart) {
+        if (gameStart && !pauseMenu) {
             if (!isGameOver&&!sectionClear) {
                 updateLevel(dt);
                 if (!doubleBattle) {
-                    repairStation.repair(P1M);
-                    repairStation.repair(P1);
-                    repairStation.repair(P1H);
+                    score = repairStation.repair(P1M,score);
+                    score = repairStation.repair(P1,score);
+                    score = repairStation.repair(P1H,score);
                 }
             }
         }
@@ -435,11 +487,26 @@ public class TankBattle extends GameEngine{
         updateAmmo(dt);
         updateSmoke(dt);
         updateExplosion(dt);
-        if (factionA.size() == 0){
-            isGameOver = true;
+        if (doubleBattle){
+            if (factionA.size() == 0){
+                Win = true;
+                playerAWin = false;
+                playerBWin = true;
+            }
+            if (factionB.size() == 0){
+                Win = true;
+                playerAWin = true;
+                playerBWin = false;
+            }
+        }else {
+            if (factionA.size() == 0) {
+                isGameOver = true;
+            }
         }
         if (factionB.size() == 0){
-            if (level == 2){
+            if (level == 3){
+                Win = true;
+            }else if (level == 2){
                 level = 3;
                 sectionClear = true;
             }
@@ -447,7 +514,9 @@ public class TankBattle extends GameEngine{
                 level = 2;
                 sectionClear = true;
             }
-
+        }
+        if (Win){
+            init();
         }
     }
 
@@ -495,6 +564,9 @@ public class TankBattle extends GameEngine{
         for (TANK tank : tanks){
             if (tank.defeat && !tank.explode){
                 createExplosion(tank.position.getX(),tank.position.getY(),tank.size.getWidth(),tank.size.getHeight());
+                if (!doubleBattle) {
+                    score += tank.FullHealth * (10 - difficult);
+                }
                 tank.explode = true;
                 factionB.remove(tank);
                 factionA.remove(tank);
@@ -573,9 +645,33 @@ public class TankBattle extends GameEngine{
                     repairStation.draw();
                 }
             }
+            if (Win){
+                drawPlayerWin();
+            }
         }
-
-    
+    }
+    public void drawPlayerWin(){
+        changeBackgroundColor(Color.WHITE);
+        clearBackground(width(), height());
+        if (doubleBattle){
+            if (playerAWin){
+                drawText(200, 200, "P1 Win", "Arial", 100);
+            }else if (playerBWin){
+                drawText(200, 200, "P2 Win", "Arial", 100);
+            }
+        }else {
+            drawText(200, 200, "Player Win", "Arial", 100);
+            drawText(200, 300, "Score: "+String.format("%.2f",score), "Arial", 100);
+        }
+        drawButton();
+    }
+    public void drawTriangle(double x,double y){
+        saveCurrentTransform();
+        translate(x,y);
+        drawLine(-10,  10,  10,  10);
+        drawLine( 10,  10,   0, -20);
+        drawLine(  0, -20, -10,  10);
+        restoreLastTransform();
     }
     public void drawTankSelection(){
         changeBackgroundColor(Color.WHITE);
@@ -586,9 +682,31 @@ public class TankBattle extends GameEngine{
             drawImage(LightTank, 250, 500, 200, 200);
             drawImage(MediumTank, 650, 500, 200, 200);
             drawImage(HeavyTank, 1050, 500, 200, 200);
-            drawText(650, 290, "Difficulty:", "Arial", 20);
-            drawRectangle(650, 300, 200, 20);
-            drawSolidRectangle(650, 300, 200 * ((10.0 - difficult) / 10.0), 20);
+            if (P1Choose == 0){
+                changeColor(Color.GREEN);
+                drawTriangle(300,800);
+            }
+            if (P1Choose == 1){
+                changeColor(Color.GREEN);
+                drawTriangle(700,800);
+            }
+            if (P1Choose == 2){
+                changeColor(Color.GREEN);
+                drawTriangle(1100,800);
+            }
+            if (P2Choose == 0){
+                changeColor(Color.RED);
+                drawTriangle(400,800);
+            }
+            if (P2Choose == 1){
+                changeColor(Color.RED);
+                drawTriangle(800,800);
+            }
+            if (P2Choose == 2){
+                changeColor(Color.RED);
+                drawTriangle(1200,800);
+            }
+
         }else {
             changeColor(Color.BLACK);
             drawText(200, 200, "Select Your Tank", "Arial", 100);
@@ -598,6 +716,18 @@ public class TankBattle extends GameEngine{
             drawText(650, 290, "Difficulty:", "Arial", 20);
             drawRectangle(650, 300, 200, 20);
             drawSolidRectangle(650, 300, 200 * ((10.0 - difficult) / 10.0), 20);
+            if (P1Choose == 0){
+                changeColor(Color.GREEN);
+                drawTriangle(350,800);
+            }
+            if (P1Choose == 1){
+                changeColor(Color.GREEN);
+                drawTriangle(750,800);
+            }
+            if (P1Choose == 2){
+                changeColor(Color.GREEN);
+                drawTriangle(1150,800);
+            }
         }
         drawButton();
     }
@@ -635,20 +765,34 @@ public class TankBattle extends GameEngine{
         changeColor(Color.BLACK);
         clearBackground(width(),height());
         drawText(200,200,"Game Over!","Arial",100);
-        drawText(200,300,"Press 'R' to try again!","Arial",20);
+        drawText(200,300,"Score: "+ String.format("%.2f",score),"Arial",100);
+        drawText(200,400,"Press 'R' to try again!","Arial",20);
     }
     public void drawSectionClear(){
         clearBackground(width(),height());
         changeColor(Color.BLACK);
         drawText(200,200,"Section Clear!","Arial",100);
-        drawText(200,300,"Press 'R' to enter next level!","Arial",20);
+        drawText(200,300,"Score: "+String.format("%.2f",score),"Arial",100);
+        drawText(200,400,"Press 'R' to enter next level!","Arial",20);
     }
     public void drawHelp(){
         changeBackgroundColor(Color.WHITE);
         clearBackground(width(),height());
         changeColor(Color.BLACK);
         drawText(200,200,"Help","Arial",100);
+        drawText(200,300,"Single-player mode:","Arial",40);
 
+        drawText(200,350,"Use 'W,A,S,D' to control the tank.","Arial",20);
+        drawText(200,400,"Press SPACE to shoot shells.","Arial",20);
+        drawText(200,450,"Destroy all enemies to enter next level.","Arial",20);
+
+        drawText(200,550,"Two-player battle mode:","Arial",40);
+
+        drawText(200,600,"Player 1 use 'W,A,S,D' to control the tank.","Arial",20);
+        drawText(200,650,"Player 2 use Arrow keys to control the tank.","Arial",20);
+        drawText(200,700,"Player 1 press SPACE to shoot shells.","Arial",20);
+        drawText(200,750,"Player 2 press ENTER to shoot shells.","Arial",20);
+        drawText(200,800,"Destroy each other to win.","Arial",20);
         drawButton();
     }
     public void initButton(double x, double y , double w, double h, String Text ){
@@ -657,6 +801,18 @@ public class TankBattle extends GameEngine{
         button.y = y;
         button.w = w;
         button.h = h;
+        button.size = 20;
+        button.Text = Text;
+        button.color = Color.BLACK;
+        buttons.add(button);
+    }
+    public void initButton(double x, double y , double w, double h, String Text ,int size){
+        Button button = new Button();
+        button.x = x;
+        button.y = y;
+        button.w = w;
+        button.h = h;
+        button.size = size;
         button.Text = Text;
         button.color = Color.BLACK;
         buttons.add(button);
@@ -665,7 +821,7 @@ public class TankBattle extends GameEngine{
     public void drawButton(){
         for (Button button : buttons) {
             changeColor(Color.BLACK);
-            drawText(button.x, button.y, button.Text, "Arial", 20);
+            drawText(button.x, button.y, button.Text, "Arial", button.size);
             changeColor(button.color);
             drawRectangle(button.x, button.y - 30, button.w, button.h);
         }
@@ -676,6 +832,7 @@ public class TankBattle extends GameEngine{
         double y;
         double w;
         double h;
+        int size;
         String Text;
         Color color;
     }
@@ -779,13 +936,15 @@ public class TankBattle extends GameEngine{
             }
         }
         if (tankSelection) {
-            if (e.getX()>650&&e.getX()<650+200&&e.getY()>300&&e.getY()<300+20){
-                difficult = 10 - ((e.getX() - 650)/200.0)*10;
-                if (difficult > 9){
-                    difficult = 9;
-                }
-                if (difficult < 1){
-                    difficult = 1;
+            if (!doubleBattle) {
+                if (e.getX() > 650 && e.getX() < 650 + 200 && e.getY() > 300 && e.getY() < 300 + 20) {
+                    difficult = 10 - ((e.getX() - 650) / 200.0) * 10;
+                    if (difficult > 9) {
+                        difficult = 9;
+                    }
+                    if (difficult < 1) {
+                        difficult = 1;
+                    }
                 }
             }
             if (!buttons.isEmpty()) {
@@ -856,6 +1015,7 @@ public class TankBattle extends GameEngine{
                             help = false;
                             about = false;
                             gameMenu = false;
+                            isGameOver = false;
                             init();
                             break;
                         }
@@ -866,6 +1026,7 @@ public class TankBattle extends GameEngine{
                             about = false;
                             gameMenu = false;
                             gameStart = true;
+                            isGameOver = false;
                             level = 1;
                             init();
                             break;
@@ -877,6 +1038,7 @@ public class TankBattle extends GameEngine{
                             about = false;
                             gameMenu = false;
                             gameStart = true;
+                            isGameOver = false;
                             level = 2;
                             init();
                             break;
@@ -888,12 +1050,51 @@ public class TankBattle extends GameEngine{
                             about = false;
                             gameMenu = false;
                             gameStart = true;
+                            isGameOver = false;
                             level = 3;
                             init();
                             break;
                         }
                     }
 
+                }
+            }
+        }if (Win){
+            for (int i = 0; i < buttons.size(); i++) {
+                if (e.getX() < buttons.get(i).x + buttons.get(i).w && e.getY() < buttons.get(i).y - 30 + buttons.get(i).h && e.getX() > buttons.get(i).x && e.getY() > buttons.get(i).y - 30) {
+                    if (i == 0){
+                        Win = false;
+                        startAudioLoop(End_Bgm);
+                        playerBWin = false;
+                        playerAWin = false;
+                        levelSelection = false;
+                        tankSelection = false;
+                        gameStart = false;
+                        isGameOver = false;
+                        help = false;
+                        about = false;
+                        gameMenu = true;
+                        init();
+                        break;
+                    }
+                }
+            }
+        }
+        if (pauseMenu){
+            for (int i = 0; i < buttons.size(); i++) {
+                if (e.getX() < buttons.get(i).x + buttons.get(i).w && e.getY() < buttons.get(i).y - 30 + buttons.get(i).h && e.getX() > buttons.get(i).x && e.getY() > buttons.get(i).y - 30) {
+                    if (i == 0){
+                        pauseMenu =false;
+                        buttons.clear();
+                        break;
+                    }
+                    if (i == 1){
+                        pauseMenu =false;
+                        gameStart = false;
+                        gameMenu = true;
+                        init();
+                        break;
+                    }
                 }
             }
         }
@@ -908,10 +1109,24 @@ public class TankBattle extends GameEngine{
         drawTank();
         drawWeapon();
         drawSmoke();
+
         if (wall.getBlocks().size() !=0) {
             drawWall();
         }
         drawExplosion();
+        if (pauseMenu){
+            drawButton();
+        }
+        if (!doubleBattle) {
+            drawScore();
+        }
+    }
+    public void drawScore(){
+        drawText(20,20,"Score: "+ String.format("%.2f",score),"Arial",20);
+    }
+    public void initPause(){
+        initButton(650,500,200,40,"Continue ");
+        initButton(650,550,200,40,"Back to menu");
     }
     public void drawWeapon(){
     }
@@ -953,8 +1168,9 @@ public class TankBattle extends GameEngine{
                 }
             }
         }
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE && !isGameOver)    {
-            System.exit(1);
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE && !isGameOver && gameStart && !Win)    {
+            pauseMenu = true;
+            initPause();
         }
         if(e.getKeyCode() == KeyEvent.VK_R)    {
             if (isGameOver) {
@@ -1188,7 +1404,7 @@ public class TankBattle extends GameEngine{
     public void ConstructWall(){
         if(level == 1){
             Block = loadImage(Resource + "block/wall"+level+".png");
-            for (int i = 0; i <= 16 ; i++) {
+            for (int i = 0; i <= 14 ; i++) {
                 if (i % 2 == 0){
                     wall.newBlock(50+50*i,150,100,100,false);
                     wall.newBlock(750+50*i,450,100,100,false);
@@ -1199,28 +1415,27 @@ public class TankBattle extends GameEngine{
         }
         if(level == 2){
             Block = loadImage(Resource + "block/wall"+level+".png");
-            for (int i = 0; i <= 8 ; i++) {
-                if (i % 2 == 0){
-                    wall.newBlock(50+50*i,100,100,100,false);
-                    wall.newBlock(50+50*i,500,100,100,false);
-                    wall.newBlock(50+50*i,900,100,100,false);
-                    wall.newBlock(1450-50*i,100,100,100,false);
-                    wall.newBlock(1450-50*i,500,100,100,false);
-                    wall.newBlock(1450-50*i,900,100,100,false);
-                }
+            for (int i = 0; i <= 4 ; i++) {
+
+                    wall.newBlock(50+100*i,150,100,100,false);
+                    wall.newBlock(50+100*i,550,100,100,false);
+                    wall.newBlock(50+100*i,950,100,100,false);
+                    wall.newBlock(1450-100*i,150,100,100,false);
+                    wall.newBlock(1450-100*i,550,100,100,false);
+                    wall.newBlock(1450-100*i,950,100,100,false);
 
             }
 
         }
         if(level == 3){
             Block = loadImage(Resource + "block/wall"+level+".png");
-            for (int i = 1; i <= 3; i++) {
-                wall.newBlock(200,50+100*i,100,100,false);
-                wall.newBlock(750,50+100*i,100,100,false);
-                wall.newBlock(1300,50+100*i,100,100,false);
-                wall.newBlock(200,550+100*i,100,100,false);
-                wall.newBlock(750,550+100*i,100,100,false);
-                wall.newBlock(1300,550+100*i,100,100,false);
+            for (int i = 0; i <= 3; i++) {
+                wall.newBlock(200,100*i,100,100,false);
+                wall.newBlock(750,100*i,100,100,false);
+                //wall.newBlock(1300,100*i,100,100,false);
+                wall.newBlock(200,650+100*i,100,100,false);
+                wall.newBlock(750,650+100*i,100,100,false);
+               // wall.newBlock(1300,650+100*i,100,100,false);
             }
         }
 
