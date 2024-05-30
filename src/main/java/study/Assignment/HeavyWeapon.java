@@ -10,7 +10,7 @@ public class HeavyWeapon extends MainWeapon {
         super(tank, gameEngine, Angle);
         power = 200;
         initAmmo();
-        image = gameEngine.loadImage("HeavyWeapon.png");
+        image = gameEngine.loadImage("src/main/resources/TankPart/HeavyWeapon.png");
     }
     public void Fire(){
         if (loadingTime <= 0) {

@@ -10,7 +10,7 @@ public class LightWeapon extends MainWeapon{
         super(tank, gameEngine, Angle);
         power = 100;
         initAmmo();
-        image = gameEngine.loadImage("LightWeapon.png");
+        image = gameEngine.loadImage("src/main/resources/TankPart/LightWeapon.png");
     }
     public void Fire(){
         if (loadingTime <= 0) {

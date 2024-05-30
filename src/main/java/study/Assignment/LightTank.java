@@ -13,8 +13,7 @@ public class LightTank extends TANK{
         FullHealth = 40;
         Health = 40;
         speed = 300;
-        MovingAudio = gameEngine.loadAudio("Fast.wav");
-        image = gameEngine.loadImage("LightTank0.png");
+        image = gameEngine.loadImage("src/main/resources/TankPart/Light.png");
         isrepair = false;
     }
     LightTank(GameEngine gameEngine,double difficult) {
@@ -24,8 +23,7 @@ public class LightTank extends TANK{
         FullHealth = 40 * difficult;
         Health = 40 * difficult;
         speed = 300 + difficult * 0.01 * 300;
-        MovingAudio = gameEngine.loadAudio("Fast.wav");
-        image = gameEngine.loadImage("LightTank0.png");
+        image = gameEngine.loadImage("src/main/resources/TankPart/Light.png");
         isrepair = false;
     }
     public void updateTank(double dt){
@@ -104,7 +102,7 @@ public class LightTank extends TANK{
             UP = false;
             velocity.setX(0);
             velocity.setY(0);
-        }else {
+        }else if(angleDiff < 1 && angleDiff > -1){
             UP = true;
         }
         if (angleDiff < -1) {

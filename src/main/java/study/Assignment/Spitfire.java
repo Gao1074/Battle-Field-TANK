@@ -10,7 +10,7 @@ public class Spitfire extends Weapon{
     final double trackingLength = 800;
     final double FireLength = 600;
     ArrayList<FireAmmo> ammos = new ArrayList<>();
-    Image image = gameEngine.loadImage("SideFire.png");
+    Image image = gameEngine.loadImage("src/main/resources/TankPart/SideFire.png");
     double sideFireMode;
     public Spitfire(TANK tank , GameEngine gameEngine ,double Angle,double D) {
         super(tank, gameEngine, Angle);

@@ -14,8 +14,7 @@ public class MediumTank extends TANK{
         FullHealth = 80;
         Health = 80;
         speed = 200;
-        MovingAudio = gameEngine.loadAudio("Medium.wav");
-        image = gameEngine.loadImage("MediumTank0.png");
+        image = gameEngine.loadImage("src/main/resources/TankPart/Medium.png");
         isrepair = false;
     }
     MediumTank(GameEngine gameEngine,double difficult) {
@@ -25,8 +24,8 @@ public class MediumTank extends TANK{
         FullHealth = 80 * difficult;
         Health = 80 * difficult;
         speed = 200 + difficult * 0.01 * 200;
-        MovingAudio = gameEngine.loadAudio("Medium.wav");
-        image = gameEngine.loadImage("MediumTank0.png");
+
+        image = gameEngine.loadImage("src/main/resources/TankPart/Medium.png");
         isrepair = false;
     }
     public void updateTank(double dt){
@@ -103,7 +102,7 @@ public class MediumTank extends TANK{
             UP = false;
             velocity.setX(0);
             velocity.setY(0);
-        }else {
+        }else if(angleDiff < 1 && angleDiff > -1){
             UP = true;
         }
         if (angleDiff < -1) {

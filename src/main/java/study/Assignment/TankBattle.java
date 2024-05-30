@@ -27,7 +27,6 @@ public class TankBattle extends GameEngine{
     public ArrayList<TANK> tanks = new ArrayList<>();
     RepairStation repairStation;
     int P1Choose = 0;
-    AudioClip Test = loadAudio("Fast.wav");
 
     public static void main(String[] args) {
         createGame(new TankBattle());
@@ -44,8 +43,6 @@ public class TankBattle extends GameEngine{
     ArrayList<MediumTank> mediumTanks = new ArrayList<>();
     double difficult = 1;
     public void initTank(){
-        startAudioLoop(Test);
-        stopAudioLoop(Test);
 
         P1 = new LightTank(this,difficult);
         P1M = new MediumTank(this,difficult);

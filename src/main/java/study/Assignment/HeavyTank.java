@@ -17,9 +17,9 @@ public class HeavyTank extends TANK{
         size.setWidth(80);
         size.setHeight(80);
         FullHealth = 160;
-        MovingAudio = gameEngine.loadAudio("Slow.wav");
         Health = 160;
-        image = gameEngine.loadImage("HeavyTank0.png");
+        speed = 60;
+        image = gameEngine.loadImage("src/main/resources/TankPart/Heavy.png");
         isrepair = false;
     }
     public HeavyTank(GameEngine gameEngine,double difficult){
@@ -29,8 +29,7 @@ public class HeavyTank extends TANK{
         FullHealth = 160 * difficult;
         Health = 160 * difficult;
         speed = 60 + difficult * 0.01 * 60;
-        MovingAudio = gameEngine.loadAudio("Slow.wav");
-        image = gameEngine.loadImage("HeavyTank0.png");
+        image = gameEngine.loadImage("src/main/resources/TankPart/Heavy.png");
         isrepair = false;
     }
     public void updateTank(double dt){
@@ -141,7 +140,7 @@ public class HeavyTank extends TANK{
             UP = false;
             velocity.setX(0);
             velocity.setY(0);
-        }else {
+        }else if(angleDiff < 1 && angleDiff > -1){
             UP = true;
         }
         if (angleDiff < -1) {
