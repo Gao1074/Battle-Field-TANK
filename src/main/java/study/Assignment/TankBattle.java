@@ -57,14 +57,13 @@ public class TankBattle extends GameEngine{
         P2H = new HeavyTank(this,difficult);
 
         if (P1Choose == 0) {
-            initPlayerA(P1,250,250);
-
+            initPlayerA(P1,1000,1000);
         }
         if (P1Choose == 1) {
-            initPlayerA(P1M,250,250);
+            initPlayerA(P1M,1000,1000);
         }
         if (P1Choose == 2) {
-            initPlayerA(P1H,250,250);
+            initPlayerA(P1H,1000,1000);
         }
         if (doubleBattle){
             if (P2Choose == 0) {
@@ -1215,6 +1214,14 @@ public class TankBattle extends GameEngine{
         }
         if(level == 3){
             Block = loadImage(Resource + "block/wall"+level+".png");
+            for (int i = 1; i <= 3; i++) {
+                wall.newBlock(200,50+100*i,100,100,false);
+                wall.newBlock(750,50+100*i,100,100,false);
+                wall.newBlock(1300,50+100*i,100,100,false);
+                wall.newBlock(200,550+100*i,100,100,false);
+                wall.newBlock(750,550+100*i,100,100,false);
+                wall.newBlock(1300,550+100*i,100,100,false);
+            }
         }
 
     }
