@@ -5,6 +5,7 @@
 
 package study.Assignment;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -27,6 +28,15 @@ public class TankBattle extends GameEngine{
     ArrayList<Image> Images = new ArrayList<>();
     String Resource = "src/main/resources/";
     String BlackSmoke = "Black smoke/blackSmoke";
+    Image logo = loadImage(Resource+"BackGround/logo.png");
+    Image BGA = loadImage(Resource+"BackGround/BG_A.png");
+    Image BGB = loadImage(Resource+"BackGround/BG_B.png");
+    Image BGC = loadImage(Resource+"BackGround/BG_C.png");
+    Image BGD = loadImage(Resource+"BackGround/BG_D.png");
+    Image BGE = loadImage(Resource+"BackGround/BG_E.png");
+    Image BGF = loadImage(Resource+"BackGround/BG_F.png");
+    Image BGG = loadImage(Resource+"BackGround/BG_G.png");
+    Image BGH = loadImage(Resource+"BackGround/BG_H.png");
     Image LightTank = loadImage(Resource+"TanksPreview/LightTankPreview.png");
     Image MediumTank = loadImage(Resource+"TanksPreview/MediumTankPreview.png");
     Image HeavyTank = loadImage(Resource+"TanksPreview/HeavyTankPreview.png");
@@ -175,7 +185,9 @@ public class TankBattle extends GameEngine{
     }
 
     public void init(){
-        score = 0;
+        if (!Win) {
+            score = 0;
+        }
         factionB.clear();
         factionA.clear();
         lightTanks.clear();
@@ -253,11 +265,11 @@ public class TankBattle extends GameEngine{
         stopAudioLoop(Level_3_Bgm);
         stopAudioLoop(End_Bgm);
         startAudioLoop(MenuBgm);
-        initButton(200,500,200,40,"Single Player");
-        initButton(200,550,200,40,"Double Battles");
-        initButton(200,600,200,40,"Help");
-        initButton(200,650,200,40,"About");
-        initButton(200,700,200,40,"Exit");
+        initButton(150,600,200,40,"Single Player");
+        initButton(400,600,200,40,"Double Battles");
+        initButton(650,600,200,40,"Help");
+        initButton(900,600,200,40,"About");
+        initButton(1150,600,200,40,"Exit");
     }
     public void initLevel(){
         if (level == 1){
@@ -565,7 +577,7 @@ public class TankBattle extends GameEngine{
             if (tank.defeat && !tank.explode){
                 createExplosion(tank.position.getX(),tank.position.getY(),tank.size.getWidth(),tank.size.getHeight());
                 if (!doubleBattle) {
-                    score += tank.FullHealth * (10 - difficult);
+                    score += tank.FullHealth * (10 - difficult) * tank.IsAI;
                 }
                 tank.explode = true;
                 factionB.remove(tank);
@@ -650,21 +662,7 @@ public class TankBattle extends GameEngine{
             }
         }
     }
-    public void drawPlayerWin(){
-        changeBackgroundColor(Color.WHITE);
-        clearBackground(width(), height());
-        if (doubleBattle){
-            if (playerAWin){
-                drawText(200, 200, "P1 Win", "Arial", 100);
-            }else if (playerBWin){
-                drawText(200, 200, "P2 Win", "Arial", 100);
-            }
-        }else {
-            drawText(200, 200, "Player Win", "Arial", 100);
-            drawText(200, 300, "Score: "+String.format("%.2f",score), "Arial", 100);
-        }
-        drawButton();
-    }
+
     public void drawTriangle(double x,double y){
         saveCurrentTransform();
         translate(x,y);
@@ -676,9 +674,10 @@ public class TankBattle extends GameEngine{
     public void drawTankSelection(){
         changeBackgroundColor(Color.WHITE);
         clearBackground(width(), height());
+        drawImage(BGB,0,700);
         if (doubleBattle) {
             changeColor(Color.BLACK);
-            drawText(200, 200, "Select Your Tank", "Arial", 100);
+            drawText(350, 200, "Select Your Tank", "Arial", 100);
             drawImage(LightTank, 250, 500, 200, 200);
             drawImage(MediumTank, 650, 500, 200, 200);
             drawImage(HeavyTank, 1050, 500, 200, 200);
@@ -709,7 +708,7 @@ public class TankBattle extends GameEngine{
 
         }else {
             changeColor(Color.BLACK);
-            drawText(200, 200, "Select Your Tank", "Arial", 100);
+            drawText(350, 200, "Select Your Tank", "Arial", 100);
             drawImage(LightTank, 250, 500, 200, 200);
             drawImage(MediumTank, 650, 500, 200, 200);
             drawImage(HeavyTank, 1050, 500, 200, 200);
@@ -734,16 +733,19 @@ public class TankBattle extends GameEngine{
     public void drawLevelSelection(){
         changeBackgroundColor(Color.WHITE);
         clearBackground(width(),height());
+        drawImage(BGC,0,500);
         changeColor(Color.BLACK);
-        drawText(200,200,"TankBattle","Arial",100);
+        drawText(500,200,"Select Level","Arial",100);
         drawButton();
 
     }
     public void drawMenu(){
         changeBackgroundColor(Color.WHITE);
         clearBackground(width(),height());
+        drawImage(BGA,0,0);
         changeColor(Color.BLACK);
-        drawText(200,200,"TankBattle","Arial",100);
+        drawImage(logo,600,250,300,300);
+        drawText(350,200,"Battle Field - Tank","Arial",100);
         drawButton();
 
     }
@@ -751,6 +753,7 @@ public class TankBattle extends GameEngine{
     public void drawAbout(){
         changeBackgroundColor(Color.WHITE);
         clearBackground(width(),height());
+        drawImage(BGE,600,50,900,900);
         changeColor(Color.BLACK);
         drawText(200,200,"Made By Group 2","Arial",100);
         drawText(200,300,"Group Member:","Arial",20);
@@ -764,21 +767,41 @@ public class TankBattle extends GameEngine{
     public void drawGameOver(){
         changeColor(Color.BLACK);
         clearBackground(width(),height());
-        drawText(200,200,"Game Over!","Arial",100);
-        drawText(200,300,"Score: "+ String.format("%.2f",score),"Arial",100);
-        drawText(200,400,"Press 'R' to try again!","Arial",20);
+        drawImage(BGF,700,0,1000,1000);
+        drawText(50,400,"Game Over!","Arial",50);
+        drawText(50,500,"Score: "+ String.format("%.2f",score),"Arial",50);
+        drawText(50,600,"Press 'R' to try again!","Arial",50);
+    }
+    public void drawPlayerWin(){
+        changeBackgroundColor(Color.WHITE);
+        clearBackground(width(), height());
+        if (doubleBattle){
+            drawImage(BGG,0,0);
+            if (playerAWin){
+                drawText(400, 200, "Player 1 Win", "Arial", 100);
+            }else if (playerBWin){
+                drawText(400, 200, "Player 2 Win", "Arial", 100);
+            }
+        }else {
+            drawImage(BGH,500,0,1000,1000);
+            drawText(50, 400, "Player Win", "Arial", 50);
+            drawText(50, 500, "Score: "+String.format("%.2f",score), "Arial", 50);
+        }
+        drawButton();
     }
     public void drawSectionClear(){
         clearBackground(width(),height());
         changeColor(Color.BLACK);
-        drawText(200,200,"Section Clear!","Arial",100);
-        drawText(200,300,"Score: "+String.format("%.2f",score),"Arial",100);
-        drawText(200,400,"Press 'R' to enter next level!","Arial",20);
+        drawImage(BGH,500,0,1000,1000);
+        drawText(50,400,"Section Clear!","Arial",50);
+        drawText(50,500,"Score: "+String.format("%.2f",score),"Arial",50);
+        drawText(50,600,"Press 'R' to enter next level!","Arial",50);
     }
     public void drawHelp(){
         changeBackgroundColor(Color.WHITE);
         clearBackground(width(),height());
         changeColor(Color.BLACK);
+        drawImage(BGD,600,50,900,900);
         drawText(200,200,"Help","Arial",100);
         drawText(200,300,"Single-player mode:","Arial",40);
 
@@ -839,13 +862,15 @@ public class TankBattle extends GameEngine{
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        for (Button button : buttons){
-            if (!(e.getX() < button.x + button.w && e.getY() < button.y - 30 + button.h && e.getX() > button.x && e.getY() > button.y - 30)){
-                button.color = Color.BLACK;
-            }else {
-                button.color = Color.WHITE;
-            }
+        if (buttons!=null) {
+            for (Button button : buttons) {
+                if (!(e.getX() < button.x + button.w && e.getY() < button.y - 30 + button.h && e.getX() > button.x && e.getY() > button.y - 30)) {
+                    button.color = Color.BLACK;
+                } else {
+                    button.color = Color.WHITE;
+                }
 
+            }
         }
     }
 
@@ -867,6 +892,7 @@ public class TankBattle extends GameEngine{
                             break;
                         }
                         else if (i == 1) {
+                            difficult = 1;
                             doubleBattle = true;
                             levelSelection = false;
                             tankSelection = true;

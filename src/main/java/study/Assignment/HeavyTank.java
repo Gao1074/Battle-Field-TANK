@@ -28,6 +28,7 @@ public class HeavyTank extends TANK{
         size.setHeight(80);
         FullHealth = 160 * difficult;
         Health = 160 * difficult;
+        IsAI = 0;
         speed = 60 + difficult * 0.01 * 60;
         image = gameEngine.loadImage("src/main/resources/TankPart/Heavy.png");
         isrepair = false;

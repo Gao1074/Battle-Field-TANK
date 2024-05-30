@@ -13,6 +13,7 @@ public class MediumTank extends TANK{
         size.setHeight(60);
         FullHealth = 80;
         Health = 80;
+        IsAI = 0;
         speed = 200;
         image = gameEngine.loadImage("src/main/resources/TankPart/Medium.png");
         isrepair = false;

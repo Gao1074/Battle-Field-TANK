@@ -15,6 +15,7 @@ public abstract class TANK extends Entity{
     public boolean explode;
     public boolean isrepair;
     public double speed;
+    double IsAI = 1;
     TANK target = this;
 
     TANK(GameEngine gameEngine){

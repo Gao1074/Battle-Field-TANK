@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class LightTank extends TANK{
+
 //    boolean Playing;
     LightWeapon weapon_M = new LightWeapon(this,gameEngine,0);
     LightTank(GameEngine gameEngine) {
@@ -20,6 +21,7 @@ public class LightTank extends TANK{
         super(gameEngine);
         size.setWidth(40);
         size.setHeight(40);
+        IsAI = 0;
         FullHealth = 40 * difficult;
         Health = 40 * difficult;
         speed = 300 + difficult * 0.01 * 300;
