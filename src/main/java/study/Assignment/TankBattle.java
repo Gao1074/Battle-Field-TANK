@@ -11,6 +11,7 @@ public class TankBattle extends GameEngine{
     boolean about = false;
     boolean help = false;
     boolean sectionClear = false;
+    boolean doubleBattle = false;
 
     int level = 1;
     public Wall wall = new Wall();
@@ -27,6 +28,7 @@ public class TankBattle extends GameEngine{
     public ArrayList<TANK> tanks = new ArrayList<>();
     RepairStation repairStation;
     int P1Choose = 0;
+    int P2Choose = 0;
 
     public static void main(String[] args) {
         createGame(new TankBattle());
@@ -34,6 +36,9 @@ public class TankBattle extends GameEngine{
     LightTank P1;
     MediumTank P1M;
     HeavyTank P1H;
+    LightTank P2;
+    MediumTank P2M;
+    HeavyTank P2H;
     boolean gameMenu = true;
     ArrayList<HeavyTank> playerH = new ArrayList<>();
     ArrayList<MediumTank> playerM = new ArrayList<>();
@@ -47,7 +52,9 @@ public class TankBattle extends GameEngine{
         P1 = new LightTank(this,difficult);
         P1M = new MediumTank(this,difficult);
         P1H = new HeavyTank(this,difficult);
-
+        P2 = new LightTank(this,difficult);
+        P2M = new MediumTank(this,difficult);
+        P2H = new HeavyTank(this,difficult);
 
         if (P1Choose == 0) {
             initPlayerA(P1,250,250);
@@ -59,30 +66,45 @@ public class TankBattle extends GameEngine{
         if (P1Choose == 2) {
             initPlayerA(P1H,250,250);
         }
-        if (level == 1){
-            initLightAi(300,300);
-            initLightAi(600,300);
-            initLightAi(900,300);
-            repairStation = new RepairStation(this, 500,500);
+        if (doubleBattle){
+            if (P2Choose == 0) {
+                initPlayerB(P2,250,300);
 
+            }
+            if (P2Choose == 1) {
+                initPlayerB(P2M,250,300);
+            }
+            if (P2Choose == 2) {
+                initPlayerB(P2H,1000,1000);
+            }
         }
 
-        if (level == 2){
 
-            initMediumAi(300,300);
-            initMediumAi(600,300);
-            initMediumAi(900,300);
-            repairStation = new RepairStation(this, 500,500);
+        if (!doubleBattle) {
+            if (level == 1) {
+                initLightAi(300, 300);
+                initLightAi(600, 300);
+                initLightAi(900, 300);
+                repairStation = new RepairStation(this, 500, 500);
 
+            }
+
+            if (level == 2) {
+
+                initMediumAi(300, 300);
+                initMediumAi(600, 300);
+                initMediumAi(900, 300);
+                repairStation = new RepairStation(this, 500, 500);
+
+            }
+            if (level == 3) {
+                initHeavyAi(900, 900);
+                initMediumAi(600, 300);
+                initLightAi(300, 300);
+                initLightAi(900, 300);
+                repairStation = new RepairStation(this, 500, 500);
+            }
         }
-        if (level == 3){
-            initHeavyAi(900,900);
-            initMediumAi(600,300);
-            initLightAi(300,300);
-            initLightAi(900,300);
-            repairStation = new RepairStation(this, 500,500);
-        }
-
     }
 
     public void initPlayerA(HeavyTank tank, double x, double y){
@@ -98,6 +120,21 @@ public class TankBattle extends GameEngine{
     public void initPlayerA(LightTank tank, double x, double y){
         tank.initTank(x,y);
         factionA.add(tank);
+        tanks.add(tank);
+    }
+    public void initPlayerB(HeavyTank tank, double x, double y){
+        tank.initTank(x,y);
+        factionB.add(tank);
+        tanks.add(tank);
+    }
+    public void initPlayerB(MediumTank tank, double x, double y){
+        tank.initTank(x,y);
+        factionB.add(tank);
+        tanks.add(tank);
+    }
+    public void initPlayerB(LightTank tank, double x, double y){
+        tank.initTank(x,y);
+        factionB.add(tank);
         tanks.add(tank);
     }
     public void initHeavyAi(double x, double y){
@@ -140,7 +177,8 @@ public class TankBattle extends GameEngine{
             initAbout();
         }else if (help){
             initHelp();
-        }else if (tankSelection){
+        }
+        else if (tankSelection){
             initTankSelection();
         }else if (levelSelection){
             initLevelSelection();
@@ -150,10 +188,22 @@ public class TankBattle extends GameEngine{
     }
     boolean gameStart;
     public void initTankSelection(){
-        initButton(50,50,200,40,"Back");
-        initButton(250,730,200,40,"LightTank");
-        initButton(650,730,200,40,"MediumTank");
-        initButton(1050,730,200,40,"HeavyTank");
+        if (doubleBattle){
+            initButton(50, 50, 200, 40, "Back");
+            initButton(250, 730, 100, 40, "LightTank");
+            initButton(650, 730, 100, 40, "MediumTank");
+            initButton(1050, 730, 100, 40, "HeavyTank");
+            initButton(1250, 910, 200, 40, "Confirm");
+            initButton(350, 730, 100, 40, "LightTank");
+            initButton(750, 730, 100, 40, "MediumTank");
+            initButton(1150, 730, 100, 40, "HeavyTank");
+        }else {
+            initButton(50, 50, 200, 40, "Back");
+            initButton(250, 730, 200, 40, "LightTank");
+            initButton(650, 730, 200, 40, "MediumTank");
+            initButton(1050, 730, 200, 40, "HeavyTank");
+            initButton(1250, 910, 200, 40, "Confirm");
+        }
     }
     public void initLevelSelection(){
         initButton(50,50,200,40,"Back");
@@ -169,10 +219,11 @@ public class TankBattle extends GameEngine{
         
     }
     public void initStartMenu(){
-        initButton(200,500,200,40,"GameStart");
-        initButton(200,550,200,40,"Help");
-        initButton(200,600,200,40,"About");
-        initButton(200,650,200,40,"Exit");
+        initButton(200,500,200,40,"Single Player");
+        initButton(200,550,200,40,"Double Battles");
+        initButton(200,600,200,40,"Help");
+        initButton(200,650,200,40,"About");
+        initButton(200,700,200,40,"Exit");
     }
     public void initLevel(){
         if (level == 1){
@@ -211,6 +262,21 @@ public class TankBattle extends GameEngine{
             P1H.updateTank(dt);
             P1H.FindTarget(factionB, dt);
             wall.setCollides(P1H);
+        }
+        if (doubleBattle) {
+            if (P2Choose == 0) {
+                P2.updateTank(dt);
+                wall.setCollides(P2);
+            }
+            if (P2Choose == 1) {
+                P2M.updateTank(dt);
+                wall.setCollides(P2M);
+            }
+            if (P2Choose == 2) {
+                P2H.updateTank(dt);
+                P2H.FindTarget(factionA, dt);
+                wall.setCollides(P2H);
+            }
         }
         for (HeavyTank tank : heavyTanks){
             if (!tank.defeat){
@@ -296,8 +362,7 @@ public class TankBattle extends GameEngine{
         }else if (P1Choose == 1){
             P1M.weapon_M.updateAmmo(dt,wall);
             P1M.UpdateDamage(factionB);
-        }
-        if (P1Choose==2) {
+        }else if (P1Choose==2) {
             P1H.weapon_M.updateAmmo(dt, wall);
             P1H.weapon_L.updateAmmo(dt, wall);
             P1H.weapon_R.updateAmmo(dt, wall);
@@ -306,6 +371,24 @@ public class TankBattle extends GameEngine{
             P1H.UpdateDamage(factionB);
 
         }
+        if (doubleBattle){
+            if (P2Choose == 0){
+                P2.weapon_M.updateAmmo(dt,wall);
+                P2.UpdateDamage(factionA);
+            }else if (P2Choose == 1){
+                P2M.weapon_M.updateAmmo(dt,wall);
+                P2M.UpdateDamage(factionA);
+            }else if (P2Choose == 2) {
+                System.out.println(1);
+                P2H.weapon_M.updateAmmo(dt, wall);
+                P2H.weapon_L.updateAmmo(dt, wall);
+                P2H.weapon_R.updateAmmo(dt, wall);
+                P2H.weapon_L_L.updateAmmo(dt, wall);
+                P2H.weapon_R_R.updateAmmo(dt, wall);
+                P2H.UpdateDamage(factionA);
+            }
+        }
+
         for (HeavyTank tank : heavyTanks){
             tank.weapon_M.updateAmmo(dt,wall);
             tank.weapon_L.updateAmmo(dt,wall);
@@ -330,9 +413,11 @@ public class TankBattle extends GameEngine{
         if (gameStart) {
             if (!isGameOver&&!sectionClear) {
                 updateLevel(dt);
-                repairStation.repair(P1M);
-                repairStation.repair(P1);
-                repairStation.repair(P1H);
+                if (!doubleBattle) {
+                    repairStation.repair(P1M);
+                    repairStation.repair(P1);
+                    repairStation.repair(P1H);
+                }
             }
         }
     }
@@ -440,6 +525,18 @@ public class TankBattle extends GameEngine{
         }if (P1Choose == 2) {
             P1H.drawTank();
         }
+        changeColor(Color.RED);
+        if (doubleBattle) {
+            if (P2Choose == 0) {
+                P2.drawTank();
+            }
+            if (P2Choose == 1) {
+                P2M.drawTank();
+            }
+            if (P2Choose == 2) {
+                P2H.drawTank();
+            }
+        }
         for (HeavyTank tank : heavyTanks){
             changeColor(Color.RED);
             tank.drawTank();
@@ -473,7 +570,9 @@ public class TankBattle extends GameEngine{
                 drawSectionClear();
             } else {
                 drawLevel();
-                repairStation.draw();
+                if (!doubleBattle) {
+                    repairStation.draw();
+                }
             }
         }
 
@@ -481,17 +580,27 @@ public class TankBattle extends GameEngine{
     }
     public void drawTankSelection(){
         changeBackgroundColor(Color.WHITE);
-        clearBackground(width(),height());
-        changeColor(Color.BLACK);
-        drawText(200,200,"Select Your Tank","Arial",100);
-        drawImage(LightTank,250,500,200,200);
-        drawImage(MediumTank,650,500,200,200);
-        drawImage(HeavyTank,1050,500,200,200);
-        drawText(650,290,"Difficulty:","Arial",20);
-        drawRectangle(650,300,200,20);
-        drawSolidRectangle(650,300,200 * ((10.0-difficult)/10.0),20);
+        clearBackground(width(), height());
+        if (doubleBattle) {
+            changeColor(Color.BLACK);
+            drawText(200, 200, "Select Your Tank", "Arial", 100);
+            drawImage(LightTank, 250, 500, 200, 200);
+            drawImage(MediumTank, 650, 500, 200, 200);
+            drawImage(HeavyTank, 1050, 500, 200, 200);
+            drawText(650, 290, "Difficulty:", "Arial", 20);
+            drawRectangle(650, 300, 200, 20);
+            drawSolidRectangle(650, 300, 200 * ((10.0 - difficult) / 10.0), 20);
+        }else {
+            changeColor(Color.BLACK);
+            drawText(200, 200, "Select Your Tank", "Arial", 100);
+            drawImage(LightTank, 250, 500, 200, 200);
+            drawImage(MediumTank, 650, 500, 200, 200);
+            drawImage(HeavyTank, 1050, 500, 200, 200);
+            drawText(650, 290, "Difficulty:", "Arial", 20);
+            drawRectangle(650, 300, 200, 20);
+            drawSolidRectangle(650, 300, 200 * ((10.0 - difficult) / 10.0), 20);
+        }
         drawButton();
-
     }
     public void drawLevelSelection(){
         changeBackgroundColor(Color.WHITE);
@@ -592,6 +701,7 @@ public class TankBattle extends GameEngine{
                 for (int i = 0; i < buttons.size(); i++) {
                     if (e.getX() < buttons.get(i).x + buttons.get(i).w && e.getY() < buttons.get(i).y - 30 + buttons.get(i).h && e.getX() > buttons.get(i).x && e.getY() > buttons.get(i).y - 30) {
                         if (i == 0) {
+                            doubleBattle = false;
                             levelSelection = false;
                             tankSelection = true;
                             help = false;
@@ -599,7 +709,17 @@ public class TankBattle extends GameEngine{
                             gameMenu = false;
                             init();
                             break;
-                        }else if (i == 1) {
+                        }
+                        else if (i == 1) {
+                            doubleBattle = true;
+                            levelSelection = false;
+                            tankSelection = true;
+                            help = false;
+                            about = false;
+                            gameMenu = false;
+                            init();
+                            break;
+                        }else if (i == 2) {
                             levelSelection = false;
                             tankSelection = false;
                             help = true;
@@ -608,7 +728,7 @@ public class TankBattle extends GameEngine{
                             init();
                             break;
                         }
-                        else if (i == 2) {
+                        else if (i == 3) {
                             levelSelection = false;
                             tankSelection = false;
                             help = false;
@@ -617,7 +737,7 @@ public class TankBattle extends GameEngine{
                             init();
                             break;
                         }
-                        else if (i == 3) {
+                        else if (i == 4) {
                             System.exit(0);
 
                         }
@@ -683,26 +803,20 @@ public class TankBattle extends GameEngine{
                         }
                         if (i == 1) {
                             P1Choose = 0;
-                            levelSelection = true;
-                            tankSelection = false;
-                            help = false;
-                            about = false;
-                            gameMenu = false;
                             init();
                             break;
                         }
                         if (i == 2) {
                             P1Choose = 1;
-                            levelSelection = true;
-                            tankSelection = false;
-                            help = false;
-                            about = false;
-                            gameMenu = false;
                             init();
                             break;
                         }
                         if (i == 3) {
                             P1Choose = 2;
+                            init();
+                            break;
+                        }
+                        if (i == 4) {
                             levelSelection = true;
                             tankSelection = false;
                             help = false;
@@ -711,7 +825,24 @@ public class TankBattle extends GameEngine{
                             init();
                             break;
                         }
+                        if (doubleBattle){
+                            if (i == 5) {
+                                P2Choose = 0;
+                                init();
+                                break;
+                            }
+                            if (i == 6) {
+                                P2Choose = 1;
+                                init();
+                                break;
+                            }
+                            if (i == 7) {
+                                P2Choose = 2;
+                                init();
+                                break;
+                            }
 
+                        }
                     }
                 }
             }
@@ -786,6 +917,7 @@ public class TankBattle extends GameEngine{
     public void drawWeapon(){
     }
     boolean SpacePressed = false;
+    boolean EnterPressed = false;
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !isGameOver)    {
@@ -801,6 +933,24 @@ public class TankBattle extends GameEngine{
                 if (P1Choose==2) {
                     P1H.weapon_M.Fire();
                     SpacePressed = true;
+                }
+            }
+        }
+        if (doubleBattle) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER && !isGameOver) {
+                if (!EnterPressed) {
+                    if (P2Choose == 0) {
+                        P2.weapon_M.Fire();
+                        EnterPressed = true;
+                    }
+                    if (P2Choose == 1) {
+                        P2M.weapon_M.Fire();
+                        EnterPressed = true;
+                    }
+                    if (P2Choose == 2) {
+                        P2H.weapon_M.Fire();
+                        EnterPressed = true;
+                    }
                 }
             }
         }
@@ -863,6 +1013,55 @@ public class TankBattle extends GameEngine{
             }
 
         }
+        if (doubleBattle) {
+            if (e.getKeyCode() == KeyEvent.VK_UP && !isGameOver) {
+                if (P2Choose == 0) {
+                    P2.UP = true;
+                }
+                if (P2Choose == 1) {
+                    P2M.UP = true;
+                }
+                if (P2Choose == 2) {
+                    P2H.UP = true;
+                }
+
+            }
+            if (e.getKeyCode() == KeyEvent.VK_LEFT && !isGameOver) {
+                if (P2Choose == 0) {
+                    P2.LEFT = true;
+                }
+                if (P2Choose == 1) {
+                    P2M.LEFT = true;
+                }
+                if (P2Choose == 2) {
+                    P2H.LEFT = true;
+                }
+            }
+            if (e.getKeyCode() == KeyEvent.VK_DOWN && !isGameOver) {
+                if (P2Choose == 0) {
+                    P2.DOWN = true;
+                }
+                if (P2Choose == 1) {
+                    P2M.DOWN = true;
+                }
+                if (P2Choose == 2) {
+                    P2H.DOWN = true;
+                }
+
+            }
+            if (e.getKeyCode() == KeyEvent.VK_RIGHT && !isGameOver) {
+                if (P2Choose == 0) {
+                    P2.RIGHT = true;
+                }
+                if (P2Choose == 1) {
+                    P2M.RIGHT = true;
+                }
+                if (P2Choose == 2) {
+                    P2H.RIGHT = true;
+                }
+
+            }
+        }
     }
     @Override
     public void keyReleased(KeyEvent e) {
@@ -915,8 +1114,66 @@ public class TankBattle extends GameEngine{
             }if (P1Choose==2) {
                 P1H.RIGHT = false;
             }
-
-
+        }if (doubleBattle) {
+            if (e.getKeyCode() == KeyEvent.VK_UP && !isGameOver) {
+                if (P2Choose == 0) {
+                    P2.UP = false;
+                    P2.velocity.setX(0);
+                    P2.velocity.setY(0);
+                }
+                if (P2Choose == 1) {
+                    P2M.UP = false;
+                    P2M.velocity.setX(0);
+                    P2M.velocity.setY(0);
+                }
+                if (P2Choose == 2) {
+                    P2H.UP = false;
+                    P2H.velocity.setX(0);
+                    P2H.velocity.setY(0);
+                }
+            }
+            if (e.getKeyCode() == KeyEvent.VK_LEFT && !isGameOver) {
+                if (P2Choose == 0) {
+                    P2.LEFT = false;
+                }
+                if (P2Choose == 1) {
+                    P2M.LEFT = false;
+                }
+                if (P2Choose == 2) {
+                    P2H.LEFT = false;
+                }
+            }
+            if (e.getKeyCode() == KeyEvent.VK_DOWN && !isGameOver) {
+                if (P2Choose == 0) {
+                    P2.DOWN = false;
+                    P2.velocity.setX(0);
+                    P2.velocity.setY(0);
+                }
+                if (P2Choose == 1) {
+                    P2M.DOWN = false;
+                    P2M.velocity.setX(0);
+                    P2M.velocity.setY(0);
+                }
+                if (P2Choose == 2) {
+                    P2H.DOWN = false;
+                    P2H.velocity.setX(0);
+                    P2H.velocity.setY(0);
+                }
+            }
+            if (e.getKeyCode() == KeyEvent.VK_RIGHT && !isGameOver) {
+                if (P2Choose == 0) {
+                    P2.RIGHT = false;
+                }
+                if (P2Choose == 1) {
+                    P2M.RIGHT = false;
+                }
+                if (P2Choose == 2) {
+                    P2H.RIGHT = false;
+                }
+            }
+            if(e.getKeyCode() == KeyEvent.VK_ENTER && !isGameOver)    {
+                EnterPressed = false;
+            }
         }
         if(e.getKeyCode() == KeyEvent.VK_SPACE && !isGameOver)    {
             SpacePressed = false;
